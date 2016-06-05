@@ -270,7 +270,7 @@ public final class Hashids {
   }
 
   /**
-   * Encode a hexadecimal string to string.
+   * Encode an hexadecimal string to string.
    *
    * @param hex The hexadecimal string to encode
    * @return The encoded string
@@ -288,7 +288,7 @@ public final class Hashids {
   }
 
   /**
-   * Decode a encoded string.
+   * Decode an encoded string.
    *
    * @param hash The encoded string
    * @return The {@link Hashid} instance with the decoded hash and decoded number(s)
@@ -301,16 +301,40 @@ public final class Hashids {
   }
 
   /**
-   * Decode a encoded string to a array of long numbers.
+   * Decode an encoded string to long numbers.
    *
    * @param hash The encoded string
-   * @return The decoded array containing the long numbers
+   * @return The decoded long numbers
    */
   public long[] decodeNumbers(String hash) {
     if (isEmpty(hash)) {
       return new long[0];
     }
     return doDecode(hash, alphabet).numbers();
+  }
+
+  /**
+   * Decode an encoded string to integer numbers.
+   *
+   * @param hash The encoded string
+   * @return The decoded integer numbers
+   *
+   * @throws IllegalArgumentException if decoded number is out of integer range, shouldn't you be using longs instead?
+   */
+  public int[] decodeIntegerNumbers(String hash) {
+    if (isEmpty(hash)) {
+      return new int[0];
+    }
+    long[] numbers = doDecode(hash, alphabet).numbers();
+    int[] ints = new int[numbers.length];
+    for (int idx = 0; idx < numbers.length; idx++) {
+      long number = numbers[idx];
+      if (number < Integer.MIN_VALUE || number > Integer.MAX_VALUE) {
+        throw new IllegalArgumentException("Number out of range");
+      }
+      ints[idx] = (int) number;
+    }
+    return ints;
   }
 
   private Hashid doEncode(long... numbers) {
