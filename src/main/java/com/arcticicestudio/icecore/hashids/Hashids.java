@@ -265,6 +265,16 @@ public final class Hashids {
       this.separators = separators;
       this.minHashLength = minHashLength;
     }
+
+    /**
+     * Sets the salt string.
+     *
+     * @param salt The string to use as salt
+     * @return The builder instance with the specified salt string and defaults
+     */
+    public Builder salt(String salt) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
   }
 
   /**
