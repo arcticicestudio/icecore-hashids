@@ -39,4 +39,13 @@ package com.arcticicestudio.icecore.hashids;
  * @see <a href="http://hashids.org">Hashids</a>
  * @since 0.1.0
  */
-public final class Hashid {}
+public final class Hashid {
+
+  private final long[] longNumbers;
+  private final String hash;
+
+  public Hashid(long[] longs, String hash) {
+    this.longNumbers = longs;
+    this.hash = hash;
+  }
+}
