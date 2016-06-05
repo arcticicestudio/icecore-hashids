@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 17:45 UTC+0200       +
-modified  2016-06-05 17:46 UTC+0200       +
+modified  2016-06-05 18:09 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -46,6 +46,8 @@ public final class Hashid {
 
   private final long[] numbers;
   private final String hash;
+
+  public static final Hashid EMPTY = new Hashid(new long[0], "");
 
   public Hashid(long[] longs, String hash) {
     this.numbers = longs;
