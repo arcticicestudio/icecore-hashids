@@ -29,6 +29,8 @@ Arctic Versioning Specification (ArcVer)
 */
 package com.arcticicestudio.icecore.hashids;
 
+import java.util.List;
+
 /**
  * Generates short, unique, non-sequential and decodable hashids from positive unsigned (long) integer numbers.
  *
@@ -320,5 +322,14 @@ public final class Hashids {
       number += pos * Math.pow(alphabet.length(), input.length() - idx - 1);
     }
     return number;
+  }
+
+  private long[] toArray(List<Long> longs) {
+    final long[] result = new long[longs.size()];
+    int idx = 0;
+    for (Long aLong : longs) {
+      result[idx++] = aLong;
+    }
+    return result;
   }
 }
