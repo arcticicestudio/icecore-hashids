@@ -1,0 +1,3 @@
+build/{assembly,dist}
+{build,src}/{main,scratch,test}/{assets,java/com/arcticicestudio/icecore/hashids,native,resources}
+lib/{main,scratch,test}/java/vendor
