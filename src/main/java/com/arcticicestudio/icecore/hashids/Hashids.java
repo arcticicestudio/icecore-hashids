@@ -249,6 +249,24 @@ public final class Hashids {
     return encode(numbers).toString();
   }
 
+  /**
+   * Encode number(s) to string.
+   *
+   * @param numbers The number(s) to encode
+   * @return The encoded string
+   */
+  public String encodeToString(int... numbers) {
+    if (numbers.length == 0) {
+      return "";
+    }
+    long[] longs = new long[numbers.length];
+    for (int idx = 0; idx < numbers.length; idx++) {
+      longs[idx] = numbers[idx];
+
+    }
+    return doEncode(longs).toString();
+  }
+
   private Hashid doEncode(long... numbers) {
     int numberHashInt = 0;
     for (int idx = 0; idx < numbers.length; idx++) {
