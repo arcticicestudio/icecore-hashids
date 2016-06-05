@@ -28,6 +28,9 @@ Arctic Versioning Specification (ArcVer)
 */
 package com.arcticicestudio.icecore.hashids;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Represents a hashid which holds all numbers and the encoded string.
  *
@@ -68,5 +71,13 @@ public final class Hashid {
   @Override
   public String toString() {
     return hash;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 7;
+    hashCode = 97 * hashCode + Arrays.hashCode(this.numbers);
+    hashCode = 97 * hashCode + Objects.hashCode(this.hash);
+    return hashCode;
   }
 }
