@@ -239,4 +239,16 @@ public final class Hashids {
     }
     return alphabet;
   }
+
+  private String hash(long input, String alphabet) {
+    String hash = "";
+    final int alphabetLen = alphabet.length();
+    final char[] alphabetChars = alphabet.toCharArray();
+    do {
+      hash = alphabetChars[(int) (input % alphabetLen)] + hash;
+      input /= alphabetLen;
+    }
+    while (input > 0);
+    return hash;
+  }
 }
