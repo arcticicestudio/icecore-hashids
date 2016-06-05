@@ -258,6 +258,13 @@ public final class Hashids {
       this.separators = DEFAULT_SEPARATORS;
       this.minHashLength = 0;
     }
+
+    private Builder(String salt, String alphabet, String separators, int minHashLength) {
+      this.salt = salt;
+      this.alphabet = alphabet;
+      this.separators = separators;
+      this.minHashLength = minHashLength;
+    }
   }
 
   /**
