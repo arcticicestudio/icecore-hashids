@@ -59,4 +59,14 @@ public final class Hashid {
     System.arraycopy(numbers, 0, values, 0, numbers.length);
     return values;
   }
+
+  /**
+   * Returns the hash string of this hashid
+   *
+   * @return the hash string of this hashid
+   */
+  @Override
+  public String toString() {
+    return hash;
+  }
 }
