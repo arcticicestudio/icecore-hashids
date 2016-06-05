@@ -136,4 +136,24 @@ public final class Hashids {
   public Hashids(String salt, int minHashLength, String alphabet) {
     this(salt, minHashLength, alphabet, DEFAULT_SEPARATORS);
   }
+
+  private String consistentShuffle(String alphabet, String salt) {
+    if (salt.length() <= 0) {
+      return alphabet;
+    }
+    final char[] saltChars = salt.toCharArray();
+    int ascVal, j;
+    char tmp;
+    for (int idx = alphabet.length() - 1, v = 0, p = 0; idx > 0; idx--, v++) {
+      v %= salt.length();
+      ascVal = (int) saltChars[v];
+      p += ascVal;
+      j = (ascVal + v + p) % idx;
+
+      tmp = alphabet.charAt(j);
+      alphabet = alphabet.substring(0, j) + alphabet.charAt(idx) + alphabet.substring(j + 1);
+      alphabet = alphabet.substring(0, idx) + tmp + alphabet.substring(idx + 1);
+    }
+    return alphabet;
+  }
 }
