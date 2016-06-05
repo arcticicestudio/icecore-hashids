@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-05 19:59 UTC+0200       +
+modified  2016-06-05 22:22 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -335,6 +335,21 @@ public final class Hashids {
       ints[idx] = (int) number;
     }
     return ints;
+  }
+
+  /**
+   * Decode an string to hexadecimal numbers.
+   *
+   * @param hash The encoded string
+   * @return The decoded hexadecimal numbers string
+   */
+  public String decodeHex(String hash) {
+    StringBuilder sb = new StringBuilder();
+    long[] numbers = decodeLongNumbers(hash);
+    for (long number : numbers) {
+      sb.append(Long.toHexString(number).substring(1));
+    }
+    return sb.toString();
   }
 
   private Hashid doEncode(long... numbers) {
