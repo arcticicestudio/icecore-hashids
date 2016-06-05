@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-05 22:22 UTC+0200       +
+modified  2016-06-05 22:48 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -223,6 +223,97 @@ public final class Hashids {
 
     this.alphabet = alphabet;
     this.separators = seps;
+  }
+
+  /**
+   * An immutable and reusable {@link Hashids} builder.
+   *
+   * <p>
+   *   Each method returns a new builder instance.
+   * </p>
+   *
+   * <p>
+   *   Defaults are
+   *   <ul>
+   *     <li>no salt</li>
+   *     <li>{@link #DEFAULT_ALPHABET} ({@value #DEFAULT_ALPHABET})</li>
+   *     <li>no minimum hash length</li>
+   *     <li>{@link #DEFAULT_SEPARATORS} ({@value #DEFAULT_SEPARATORS})</li>
+   *   </ul>
+   * </p>
+   */
+  public static final class Builder {
+
+    private final String salt;
+    private final String alphabet;
+    private final String separators;
+    private final int minHashLength;
+
+    /**
+     * Create a new {@link Hashids} builder.
+     */
+    public Builder() {
+      this.salt = "";
+      this.alphabet = DEFAULT_ALPHABET;
+      this.separators = DEFAULT_SEPARATORS;
+      this.minHashLength = 0;
+    }
+
+    private Builder(String salt, String alphabet, String separators, int minHashLength) {
+      this.salt = salt;
+      this.alphabet = alphabet;
+      this.separators = separators;
+      this.minHashLength = minHashLength;
+    }
+
+    /**
+     * Sets the salt string.
+     *
+     * @param salt The string to use as salt
+     * @return The builder instance with the specified salt
+     */
+    public Builder salt(String salt) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
+
+    /**
+     * Sets the custom alphabet string.
+     *
+     * @param alphabet The string to use as custom alphabet
+     * @return The builder instance with the specified custom alphabet
+     */
+    public Builder alphabet(String alphabet) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
+
+    /**
+     * Sets the custom separators string.
+     *
+     * @param separators The string to use as custom alphabet
+     * @return The builder instance with the specified custom separators
+     */
+    public Builder separators(String separators) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
+
+    /**
+     * Sets the minimum hash length.
+     *
+     * @param minHashLength The minimum length of the hash
+     * @return The builder instance with the minimum hash length
+     */
+    public Builder minHashLength(int minHashLength) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
+
+    /**
+     * Builds the {@link Hashids}.
+     *
+     * @return The {@link Hashids} instance
+     */
+    public Hashids build() {
+      return new Hashids(salt, minHashLength, alphabet, separators);
+    }
   }
 
   /**
