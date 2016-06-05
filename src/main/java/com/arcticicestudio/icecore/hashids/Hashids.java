@@ -72,4 +72,14 @@ package com.arcticicestudio.icecore.hashids;
  * @see <a href="http://hashids.org">Hashids</a>
  * @since 0.1.0
  */
-public final class Hashids {}
+public final class Hashids {
+
+  /**
+   * Holds the default alphabet string.
+   *
+   * <p>
+   *   {@code abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890}
+   * </p>
+   */
+  public static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+}
