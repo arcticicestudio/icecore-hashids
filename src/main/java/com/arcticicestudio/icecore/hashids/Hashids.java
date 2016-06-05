@@ -31,6 +31,8 @@ package com.arcticicestudio.icecore.hashids;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Generates short, unique, non-sequential and decodable hashids from positive unsigned (long) integer numbers.
@@ -265,6 +267,24 @@ public final class Hashids {
 
     }
     return doEncode(longs).toString();
+  }
+
+  /**
+   * Encode a hexadecimal string to string.
+   *
+   * @param hex The hexadecimal string to encode
+   * @return The encoded string
+   */
+  public String encodeHexToString(String hex) {
+    if (!hex.matches("^[0-9a-fA-F]+$")) {
+      throw new IllegalArgumentException(String.format("%s is not a hex string", hex));
+    }
+    Matcher matcher = Pattern.compile("[\\w\\W]{1,12}").matcher(hex);
+    List<Long> matched = new ArrayList<>();
+    while (matcher.find()) {
+      matched.add(Long.parseLong("1" + matcher.group(), 16));
+    }
+    return doEncode(toArray(matched)).toString();
   }
 
   private Hashid doEncode(long... numbers) {
