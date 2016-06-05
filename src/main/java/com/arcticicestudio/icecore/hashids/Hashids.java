@@ -132,4 +132,8 @@ public final class Hashids {
   public Hashids(String salt, String alphabet) {
     this(salt, 0, alphabet);
   }
+
+  public Hashids(String salt, int minHashLength, String alphabet) {
+    this(salt, minHashLength, alphabet, DEFAULT_SEPARATORS);
+  }
 }
