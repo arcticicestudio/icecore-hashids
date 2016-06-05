@@ -295,6 +295,16 @@ public final class Hashids {
     public Builder separators(String separators) {
       return new Builder(salt, alphabet, separators, minHashLength);
     }
+
+    /**
+     * Sets the minimum hash length.
+     *
+     * @param minHashLength The minimum length of the hash
+     * @return The builder instance with the minimum hash length
+     */
+    public Builder minHashLength(int minHashLength) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
   }
 
   /**
