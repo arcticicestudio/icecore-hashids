@@ -242,7 +242,23 @@ public final class Hashids {
    *   </ul>
    * </p>
    */
-  public static final class Builder {}
+  public static final class Builder {
+
+    private final String salt;
+    private final String alphabet;
+    private final String separators;
+    private final int minHashLength;
+
+    /**
+     * Create a new {@link Hashids} builder.
+     */
+    public Builder() {
+      this.salt = "";
+      this.alphabet = DEFAULT_ALPHABET;
+      this.separators = DEFAULT_SEPARATORS;
+      this.minHashLength = 0;
+    }
+  }
 
   /**
    * Encode number(s).
