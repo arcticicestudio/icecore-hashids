@@ -270,7 +270,7 @@ public final class Hashids {
      * Sets the salt string.
      *
      * @param salt The string to use as salt
-     * @return The builder instance with the specified salt string and defaults
+     * @return The builder instance with the specified salt
      */
     public Builder salt(String salt) {
       return new Builder(salt, alphabet, separators, minHashLength);
@@ -280,9 +280,19 @@ public final class Hashids {
      * Sets the custom alphabet string.
      *
      * @param alphabet The string to use as custom alphabet
-     * @return The builder instance with the specified alphabet string and defaults
+     * @return The builder instance with the specified custom alphabet
      */
     public Builder alphabet(String alphabet) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
+
+    /**
+     * Sets the custom separators string.
+     *
+     * @param separators The string to use as custom alphabet
+     * @return The builder instance with the specified custom separators
+     */
+    public Builder separators(String separators) {
       return new Builder(salt, alphabet, separators, minHashLength);
     }
   }
