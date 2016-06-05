@@ -223,6 +223,19 @@ public final class Hashids {
     this.separators = seps;
   }
 
+  /**
+   * Encode number(s).
+   *
+   * @param numbers The number(s) to encode
+   * @return The {@link Hashid} instance with the number(s) and the encoded string
+   */
+  public Hashid encode(long... numbers) {
+    if (numbers.length == 0) {
+      return Hashid.EMPTY;
+    }
+    return doEncode(numbers);
+  }
+
   private Hashid doEncode(long... numbers) {
     int numberHashInt = 0;
     for (int idx = 0; idx < numbers.length; idx++) {
