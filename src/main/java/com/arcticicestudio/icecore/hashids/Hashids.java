@@ -275,6 +275,16 @@ public final class Hashids {
     public Builder salt(String salt) {
       return new Builder(salt, alphabet, separators, minHashLength);
     }
+
+    /**
+     * Sets the custom alphabet string.
+     *
+     * @param alphabet The string to use as custom alphabet
+     * @return The builder instance with the specified alphabet string and defaults
+     */
+    public Builder alphabet(String alphabet) {
+      return new Builder(salt, alphabet, separators, minHashLength);
+    }
   }
 
   /**
