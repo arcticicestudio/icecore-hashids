@@ -287,6 +287,19 @@ public final class Hashids {
     return doEncode(toArray(matched)).toString();
   }
 
+  /**
+   * Decode a encoded string.
+   *
+   * @param hash The encoded string
+   * @return The {@link Hashid} instance with the decoded hash and decoded number(s)
+   */
+  public Hashid decode(String hash) {
+    if (isEmpty(hash)) {
+      return Hashid.EMPTY;
+    }
+    return doDecode(hash, alphabet);
+  }
+
   private Hashid doEncode(long... numbers) {
     int numberHashInt = 0;
     for (int idx = 0; idx < numbers.length; idx++) {
