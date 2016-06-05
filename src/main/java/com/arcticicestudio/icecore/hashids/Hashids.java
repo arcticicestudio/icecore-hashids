@@ -75,11 +75,24 @@ package com.arcticicestudio.icecore.hashids;
 public final class Hashids {
 
   /**
-   * Holds the default alphabet string.
+   * Holds the default alphabet.
    *
    * <p>
    *   {@code abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890}
    * </p>
    */
   public static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+  /**
+   * Holds the default separators.
+   *
+   * <p>
+   *   Used to prevent the generation of strings that contain bad, offensive or rude words.
+   * </p>
+   *
+   * <p>
+   *   {@code cfhistuCFHISTU}
+   * </p>
+   */
+  public static final String DEFAULT_SEPARATORS = "cfhistuCFHISTU";
 }
