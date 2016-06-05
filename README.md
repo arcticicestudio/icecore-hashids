@@ -23,12 +23,12 @@ This algorithm tries to satisfy the following requirements:
 **NOTE**: All (long) integers must be greater than or equal to zero.
 
 ### Version
-[`-`](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads)  
+[`0.0.0`](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads)  
 
 For older versions check out the private [Bitbucket Git Repository](https://bitbucket.org/arcticicestudio/icecore-hashids).
 
 ### Changelog
-[`-`](CHANGELOG.md)
+[`0.0.0`](CHANGELOG.md)
 
 ### Development
 #### Workflow
