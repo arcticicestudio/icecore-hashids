@@ -39,7 +39,7 @@ package com.arcticicestudio.icecore.hashids;
  *
  * <p>
  *   The Hashids's {@code salt} is used as a secret to generate unique strings using a given {@code alphabet}.
- *    Generated strings can have a {@code minimumLength}.
+ *    Generated strings can have a {@code minHashLength}.
  * </p>
  *
  * <p>
@@ -117,9 +117,15 @@ public final class Hashids {
    */
   public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
 
+  private static final int GUARD_DIV = 12;
+  private static final int MIN_ALPHABET_LENGTH = 16;
+  private static final double SEP_DIV = 3.5;
+
   private final String alphabet;
+  private final String guards;
   private final int minHashLength;
   private final String salt;
+  private final String separators;
 
   public Hashids(String salt) {
     this(salt, 0);
@@ -135,6 +141,83 @@ public final class Hashids {
 
   public Hashids(String salt, int minHashLength, String alphabet) {
     this(salt, minHashLength, alphabet, DEFAULT_SEPARATORS);
+  }
+
+  public Hashids(String salt, int minHashLength, String alphabet, String separators) {
+    if (alphabet == null) {
+      throw new IllegalArgumentException("alphabet was null");
+    }
+    if (alphabet.length() == 0) {
+      throw new IllegalArgumentException("alphabet was empty");
+    }
+
+    this.salt = salt == null ? "" : salt;
+    this.minHashLength = minHashLength < 0 ? 0 : minHashLength;
+
+    String uniqueAlphabet = "";
+    for (int idx = 0; idx < alphabet.length(); idx++) {
+      if (!uniqueAlphabet.contains("" + alphabet.charAt(idx))) {
+        uniqueAlphabet += "" + alphabet.charAt(idx);
+      }
+    }
+    alphabet = uniqueAlphabet;
+
+    if (alphabet.length() < MIN_ALPHABET_LENGTH) {
+      throw new IllegalArgumentException(
+        "Alphabet must contain at least " + MIN_ALPHABET_LENGTH + " unique characters"
+      );
+    }
+
+    if (alphabet.contains(" ")) {
+      throw new IllegalArgumentException("Alphabet cannot contains spaces");
+    }
+
+    /*
+     * Separators should contain only characters present in alphabet.
+     * Alphabet should not contain separators.
+     */
+    String seps = separators == null ? "" : separators;
+    for (int sepIdx = 0; sepIdx < seps.length(); sepIdx++) {
+      int alphaIdx = alphabet.indexOf(seps.charAt(sepIdx));
+      if (alphaIdx == -1) {
+        seps = seps.substring(0, sepIdx) + " " + seps.substring(sepIdx + 1);
+      } else {
+        alphabet = alphabet.substring(0, alphaIdx) + " " + alphabet.substring(alphaIdx + 1);
+      }
+    }
+
+    alphabet = alphabet.replaceAll("\\s+", "");
+    seps = seps.replaceAll("\\s+", "");
+    seps = consistentShuffle(seps, this.salt);
+
+
+    if (seps == null || seps.length() == 0 || (alphabet.length() / seps.length()) > SEP_DIV) {
+      int sepsLen = (int) Math.ceil(alphabet.length() / SEP_DIV);
+      if (sepsLen == 1) {
+        sepsLen++;
+      }
+      if (sepsLen > seps.length()) {
+        int diff = sepsLen - seps.length();
+        seps += alphabet.substring(0, diff);
+        alphabet = alphabet.substring(diff);
+      } else {
+        seps = seps.substring(0, sepsLen);
+      }
+    }
+
+    alphabet = consistentShuffle(alphabet, this.salt);
+    int guardCount = (int) Math.ceil(alphabet.length() / GUARD_DIV);
+
+    if (alphabet.length() < 3) {
+      guards = seps.substring(0, guardCount);
+      seps = seps.substring(guardCount);
+    } else {
+      guards = alphabet.substring(0, guardCount);
+      alphabet = alphabet.substring(guardCount);
+    }
+
+    this.alphabet = alphabet;
+    this.separators = seps;
   }
 
   private String consistentShuffle(String alphabet, String salt) {
