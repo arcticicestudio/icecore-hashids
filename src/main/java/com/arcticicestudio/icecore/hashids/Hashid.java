@@ -80,4 +80,19 @@ public final class Hashid {
     hashCode = 97 * hashCode + Objects.hashCode(this.hash);
     return hashCode;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Hashid other = (Hashid) obj;
+    return Arrays.equals(this.numbers, other.numbers) && Objects.equals(this.hash, other.hash);
+  }
 }
