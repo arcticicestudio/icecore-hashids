@@ -300,6 +300,19 @@ public final class Hashids {
     return doDecode(hash, alphabet);
   }
 
+  /**
+   * Decode a encoded string to a array of long numbers.
+   *
+   * @param hash The encoded string
+   * @return The decoded array containing the long numbers
+   */
+  public long[] decodeNumbers(String hash) {
+    if (isEmpty(hash)) {
+      return new long[0];
+    }
+    return doDecode(hash, alphabet).numbers();
+  }
+
   private Hashid doEncode(long... numbers) {
     int numberHashInt = 0;
     for (int idx = 0; idx < numbers.length; idx++) {
