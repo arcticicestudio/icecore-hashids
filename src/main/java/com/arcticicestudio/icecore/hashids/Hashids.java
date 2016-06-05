@@ -306,7 +306,7 @@ public final class Hashids {
    * @param hash The encoded string
    * @return The decoded long numbers
    */
-  public long[] decodeNumbers(String hash) {
+  public long[] decodeLongNumbers(String hash) {
     if (isEmpty(hash)) {
       return new long[0];
     }
