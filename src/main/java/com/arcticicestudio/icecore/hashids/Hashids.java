@@ -226,6 +226,25 @@ public final class Hashids {
   }
 
   /**
+   * An immutable and reusable {@link Hashids} builder.
+   *
+   * <p>
+   *   Each method returns a new builder instance.
+   * </p>
+   *
+   * <p>
+   *   Defaults are
+   *   <ul>
+   *     <li>no salt</li>
+   *     <li>{@link #DEFAULT_ALPHABET} ({@value #DEFAULT_ALPHABET})</li>
+   *     <li>no minimum hash length</li>
+   *     <li>{@link #DEFAULT_SEPARATORS} ({@value #DEFAULT_SEPARATORS})</li>
+   *   </ul>
+   * </p>
+   */
+  public static final class Builder {}
+
+  /**
    * Encode number(s).
    *
    * @param numbers The number(s) to encode
