@@ -275,7 +275,7 @@ public final class Hashids {
    * @param hex The hexadecimal string to encode
    * @return The encoded string
    */
-  public String encodeHexToString(String hex) {
+  public String encodeHex(String hex) {
     if (!hex.matches("^[0-9a-fA-F]+$")) {
       throw new IllegalArgumentException(String.format("%s is not a hex string", hex));
     }
