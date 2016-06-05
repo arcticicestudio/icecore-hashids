@@ -196,7 +196,7 @@ public final class Hashids {
     seps = consistentShuffle(seps, this.salt);
 
 
-    if (seps == null || seps.length() == 0 || (alphabet.length() / seps.length()) > SEP_DIV) {
+    if (isEmpty(seps) || (alphabet.length() / seps.length()) > SEP_DIV) {
       int sepsLen = (int) Math.ceil(alphabet.length() / SEP_DIV);
       if (sepsLen == 1) {
         sepsLen++;
@@ -424,5 +424,15 @@ public final class Hashids {
       result[idx++] = aLong;
     }
     return result;
+  }
+
+  /**
+   * Check if a string is {@code null} or empty.
+   *
+   * @param value The string to check
+   * @return {code true} if the string is {@code null} or empty, {@code false }otherwise
+   */
+  private boolean isEmpty(String value) {
+    return value == null || value.length() == 0;
   }
 }
