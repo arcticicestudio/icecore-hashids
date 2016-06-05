@@ -220,6 +220,65 @@ public final class Hashids {
     this.separators = seps;
   }
 
+  private Hashid doEncode(long... numbers) {
+    int numberHashInt = 0;
+    for (int idx = 0; idx < numbers.length; idx++) {
+      if (numbers[idx] < 0 || numbers[idx] > MAX_NUMBER_VALUE) {
+        throw new IllegalArgumentException("Number out of range");
+      }
+      numberHashInt += numbers[idx] % (idx + 100);
+    }
+    String decodeAlphabet = alphabet;
+    final char lottery = decodeAlphabet.toCharArray()[numberHashInt % decodeAlphabet.length()];
+
+    String result = lottery + "";
+
+    String buffer;
+    int sepsIdx, guardIdx;
+    for (int idx = 0; idx < numbers.length; idx++) {
+      long num = numbers[idx];
+      buffer = lottery + salt + decodeAlphabet;
+
+      decodeAlphabet = consistentShuffle(decodeAlphabet, buffer.substring(0, decodeAlphabet.length()));
+      final String last = hash(num, decodeAlphabet);
+
+      result += last;
+
+      if (idx + 1 < numbers.length) {
+        num %= ((int) last.toCharArray()[0] + idx);
+        sepsIdx = (int) (num % separators.length());
+        result += separators.toCharArray()[sepsIdx];
+      }
+    }
+
+    if (result.length() < minHashLength) {
+      guardIdx = (numberHashInt + (int) (result.toCharArray()[0])) % guards.length();
+      char guard = guards.toCharArray()[guardIdx];
+
+      result = guard + result;
+
+      if (result.length() < minHashLength) {
+        guardIdx = (numberHashInt + (int) (result.toCharArray()[2])) % guards.length();
+        guard = guards.toCharArray()[guardIdx];
+
+        result += guard;
+      }
+    }
+
+    final int halfLen = decodeAlphabet.length() / 2;
+    while (result.length() < minHashLength) {
+      decodeAlphabet = consistentShuffle(decodeAlphabet, decodeAlphabet);
+      result = decodeAlphabet.substring(halfLen) + result + decodeAlphabet.substring(0, halfLen);
+      final int excess = result.length() - minHashLength;
+      if (excess > 0) {
+        int startPos = excess / 2;
+        result = result.substring(startPos, startPos + minHashLength);
+      }
+    }
+
+    return new Hashid(numbers, result);
+  }
+
   private String consistentShuffle(String alphabet, String salt) {
     if (salt.length() <= 0) {
       return alphabet;
