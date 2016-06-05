@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-05 22:22 UTC+0200       +
+modified  2016-06-05 22:48 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -304,6 +304,15 @@ public final class Hashids {
      */
     public Builder minHashLength(int minHashLength) {
       return new Builder(salt, alphabet, separators, minHashLength);
+    }
+
+    /**
+     * Builds the {@link Hashids}.
+     *
+     * @return The {@link Hashids} instance
+     */
+    public Hashids build() {
+      return new Hashids(salt, minHashLength, alphabet, separators);
     }
   }
 
