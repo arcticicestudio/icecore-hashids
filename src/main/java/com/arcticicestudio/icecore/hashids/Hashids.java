@@ -116,4 +116,10 @@ public final class Hashids {
    * </p>
    */
   public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
+
+  private final String salt;
+
+  public Hashids(String salt) {
+    this(salt, 0);
+  }
 }
