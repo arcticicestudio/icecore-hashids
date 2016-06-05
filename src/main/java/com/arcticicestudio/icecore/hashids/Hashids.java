@@ -78,7 +78,7 @@ public final class Hashids {
    * Holds the default alphabet.
    *
    * <p>
-   *   {@code abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890}
+   *   Value: {@code abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890}
    * </p>
    */
   public static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -91,8 +91,29 @@ public final class Hashids {
    * </p>
    *
    * <p>
-   *   {@code cfhistuCFHISTU}
+   *   Value: {@code cfhistuCFHISTU}
    * </p>
    */
   public static final String DEFAULT_SEPARATORS = "cfhistuCFHISTU";
+
+  /**
+   * Holds the maximum number value.
+   *
+   * <p>
+   *   This limit is mandatory in order to ensure interoperability.
+   * </p>
+   *
+   * <p>
+   *   JavaScript equivalents used in <a href="https://github.com/ivanakimov/hashids.js">hashids.js</a>:
+   *   <ul>
+   *     <li>{@code 9_007_199_254_740_991}</li>
+   *     <li>{@code 2^53-1}</li>
+   *     <li>{@code Number.MAX_VALUE-1}</li>
+   *   </ul>
+   * </p>
+   * <p>
+   *   Value: {@code 9_007_199_254_740_992L - 1}
+   * </p>
+   */
+  public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
 }
