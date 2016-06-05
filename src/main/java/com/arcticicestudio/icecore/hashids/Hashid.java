@@ -41,11 +41,22 @@ package com.arcticicestudio.icecore.hashids;
  */
 public final class Hashid {
 
-  private final long[] longNumbers;
+  private final long[] numbers;
   private final String hash;
 
   public Hashid(long[] longs, String hash) {
-    this.longNumbers = longs;
+    this.numbers = longs;
     this.hash = hash;
+  }
+
+  /**
+   * All numbers of this hashid.
+   *
+   * @return a new array with all numbers of this hashid
+   */
+  public long[] numbers() {
+    long[] values = new long[numbers.length];
+    System.arraycopy(numbers, 0, values, 0, numbers.length);
+    return values;
   }
 }
