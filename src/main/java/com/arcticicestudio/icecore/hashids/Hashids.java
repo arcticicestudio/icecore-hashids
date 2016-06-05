@@ -251,4 +251,15 @@ public final class Hashids {
     while (input > 0);
     return hash;
   }
+
+  private Long unhash(String input, String alphabet) {
+    long number = 0;
+    long pos;
+    final char[] inputChars = input.toCharArray();
+    for (int idx = 0; idx < input.length(); idx++) {
+      pos = alphabet.indexOf(inputChars[idx]);
+      number += pos * Math.pow(alphabet.length(), input.length() - idx - 1);
+    }
+    return number;
+  }
 }
