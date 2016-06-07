@@ -105,6 +105,18 @@ public class HashidsTest {
   }
 
   @Test
+  public void oneIntegerNumberWithCustomAlphabet() {
+    Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
+    int number = 12_345;
+    String expected = "KQL1R";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
+
+    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
+
+  @Test
   public void severalLongNumbers() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {683L, 94_108L, 123L, 5L};
