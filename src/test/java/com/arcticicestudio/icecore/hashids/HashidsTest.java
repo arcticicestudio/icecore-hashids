@@ -79,4 +79,16 @@ public class HashidsTest {
     assertEquals(decoded.length, numbers.length);
     assertArrayEquals(decoded, numbers);
   }
+
+  @Test
+  public void severalIntegerNumbers() {
+    Hashids hashids = new Hashids("salt");
+    int[] numbers = {683, 94_108, 123, 5};
+    String expected = "1eMToyKzsRAfO";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(numbers));
+
+    assertEquals(hashids.encodeToString(numbers), expected);
+    assertEquals(decoded.length, numbers.length);
+    assertArrayEquals(decoded, numbers);
+  }
 }
