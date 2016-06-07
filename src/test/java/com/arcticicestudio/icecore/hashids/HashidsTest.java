@@ -175,4 +175,16 @@ public class HashidsTest {
     assertEquals(decoded.length, numbers.length);
     assertArrayEquals(decoded, numbers);
   }
+
+  @Test
+  public void severalIntegerNumbersWithCustomAlphabet() {
+    Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
+    int[] numbers = {683, 94_108, 123, 5};
+    String expected = "3L4DTV52JC4KAJ";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(numbers));
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(decoded.length, numbers.length);
+    assertArrayEquals(decoded, numbers);
+  }
 }
