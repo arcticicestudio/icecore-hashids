@@ -28,6 +28,7 @@ Arctic Versioning Specification (ArcVer)
 */
 package com.arcticicestudio.icecore.hashids;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -65,5 +66,17 @@ public class HashidsTest {
     assertEquals(hashids.encodeToString(number), expected);
     assertEquals(decoded.length, 1);
     assertEquals(decoded[0], number);
+  }
+
+  @Test
+  public void severalLongNumbers() {
+    Hashids hashids = new Hashids("salt");
+    long[] numbers = {683L, 94_108L, 123L, 5L};
+    String expected = "1eMToyKzsRAfO";
+    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
+
+    assertEquals(hashids.encodeToString(numbers), expected);
+    assertEquals(decoded.length, numbers.length);
+    assertArrayEquals(decoded, numbers);
   }
 }
