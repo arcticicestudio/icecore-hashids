@@ -28,6 +28,10 @@ Arctic Versioning Specification (ArcVer)
 */
 package com.arcticicestudio.icecore.hashids;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
 /**
  * Tests the <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a>
  * public API class {@link Hashids}.
@@ -37,4 +41,17 @@ package com.arcticicestudio.icecore.hashids;
  * @see <a href="http://hashids.org">Hashids</a>
  * @since 0.1.0
  */
-public class HashidsTest {}
+public class HashidsTest {
+
+  @Test
+  public void oneLongNumber() {
+    Hashids hashids = new Hashids("salt");
+    long number = 12_345L;
+    String expected = "X4j1";
+    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+
+    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
+}
