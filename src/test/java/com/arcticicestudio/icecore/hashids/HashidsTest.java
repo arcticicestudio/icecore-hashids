@@ -93,6 +93,18 @@ public class HashidsTest {
   }
 
   @Test
+  public void oneIntegerNumberWithCustomMinimumHashLength() {
+    Hashids hashids = new Hashids("salt", 8);
+    int number = 12345;
+    String expected = "xkX4j1kZ";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
+
+    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
+
+  @Test
   public void severalLongNumbers() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {683L, 94_108L, 123L, 5L};
