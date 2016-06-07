@@ -54,4 +54,16 @@ public class HashidsTest {
     assertEquals(decoded.length, 1);
     assertEquals(decoded[0], number);
   }
+
+  @Test
+  public void oneIntegerNumber() {
+    Hashids hashids = new Hashids("salt");
+    int number = 12_345;
+    String expected = "X4j1";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
+
+    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
 }
