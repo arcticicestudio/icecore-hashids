@@ -57,6 +57,18 @@ public class HashidsTest {
   }
 
   @Test
+  public void oneLargeLongNumber() {
+    Hashids hashids = new Hashids("salt");
+    long number = 9_007_199_254_740_991L;
+    String expected = "wQpRRqRX24R";
+    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+
+    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
+
+  @Test
   public void oneLongNumberWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
     long number = 12_345L;
