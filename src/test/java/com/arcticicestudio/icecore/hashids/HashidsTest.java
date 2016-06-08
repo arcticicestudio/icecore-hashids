@@ -68,6 +68,13 @@ public class HashidsTest {
     assertEquals(decoded[0], number);
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void oneLargeLongNumberNotSupported() throws Exception {
+    long number = 9007199254740993L;
+    Hashids a = new Hashids("salt");
+    a.encode(number);
+  }
+
   @Test
   public void oneLongNumberWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
