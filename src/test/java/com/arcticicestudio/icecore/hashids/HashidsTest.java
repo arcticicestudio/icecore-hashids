@@ -254,4 +254,16 @@ public class HashidsTest {
     assertEquals(numbers.length, decoded.length);
     assertArrayEquals(numbers, decoded);
   }
+
+  @Test
+  public void integerIncrementingNumbersRandomness() {
+    Hashids hashids = new Hashids("salt");
+    int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    String expected = "rjiJulUECaFAS1TBhzcX";
+    int[] decoded = hashids.decodeIntegerNumbers(expected);
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(numbers.length, decoded.length);
+    assertArrayEquals(numbers, decoded);
+  }
 }
