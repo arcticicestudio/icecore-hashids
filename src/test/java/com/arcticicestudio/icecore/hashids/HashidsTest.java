@@ -218,4 +218,16 @@ public class HashidsTest {
     assertEquals(decoded.length, numbers.length);
     assertArrayEquals(decoded, numbers);
   }
+
+  @Test
+  public void longNumbersRandomness() {
+    Hashids hashids = new Hashids("salt");
+    long[] numbers = {5L, 5L, 5L, 5L};
+    String expected = "YBF7FKFz";
+    long[] decoded = hashids.decodeLongNumbers(expected);
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(numbers.length, decoded.length);
+    assertArrayEquals(numbers, decoded);
+  }
 }
