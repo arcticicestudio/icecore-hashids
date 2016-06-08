@@ -242,4 +242,16 @@ public class HashidsTest {
     assertEquals(numbers.length, decoded.length);
     assertArrayEquals(numbers, decoded);
   }
+
+  @Test
+  public void longIncrementingNumbersRandomness() {
+    Hashids hashids = new Hashids("salt");
+    long[] numbers = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L};
+    String expected = "rjiJulUECaFAS1TBhzcX";
+    long[] decoded = hashids.decodeLongNumbers(expected);
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(numbers.length, decoded.length);
+    assertArrayEquals(numbers, decoded);
+  }
 }
