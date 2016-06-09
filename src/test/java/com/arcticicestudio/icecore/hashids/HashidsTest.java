@@ -191,6 +191,17 @@ public class HashidsTest {
   }
 
   @Test
+  public void oneIntegerNumberWithoutSeparators() {
+    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
+    int number = 12_345;
+    String hash = hashids.encodeToString(number);
+    int[] decoded = hashids.decodeIntegerNumbers(hash);
+
+    assertEquals(1, decoded.length);
+    assertEquals(number, decoded[0]);
+  }
+
+  @Test
   public void oneIntegerNumberWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
     int number = 12345;
