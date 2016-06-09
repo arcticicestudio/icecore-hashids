@@ -285,4 +285,16 @@ public class HashidsTest {
     assertNotEquals(0, hash.length());
     assertEquals(hex, returnedHex);
   }
+
+  @Test
+  public void hexStringUpperCase() {
+    Hashids hashids = new Hashids("salt");
+    String hex = "75BCD15";
+    String hash = hashids.encodeHex(hex);
+    String returnedHex = hashids.decodeHex(hash);
+
+    assertNotNull(hash);
+    assertNotEquals(0, hash.length());
+    assertEquals(hex, returnedHex);
+  }
 }
