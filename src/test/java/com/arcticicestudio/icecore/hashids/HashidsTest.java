@@ -310,4 +310,17 @@ public class HashidsTest {
     assertNotEquals(0, hash.length());
     assertEquals(hex, returnedHex);
   }
+
+  @Test
+  public void hexStringUpperCaseWithCustomMinimumHashLength() {
+    Hashids hashids = new Hashids("salt", 8);
+    String hex = "75BCD15";
+    String hash = hashids.encodeHex(hex);
+    String returnedHex = hashids.decodeHex(hash);
+
+    assertNotNull(hash);
+    assertNotEquals(0, hash.length());
+    assertEquals(hex, returnedHex);
+    assertEquals(8, hash.length());
+  }
 }
