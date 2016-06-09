@@ -213,7 +213,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneIntegerNumberWithCustomAlphabet() {
+  public void oneIntegerNumberWithCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     int number = 12_345;
     String expected = "KQL1R";
