@@ -108,7 +108,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithCustomUpperCaseAlphabet() {
+  public void oneLongNumberWithCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long number = 12_345L;
     String expected = "KQL1R";
@@ -117,6 +117,18 @@ public class HashidsTest {
     assertEquals(expected, hashids.encodeToString(number));
     assertEquals(decoded.length, 1);
     assertEquals(decoded[0], number);
+  }
+
+  @Test
+  public void oneLongNumberWithCustomLowerCaseAndNumbersAlphabet() {
+    Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
+    long number = 12_345L;
+    String expected = "gnkzkvxn";
+    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+
+    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(1, decoded.length);
+    assertEquals(number, decoded[0]);
   }
 
   @Test
