@@ -87,6 +87,17 @@ public class HashidsTest {
   }
 
   @Test
+  public void oneLongNumberWithoutSeparators() {
+    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
+    long number = 12_345L;
+    String hash = hashids.encodeToString(number);
+    long[] decoded = hashids.decodeLongNumbers(hash);
+
+    assertEquals(1, decoded.length);
+    assertEquals(number, decoded[0]);
+  }
+
+  @Test
   public void oneLongNumberWithLargeCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 1000);
     long number = 12_345;
