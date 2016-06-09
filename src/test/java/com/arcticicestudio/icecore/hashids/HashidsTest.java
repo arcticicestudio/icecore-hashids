@@ -108,7 +108,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithCustomAlphabet() {
+  public void oneLongNumberWithCustomUpperCaseAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long number = 12_345L;
     String expected = "KQL1R";
