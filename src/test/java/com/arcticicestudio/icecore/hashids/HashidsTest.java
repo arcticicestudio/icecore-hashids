@@ -135,6 +135,27 @@ public class HashidsTest {
   }
 
   @Test
+  public void oneIntegerNumberWithLargeCustomMinimumHashLength() {
+    Hashids hashids = new Hashids("salt", 1000);
+    int number = 12_345;
+    String expected = "lPaNoKpAjg2O9bdQ5K6l9Yvj0o7MWXwZPNyZ90jxQp7WYlA5gJ4LvwEMGnwDNBZjpxQY692dXoPOMyrVrgXDGE0BnaeZdM" +
+      "YO1WxRlevqJK0BloZNbYG29dP1paDDw7gpRqBzjy5OedVZlEJnNjPQ4LXZye5REY0qA2wW1pOnJNjvMbLKg6rexwWDVyl74ZW74pVdEYQBa6zv" +
+      "15eDbwlVqpzoDZ14AwlxbGL0RyE9P250JQ4egxYbwaoz17vXZENyrgxzn6V2pW5eA9vMPRdBoa7w5Vo9GMge1nPqQYJxlEZVyrxYKONAepM0lw" +
+      "L42g7PdgK6V0xvdQlao1ANOG92LpYONBLEyYvqeZwnDA6WMaGb7jaQOVlPerdbJ7B1LzDyY59b4AJOeo6l9RpgGWVnzZqjNVDpraMYz2bQxdKv" +
+      "y5PEwe7OP7WZDzeQANv9o6ga0jG2dDYj4xlKLZpa5qBbzMyGvrNp9nl4bLoy7E2dPB6AGYqzxkX4j1kZWaevwVKNR01OrMX5DgjJQAdPXJ9W16" +
+      "OwQeR2go07VEnb1MqKxJ4YLr5XEVlwpnRyBqOlZG9Rg1AnN4o6XLBJ0jWP2yrvYX7QMB0a5LdxKwED1g0KMRpWnXv26oZx4GEqAwNdVg9PR25z" +
+      "rJQjxKoXl104pzZeqEb7J5Pyw4BXWjRMnrD5RqWnoa1EGzX6JvDQbjBZ9NB6Av2bjd4LRy0WOXzrKDp0DlXKJZL7YNjOwQqbE1a4GpMLnj6RKy" +
+      "PDrWVB9lOGdqAQenj5aYBM7KWdNr6JXOgv2M9XNL0oAxJ2RqrGOngPjKyq2oPpEzdA5XORGQZa91Y0BlNxz96Bba7oVDnMgdrJvGKaMYKo9bvQ" +
+      "6r04xXL1GP2AWOWR7x46rMLgjXyQnVAEw5zL76Aboq49vK2pQz5jNJywPlGg1KAV0aLWzJ5bRevE74qBPoy6Xzbqre1RnKa2NdVODOVnBaDERz" +
+      "AgJGx41qe2LrpdWGE4QbxLJez6";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
+
+    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(1, decoded.length);
+    assertEquals(number, decoded[0]);
+  }
+
+  @Test
   public void oneIntegerNumberWithCustomAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     int number = 12_345;
