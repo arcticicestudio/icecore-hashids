@@ -295,6 +295,17 @@ public class HashidsTest {
   }
 
   @Test
+  public void severalLongNumbersWithoutSeparators() {
+    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
+    long[] number = {1L, 2L, 3L, 4L, 5L};
+    String hash = hashids.encodeToString(number);
+    long[] decoded = hashids.decodeLongNumbers(hash);
+
+    assertEquals(5, decoded.length);
+    assertArrayEquals(number, decoded);
+  }
+
+  @Test
   public void severalLongNumberWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
     long[] numbers = {683L, 94_108L, 123L, 5L};
