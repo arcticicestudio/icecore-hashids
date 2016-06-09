@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-06 21:05 UTC+0200       +
-modified  2016-06-09 13:26 UTC+0200       +
+modified  2016-06-09 20:20 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -210,7 +210,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void hexStringLowerCase() {
+  public void hexString() {
     Hashids hashids = new Hashids("salt");
     String hex = "75bcd15";
     String hash = hashids.encodeHex(hex);
@@ -222,7 +222,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void hexStringLowerCaseWithCustomMinimumHashLength() {
+  public void hexStringWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
     String hex = "75bcd15";
     String hash = hashids.encodeHex(hex);
@@ -235,32 +235,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void hexStringUpperCase() {
-    Hashids hashids = new Hashids("salt");
-    String hex = "75BCD15";
-    String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash).toUpperCase();
-
-    assertNotNull(hash);
-    assertNotEquals(0, hash.length());
-    assertEquals(hex, returnedHex);
-  }
-
-  @Test
-  public void hexStringUpperCaseWithCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 8);
-    String hex = "75BCD15";
-    String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash).toUpperCase();
-
-    assertNotNull(hash);
-    assertNotEquals(0, hash.length());
-    assertEquals(hex, returnedHex);
-    assertEquals(8, hash.length());
-  }
-
-  @Test
-  public void longHexStringLowerCase() {
+  public void longHexString() {
     Hashids hashids = new Hashids("salt");
     String hex = "f000000000000000000000000000000000000000000000000000000000000000000000000000000000000f";
     String hash = hashids.encodeHex(hex);
@@ -271,34 +246,15 @@ public class HashidsTest {
     assertEquals(hex, returnedHex);
   }
 
-  @Test
-  public void longHexStringUpperCase() {
-    Hashids hashids = new Hashids("salt");
-    String hex = "F000000000000000000000000000000000000000000000000000000000000000000000000000000000000F";
-    String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash).toUpperCase();
-
-    assertNotNull(hash);
-    assertNotEquals(0, hash.length());
-    assertEquals(hex, returnedHex);
-  }
-
   @Test(expected = IllegalArgumentException.class)
-  public void shouldNotSupportOneNegativeNumber() {
+  public void negativeNumber() {
     Hashids hashids = new Hashids("salt");
     long number = -1L;
     hashids.encodeToString(number);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void shouldNotSupportSeveralNegativeNumbers() {
-    Hashids hashids = new Hashids("salt");
-    long[] numbers = {-1L, -2L, -3L};
-    hashids.encodeToString(numbers);
-  }
-
   @Test
-  public void buildHashidsWithBuilder() {
+  public void hashidsBuilder() {
     Hashids hashids = new Hashids.Builder()
       .salt("salt")
       .minHashLength(16)
