@@ -400,6 +400,17 @@ public class HashidsTest {
   }
 
   @Test
+  public void severalIntegerNumbersWithoutSeparators() {
+    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
+    int[] number = {1, 2, 3, 4, 5};
+    String hash = hashids.encodeToString(number);
+    int[] decoded = hashids.decodeIntegerNumbers(hash);
+
+    assertEquals(5, decoded.length);
+    assertArrayEquals(number, decoded);
+  }
+
+  @Test
   public void severalIntegerNumbersWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
     int[] numbers = {683, 94_108, 123, 5};
