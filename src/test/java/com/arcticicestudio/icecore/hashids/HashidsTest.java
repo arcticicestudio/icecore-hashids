@@ -584,4 +584,11 @@ public class HashidsTest {
     long number = -1L;
     hashids.encodeToString(number);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldNotSupportSeveralNegativeLongNumbers() {
+    Hashids hashids = new Hashids("salt");
+    long[] numbers = {-1L, -2L, -3L};
+    hashids.encodeToString(numbers);
+  }
 }
