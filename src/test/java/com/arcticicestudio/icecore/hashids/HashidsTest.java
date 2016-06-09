@@ -401,7 +401,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalIntegerNumbersWithCustomAlphabet() {
+  public void severalIntegerNumbersWithCustomUpperCaseAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     int[] numbers = {683, 94_108, 123, 5};
     String expected = "3L4DTV52JC4KAJ";
