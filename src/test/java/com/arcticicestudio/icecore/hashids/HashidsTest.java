@@ -600,7 +600,7 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     String hex = "75BCD15";
     String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash);
+    String returnedHex = hashids.decodeHex(hash).toUpperCase();
 
     assertNotNull(hash);
     assertNotEquals(0, hash.length());
@@ -612,7 +612,7 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt", 8);
     String hex = "75BCD15";
     String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash);
+    String returnedHex = hashids.decodeHex(hash).toUpperCase();
 
     assertNotNull(hash);
     assertNotEquals(0, hash.length());
@@ -637,7 +637,7 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     String hex = "F000000000000000000000000000000000000000000000000000000000000000000000000000000000000F";
     String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash);
+    String returnedHex = hashids.decodeHex(hash).toUpperCase();
 
     assertNotNull(hash);
     assertNotEquals(0, hash.length());
