@@ -123,7 +123,7 @@ public class HashidsTest {
   public void oneLongNumberWithCustomLowerCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
     long number = 12_345L;
-    String expected = "gnkzkvxn";
+    String expected = "kzkvx";
     long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
 
     assertEquals(expected, hashids.encodeToString(number));
@@ -229,6 +229,18 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
     int number = 12_345;
     String expected = "kzkvx";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
+
+    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
+
+  @Test
+  public void oneIntegerNumberWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
+    Hashids hashids = new Hashids("salt", 8, "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
+    int number = 12_345;
+    String expected = "5MKQL1RM";
     int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
 
     assertEquals(expected, hashids.encodeToString(number));
