@@ -166,30 +166,6 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneNumberWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", 8, "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
-    long number = 12_345L;
-    String expected = "5MKQL1RM";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(expected, hashids.encodeToString(number));
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
-  }
-
-  @Test
-  public void oneNumberWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", 8, "abcdefghijklmnpqrstuvwxyz123456789");
-    long number = 12_345L;
-    String expected = "gnkzkvxn";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(expected, hashids.encodeToString(number));
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
-  }
-
-  @Test
   public void severalNumbers() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {683L, 94_108L, 123L, 5L};
@@ -197,99 +173,6 @@ public class HashidsTest {
     long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
 
     assertEquals(hashids.encodeToString(numbers), expected);
-    assertEquals(decoded.length, numbers.length);
-    assertArrayEquals(decoded, numbers);
-  }
-
-  @Test
-  public void severalNumbersWithoutSeparators() {
-    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
-    long[] number = {1L, 2L, 3L, 4L, 5L};
-    String hash = hashids.encodeToString(number);
-    long[] decoded = hashids.decodeLongNumbers(hash);
-
-    assertEquals(5, decoded.length);
-    assertArrayEquals(number, decoded);
-  }
-
-  @Test
-  public void severalNumbersWithCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 8);
-    long[] numbers = {683L, 94_108L, 123L, 5L};
-    String expected = "1eMToyKzsRAfO";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
-
-    assertEquals(expected, hashids.encodeToString(numbers));
-    assertEquals(decoded.length, numbers.length);
-    assertArrayEquals(decoded, numbers);
-  }
-
-  @Test
-  public void severalNumbersWithLargeCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 1000);
-    long[] numbers = {683L, 94_108L, 123L, 5L};
-    String expected =
-      "OK1VzBwj7aW6rJnwzX1yQeL0pNZ45dBwLreag6JP7RqjnEx09Nd41yD5L9EGXMBV0b6W4Rq7w2NDejWVO9oB4vaNAd1YbxGnwwre7ORAKD09W" +
-      "JXj4MBny15Jdr524W7ZgDlbPzQNY6OwLrzjDypL6JQbqP9aBnXgwAORYOEA1leMjJnpwNDQLyG90vwq9zEMgDaOo57KYbNnAdGLg6DKbVxGzM" +
-        "AQBE2vwdYplMr9bGRlgv2KoO45jw1NJLAEezGDWP0J95M71yZpVKnqbe9YbyE6gBwODQJnd5WvXK71nAEX4MpeBgv5dGQYwRDLWpNRGd97J" +
-        "OeLBW6q5PlnojA9yNqnPGjRWzvKe4bV5YQ2aXwZArzoK9G4avRLyYe5q1BGzKNqDL0Y7d41OZ6oVlgr9dZQvV5RnpoNLPWwzDj6MgYrv9Aa" +
-        "PMylJ4EBdb0O25QNzQ9zJyEgMr07apGlXBjDPA6NjK1RJQGEL0zgaAV5bq7P231eMToyKzsRAfO3Y9leBp6dWyZO4woxvrXDnMbVR4exL1Y" +
-        "Wdvq5wZn2ONKopGjgLZoD7Ye1VnRWqX6xwKGxab4OKlyEq0A9271JrXBeEWb5XwaARBQy2xJvjnPepMQJjWMNxOlbd0gpEPVD672nlAd7DO" +
-        "opZLr6XBJxE0w1gMg0Dy4ZrYEvKa2Qbzx1XwMVo2KalOj7ybV06qxPr9zNZJxpjrV4aPMqAlLZ0zGo21RNvY6LQxgXrlj2BROdNwoa4Ade0" +
-        "6PW7QVpEaYzxXBDqnZye5R1a0qPOy49XojNZnr7WJpR2BQlrZL0VxJ6ejXWPy417ovV6WzdP42KaZX5xrqgbBdKEoN1VxYRe7ZMvl42GW50" +
-        "MEaBvX1RqVA9K0yjxpnGeoavVZxpqEP6gbl2zQNdYoGLgRlr7ZXypLzPE6q02K5QJMJAelnYOKxzrgZPodvQa1jp2yWOoDpXzAMQKYBVbZl" +
-        "5GvoqjMRgD72PYlbG9EVvOxAK6AaxZEde";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
-
-    assertEquals(expected, hashids.encodeToString(numbers));
-    assertEquals(decoded.length, numbers.length);
-    assertArrayEquals(decoded, numbers);
-  }
-
-  @Test
-  public void severalNumbersWithCustomUpperCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
-    long[] numbers = {683L, 94_108L, 123L, 5L};
-    String expected = "3L4DTV52JC4KAJ";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
-
-    assertEquals(expected, hashids.encodeToString(numbers));
-    assertEquals(decoded.length, numbers.length);
-    assertArrayEquals(decoded, numbers);
-  }
-
-  @Test
-  public void severalNumbersWithCustomLowerCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
-    long[] numbers = {683L, 94_108L, 123L, 5L};
-    String expected = "38wdt3wjqf65t2";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
-
-    assertEquals(expected, hashids.encodeToString(numbers));
-    assertEquals(decoded.length, numbers.length);
-    assertArrayEquals(decoded, numbers);
-  }
-
-  @Test
-  public void severalNumbersWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", 8, "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
-    long[] numbers = {683L, 94_108L, 123L, 5L};
-    String expected = "3L4DTV52JC4KAJ";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
-
-    assertEquals(expected, hashids.encodeToString(numbers));
-    assertEquals(decoded.length, numbers.length);
-    assertArrayEquals(decoded, numbers);
-  }
-
-  @Test
-  public void severalNumbersWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", 8, "abcdefghijklmnpqrstuvwxyz123456789");
-    long[] numbers = {683L, 94_108L, 123L, 5L};
-    String expected = "38wdt3wjqf65t2";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
-
-    assertEquals(expected, hashids.encodeToString(numbers));
     assertEquals(decoded.length, numbers.length);
     assertArrayEquals(decoded, numbers);
   }
