@@ -44,7 +44,7 @@ import static org.junit.Assert.*;
 public class HashidsTest {
 
   @Test
-  public void oneLongNumber() {
+  public void oneNumber() {
     Hashids hashids = new Hashids("salt");
     long number = 12_345L;
     String expected = "X4j1";
@@ -56,7 +56,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLargeLongNumber() {
+  public void oneLargeNumber() {
     Hashids hashids = new Hashids("salt");
     long number = 9_007_199_254_740_991L;
     String expected = "wQpRRqRX24R";
@@ -67,15 +67,27 @@ public class HashidsTest {
     assertEquals(decoded[0], number);
   }
 
+  @Test
+  public void oneLargeIntegerNumber() {
+    Hashids hashids = new Hashids("salt");
+    int number = 2147483647;
+    String expected = "wqVYY1X";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
+
+    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
+
   @Test(expected = IllegalArgumentException.class)
-  public void oneLargeLongNumberNotSupported() throws Exception {
+  public void oneLargeNumberNotSupported() throws Exception {
     long number = 9007199254740993L;
     Hashids a = new Hashids("salt");
     a.encode(number);
   }
 
   @Test
-  public void oneLongNumberWithCustomMinimumHashLength() {
+  public void oneNumberWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
     long number = 12_345L;
     String expected = "xkX4j1kZ";
@@ -87,7 +99,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithoutSeparators() {
+  public void oneNumberWithoutSeparators() {
     Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
     long number = 12_345L;
     String hash = hashids.encodeToString(number);
@@ -98,7 +110,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithCustomSeparators() {
+  public void oneNumberWithCustomSeparators() {
     Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, "abcdefgABCDEFG1234567");
     long number = 12_345L;
     String hash = hashids.encodeToString(number);
@@ -109,7 +121,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithLargeCustomMinimumHashLength() {
+  public void oneNumberWithLargeCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 1000);
     long number = 12_345;
     String expected = "lPaNoKpAjg2O9bdQ5K6l9Yvj0o7MWXwZPNyZ90jxQp7WYlA5gJ4LvwEMGnwDNBZjpxQY692dXoPOMyrVrgXDGE0BnaeZdM" +
@@ -130,7 +142,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithCustomUpperCaseAndNumbersAlphabet() {
+  public void oneNumberWithCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long number = 12_345L;
     String expected = "KQL1R";
@@ -142,7 +154,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithCustomLowerCaseAndNumbersAlphabet() {
+  public void oneNumberWithCustomLowerCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
     long number = 12_345L;
     String expected = "kzkvx";
@@ -154,7 +166,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
+  public void oneNumberWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", 8, "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long number = 12_345L;
     String expected = "5MKQL1RM";
@@ -166,7 +178,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLongNumberWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
+  public void oneNumberWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", 8, "abcdefghijklmnpqrstuvwxyz123456789");
     long number = 12_345L;
     String expected = "gnkzkvxn";
@@ -178,19 +190,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneLargeIntegerNumber() {
-    Hashids hashids = new Hashids("salt");
-    int number = 2147483647;
-    String expected = "wqVYY1X";
-    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
-
-    assertEquals(hashids.encodeToString(number), expected);
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
-  }
-
-  @Test
-  public void severalLongNumbers() {
+  public void severalNumbers() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "1eMToyKzsRAfO";
@@ -202,7 +202,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithoutSeparators() {
+  public void severalNumbersWithoutSeparators() {
     Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
     long[] number = {1L, 2L, 3L, 4L, 5L};
     String hash = hashids.encodeToString(number);
@@ -213,7 +213,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumberWithCustomMinimumHashLength() {
+  public void severalNumbersWithCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 8);
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "1eMToyKzsRAfO";
@@ -225,7 +225,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumberWithLargeCustomMinimumHashLength() {
+  public void severalNumbersWithLargeCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 1000);
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected =
@@ -247,7 +247,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomUpperCaseAndNumbersAlphabet() {
+  public void severalNumbersWithCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "3L4DTV52JC4KAJ";
@@ -259,7 +259,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomLowerCaseAndNumbersAlphabet() {
+  public void severalNumbersWithCustomLowerCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "38wdt3wjqf65t2";
@@ -271,7 +271,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
+  public void severalNumbersWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", 8, "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "3L4DTV52JC4KAJ";
@@ -283,7 +283,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
+  public void severalNumbersWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", 8, "abcdefghijklmnpqrstuvwxyz123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "38wdt3wjqf65t2";
@@ -295,7 +295,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void longNumbersRandomness() {
+  public void severalNumbersRandomness() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {5L, 5L, 5L, 5L};
     String expected = "YBF7FKFz";
@@ -307,7 +307,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void longIncrementingNumbersRandomness() {
+  public void severalIncrementingNumbersRandomness() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L};
     String expected = "rjiJulUECaFAS1TBhzcX";
@@ -401,14 +401,14 @@ public class HashidsTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void shouldNotSupportOneNegativeLongNumber() {
+  public void shouldNotSupportOneNegativeNumber() {
     Hashids hashids = new Hashids("salt");
     long number = -1L;
     hashids.encodeToString(number);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void shouldNotSupportSeveralNegativeLongNumbers() {
+  public void shouldNotSupportSeveralNegativeNumbers() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {-1L, -2L, -3L};
     hashids.encodeToString(numbers);
