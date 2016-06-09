@@ -266,4 +266,12 @@ public class HashidsTest {
     assertEquals(numbers.length, decoded.length);
     assertArrayEquals(numbers, decoded);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void invalidSalt() {
+    Hashids hashidsA = new Hashids("salt and pepper");
+    Hashids hashidsB = new Hashids("salt");
+    long number = 12_345L;
+    hashidsA.decodeLongNumbers(hashidsB.encodeToString(number));
+  }
 }
