@@ -287,6 +287,19 @@ public class HashidsTest {
   }
 
   @Test
+  public void hexStringLowerCaseWithCustomMinimumHashLength() {
+    Hashids hashids = new Hashids("salt", 8);
+    String hex = "75bcd15";
+    String hash = hashids.encodeHex(hex);
+    String returnedHex = hashids.decodeHex(hash);
+
+    assertNotNull(hash);
+    assertNotEquals(0, hash.length());
+    assertEquals(hex, returnedHex);
+    assertEquals(8, hash.length());
+  }
+
+  @Test
   public void hexStringUpperCase() {
     Hashids hashids = new Hashids("salt");
     String hex = "75BCD15";
