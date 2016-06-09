@@ -323,4 +323,16 @@ public class HashidsTest {
     assertEquals(hex, returnedHex);
     assertEquals(8, hash.length());
   }
+
+  @Test
+  public void longHexStringLowerCase() {
+    Hashids hashids = new Hashids("salt");
+    String hex = "f000000000000000000000000000000000000000000000000000000000000000000000000000000000000f";
+    String hash = hashids.encodeHex(hex);
+    String returnedHex = hashids.decodeHex(hash);
+
+    assertNotNull(hash);
+    assertNotEquals(0, hash.length());
+    assertEquals(hex, returnedHex);
+  }
 }
