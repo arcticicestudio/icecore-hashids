@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-06 21:05 UTC+0200       +
-modified  2016-06-06 21:06 UTC+0200       +
+modified  2016-06-09 13:26 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -656,5 +656,20 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {-1L, -2L, -3L};
     hashids.encodeToString(numbers);
+  }
+
+  @Test
+  public void buildHashidsWithBuilder() {
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .minHashLength(16)
+      .alphabet(Hashids.DEFAULT_ALPHABET)
+      .separators(Hashids.DEFAULT_SEPARATORS)
+      .build();
+    long number = 12_345L;
+    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+
+    assertEquals(1, decoded.length);
+    assertEquals(number, decoded[0]);
   }
 }
