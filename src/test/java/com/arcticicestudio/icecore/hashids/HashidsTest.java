@@ -577,4 +577,11 @@ public class HashidsTest {
     assertNotEquals(0, hash.length());
     assertEquals(hex, returnedHex);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldNotSupportOneNegativeLongNumber() {
+    Hashids hashids = new Hashids("salt");
+    long number = -1L;
+    hashids.encodeToString(number);
+  }
 }
