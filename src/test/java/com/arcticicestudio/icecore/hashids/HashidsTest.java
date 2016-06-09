@@ -171,6 +171,28 @@ public class HashidsTest {
   }
 
   @Test
+  public void severalLongNumberWithLargeCustomMinimumHashLength() {
+    Hashids hashids = new Hashids("salt", 1000);
+    long[] numbers = {683L, 94_108L, 123L, 5L};
+    String expected =
+      "OK1VzBwj7aW6rJnwzX1yQeL0pNZ45dBwLreag6JP7RqjnEx09Nd41yD5L9EGXMBV0b6W4Rq7w2NDejWVO9oB4vaNAd1YbxGnwwre7ORAKD09W" +
+      "JXj4MBny15Jdr524W7ZgDlbPzQNY6OwLrzjDypL6JQbqP9aBnXgwAORYOEA1leMjJnpwNDQLyG90vwq9zEMgDaOo57KYbNnAdGLg6DKbVxGzM" +
+        "AQBE2vwdYplMr9bGRlgv2KoO45jw1NJLAEezGDWP0J95M71yZpVKnqbe9YbyE6gBwODQJnd5WvXK71nAEX4MpeBgv5dGQYwRDLWpNRGd97J" +
+        "OeLBW6q5PlnojA9yNqnPGjRWzvKe4bV5YQ2aXwZArzoK9G4avRLyYe5q1BGzKNqDL0Y7d41OZ6oVlgr9dZQvV5RnpoNLPWwzDj6MgYrv9Aa" +
+        "PMylJ4EBdb0O25QNzQ9zJyEgMr07apGlXBjDPA6NjK1RJQGEL0zgaAV5bq7P231eMToyKzsRAfO3Y9leBp6dWyZO4woxvrXDnMbVR4exL1Y" +
+        "Wdvq5wZn2ONKopGjgLZoD7Ye1VnRWqX6xwKGxab4OKlyEq0A9271JrXBeEWb5XwaARBQy2xJvjnPepMQJjWMNxOlbd0gpEPVD672nlAd7DO" +
+        "opZLr6XBJxE0w1gMg0Dy4ZrYEvKa2Qbzx1XwMVo2KalOj7ybV06qxPr9zNZJxpjrV4aPMqAlLZ0zGo21RNvY6LQxgXrlj2BROdNwoa4Ade0" +
+        "6PW7QVpEaYzxXBDqnZye5R1a0qPOy49XojNZnr7WJpR2BQlrZL0VxJ6ejXWPy417ovV6WzdP42KaZX5xrqgbBdKEoN1VxYRe7ZMvl42GW50" +
+        "MEaBvX1RqVA9K0yjxpnGeoavVZxpqEP6gbl2zQNdYoGLgRlr7ZXypLzPE6q02K5QJMJAelnYOKxzrgZPodvQa1jp2yWOoDpXzAMQKYBVbZl" +
+        "5GvoqjMRgD72PYlbG9EVvOxAK6AaxZEde";
+    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(decoded.length, numbers.length);
+    assertArrayEquals(decoded, numbers);
+  }
+
+  @Test
   public void severalLongNumbersWithCustomAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
