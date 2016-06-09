@@ -307,7 +307,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomUpperCaseAlphabet() {
+  public void severalLongNumbersWithCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "3L4DTV52JC4KAJ";
@@ -319,7 +319,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomLowerCaseAlphabet() {
+  public void severalLongNumbersWithCustomLowerCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "38wdt3wjqf65t2";
@@ -331,7 +331,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomMinimumHashLengthAndCustomUpperCaseAlphabet() {
+  public void severalLongNumbersWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", 8, "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "3L4DTV52JC4KAJ";
@@ -343,7 +343,7 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalLongNumbersWithCustomMinimumHashLengthAndCustomLowerCaseAlphabet() {
+  public void severalLongNumbersWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", 8, "abcdefghijklmnpqrstuvwxyz123456789");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "38wdt3wjqf65t2";
@@ -401,8 +401,32 @@ public class HashidsTest {
   }
 
   @Test
-  public void severalIntegerNumbersWithCustomUpperCaseAlphabet() {
+  public void severalIntegerNumbersWithCustomUpperCaseAndNumbersAlphabet() {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
+    int[] numbers = {683, 94_108, 123, 5};
+    String expected = "3L4DTV52JC4KAJ";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(numbers));
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(decoded.length, numbers.length);
+    assertArrayEquals(decoded, numbers);
+  }
+
+  @Test
+  public void severalIntegerNumbersWithCustomLowerCaseAndNumbersAlphabet() {
+    Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
+    int[] numbers = {683, 94_108, 123, 5};
+    String expected = "38wdt3wjqf65t2";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(numbers));
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(decoded.length, numbers.length);
+    assertArrayEquals(decoded, numbers);
+  }
+
+  @Test
+  public void severalIntegerNumbersWithCustomMinimumHashLengthAndCustomUpperCaseAndNumbersAlphabet() {
+    Hashids hashids = new Hashids("salt", 8, "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     int[] numbers = {683, 94_108, 123, 5};
     String expected = "3L4DTV52JC4KAJ";
     int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(numbers));
