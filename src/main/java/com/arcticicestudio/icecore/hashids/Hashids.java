@@ -196,7 +196,7 @@ public final class Hashids {
     seps = consistentShuffle(seps, this.salt);
 
 
-    if (isEmpty(seps) || (alphabet.length() / seps.length()) > SEP_DIV) {
+    if (isEmpty(seps) || ((float)alphabet.length() / seps.length()) > SEP_DIV) {
       int sepsLen = (int) Math.ceil(alphabet.length() / SEP_DIV);
       if (sepsLen == 1) {
         sepsLen++;
@@ -211,7 +211,7 @@ public final class Hashids {
     }
 
     alphabet = consistentShuffle(alphabet, this.salt);
-    int guardCount = (int) Math.ceil(alphabet.length() / GUARD_DIV);
+    int guardCount = (int) Math.ceil((double)alphabet.length() / GUARD_DIV);
 
     if (alphabet.length() < 3) {
       guards = seps.substring(0, guardCount);
