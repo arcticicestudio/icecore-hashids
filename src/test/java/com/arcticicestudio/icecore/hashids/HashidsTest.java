@@ -132,6 +132,18 @@ public class HashidsTest {
   }
 
   @Test
+  public void oneLongNumberWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
+    Hashids hashids = new Hashids("salt", 8, "abcdefghijklmnpqrstuvwxyz123456789");
+    long number = 12_345L;
+    String expected = "gnkzkvxn";
+    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+
+    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(decoded.length, 1);
+    assertEquals(decoded[0], number);
+  }
+
+  @Test
   public void oneIntegerNumber() {
     Hashids hashids = new Hashids("salt");
     int number = 12_345;
