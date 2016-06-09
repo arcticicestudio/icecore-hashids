@@ -437,6 +437,18 @@ public class HashidsTest {
   }
 
   @Test
+  public void severalIntegerNumbersWithCustomMinimumHashLengthAndCustomLowerCaseAndNumbersAlphabet() {
+    Hashids hashids = new Hashids("salt", 8, "abcdefghijklmnpqrstuvwxyz123456789");
+    int[] numbers = {683, 94_108, 123, 5};
+    String expected = "38wdt3wjqf65t2";
+    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(numbers));
+
+    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(decoded.length, numbers.length);
+    assertArrayEquals(decoded, numbers);
+  }
+
+  @Test
   public void longNumbersRandomness() {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {5L, 5L, 5L, 5L};
