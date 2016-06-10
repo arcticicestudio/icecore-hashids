@@ -3,7 +3,7 @@
 title     Hashids Public API Test         +
 project   icecore-hashids                 +
 file      HashidsTest.java                +
-version                                   +
+version   0.1.0                           +
 author    Arctic Ice Studio               +
 email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +

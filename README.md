@@ -190,12 +190,12 @@ This is done by never placing the following letters next to each other:
 `c, C, s, S, f, F, h, H, u, U, i, I, t, T`
 
 ### Version
-[`0.0.0`](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads)  
+[`0.1.0`](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads)  
 
 For older versions check out the private [Bitbucket Git Repository](https://bitbucket.org/arcticicestudio/icecore-hashids).
 
 ### Changelog
-[`0.0.0`](CHANGELOG.md)
+[`0.1.0`](CHANGELOG.md)
 
 ### Development
 #### Workflow
