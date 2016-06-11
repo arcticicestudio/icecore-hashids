@@ -159,13 +159,13 @@ public final class Hashids {
     this.salt = salt == null ? "" : salt;
     this.minHashLength = minHashLength < 0 ? 0 : minHashLength;
 
-    String uniqueAlphabet = "";
+    StringBuilder uniqueAlphabet = new StringBuilder();
     for (int idx = 0; idx < alphabet.length(); idx++) {
-      if (!uniqueAlphabet.contains(String.valueOf(alphabet.charAt(idx)))) {
-        uniqueAlphabet += "" + alphabet.charAt(idx);
+      if (uniqueAlphabet.indexOf(String.valueOf(alphabet.charAt(idx))) == -1) {
+        uniqueAlphabet.append(alphabet.charAt(idx));
       }
     }
-    alphabet = uniqueAlphabet;
+    alphabet = uniqueAlphabet.toString();
 
     if (alphabet.length() < MIN_ALPHABET_LENGTH) {
       throw new IllegalArgumentException(
