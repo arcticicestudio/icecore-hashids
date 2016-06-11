@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-05 22:48 UTC+0200       +
+modified  2016-06-11 12:17 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -125,6 +125,8 @@ public final class Hashids {
   private static final int GUARD_DIV = 12;
   private static final int MIN_ALPHABET_LENGTH = 16;
   private static final double SEP_DIV = 3.5;
+  private static final Pattern PATTERN_ENCODE_HEX = Pattern.compile("^[0-9a-fA-F]+$");
+  private static final Pattern PATTERN_ALPHABET_REPLACE = Pattern.compile("\\s+");
 
   private final String alphabet;
   private final String guards;
@@ -191,8 +193,8 @@ public final class Hashids {
       }
     }
 
-    alphabet = alphabet.replaceAll("\\s+", "");
-    seps = seps.replaceAll("\\s+", "");
+    alphabet = PATTERN_ALPHABET_REPLACE.matcher(alphabet).replaceAll("");
+    seps = PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll("");
     seps = consistentShuffle(seps, this.salt);
 
 
@@ -367,7 +369,7 @@ public final class Hashids {
    * @return The encoded string
    */
   public String encodeHex(String hex) {
-    if (!hex.matches("^[0-9a-fA-F]+$")) {
+    if (!PATTERN_ENCODE_HEX.matcher(hex).matches()) {
       throw new IllegalArgumentException(String.format("%s is not a hex string", hex));
     }
     Matcher matcher = Pattern.compile("[\\w\\W]{1,12}").matcher(hex);
