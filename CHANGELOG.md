@@ -3,6 +3,31 @@ IceCore - Hashids
 
 ![Hashids logo][hashids-logo] ![Hashids text banner][hashids-text-banner]
 
+## 0.2.0 (2016-06-11)
+### Features
+#### API
+  - Implemented public API Builder methods:
+
+| Class | Constructor | Description |
+| ----- | ----------- | ----------- |
+| `com.arcticicestudio.icecore.hashids.Hashids` | <u>`+ getVersion(String):Builder`</u> | Returns the [ArcVer][arcver-github]- and [SemVer][semver] compatible version. |
+
+### Improvements
+#### API
+  - Now using `StringBuilder` class for non-constant `String` attributes to avoid unnecessary `String` primitive-wrapping
+  - No more boxing of primitive for `String` conversion only
+    Make use of the static JDK method `+ String.valueOf(char):String` to avoid waste of memory and cycles by not using a primitive-wrapper with concatenating empty string `""` to a primitive.
+    This change fulfills the [Eclipse SonarQube][sonarqube-eclipse] rule [`squid:S2131`][sonarqube-eclipse-rule-squid-s2131]:
+      > Primitives should not be boxed just for `String` conversion
+
+  - Changed private methods without access to instance data to be `static`
+    Clarifies that these methods will not modify the state of the object.
+    This change fulfills the [Eclipse SonarQube][sonarqube-eclipse] rule `squid:S2325`:
+      > Private methods that don't access instance data should be static
+
+  - Pre-compile regex `Pattern` pattern
+    Improves the performance (less memory and CPU cycles) by using pre-compiled regex pattern instead of creating instances for each `Pattern` call.
+
 ## 0.1.0 (2016-06-10) - Public API
 ### Features
 #### API
@@ -74,3 +99,8 @@ IceCore - Hashids
 
 [hashids-text-banner]: https://camo.githubusercontent.com/1c71719d94fca1132cd4570f7e54f9aedfb27ba0/687474703a2f2f686173686964732e6f72672f7075626c69632f696d672f686173686964732d6c6f676f2d6e6f726d616c2e706e67
 [hashids-logo]: https://avatars1.githubusercontent.com/u/8481000
+[sonarqube-eclipse]: https://dev.eclipse.org/sonar
+[sonarqube-eclipse-rule-squid-s2131]: https://dev.eclipse.org/sonar/rules/show/squid:S2131
+[sonarqube-eclipse-rule-squid-s2325]: https://dev.eclipse.org/sonar/rules/show/squid:S232
+[arcver-github]: https://github.com/arcticicestudio/arcver
+[semver]: http://semver.org
