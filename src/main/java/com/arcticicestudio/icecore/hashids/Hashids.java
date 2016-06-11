@@ -530,7 +530,7 @@ public final class Hashids {
     return new Hashid(resultArray, hash);
   }
 
-  private String consistentShuffle(String alphabet, String salt) {
+  private static String consistentShuffle(String alphabet, String salt) {
     if (salt.length() <= 0) {
       return alphabet;
     }
@@ -550,7 +550,7 @@ public final class Hashids {
     return alphabet;
   }
 
-  private String hash(long input, String alphabet) {
+  private static String hash(long input, String alphabet) {
     String hash = "";
     final int alphabetLen = alphabet.length();
     final char[] alphabetChars = alphabet.toCharArray();
@@ -562,7 +562,7 @@ public final class Hashids {
     return hash;
   }
 
-  private Long unhash(String input, String alphabet) {
+  private static Long unhash(String input, String alphabet) {
     long number = 0;
     long pos;
     final char[] inputChars = input.toCharArray();
