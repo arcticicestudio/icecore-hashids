@@ -190,12 +190,12 @@ This is done by never placing the following letters next to each other:
 `c, C, s, S, f, F, h, H, u, U, i, I, t, T`
 
 ### Version
-[`0.1.0`](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads)  
+[`0.2.0`](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads)  
 
 For older versions check out the private [Bitbucket Git Repository](https://bitbucket.org/arcticicestudio/icecore-hashids).
 
 ### Changelog
-[`0.1.0`](CHANGELOG.md)
+[`0.2.0`](CHANGELOG.md)
 
 ### Development
 #### Workflow
@@ -207,7 +207,6 @@ This project follows the [Arctic Versioning Specification (ArcVer)](https://gith
 ### Dependencies
 #### Development
   - [`junit@4.12.0`](http://junit.org)
-  - [`hashids-java@1.0.0`](https://github.com/jiecao-fm/hashids-java)
   - [`hamcrest-core@1.3.0`](http://hamcrest.org)
 
 **Engines**

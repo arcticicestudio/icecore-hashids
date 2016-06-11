@@ -4,7 +4,7 @@
 title     Apache Ant Build Script         +
 project   icecore-hashids                 +
 file      build.xml                       +
-version   0.1.0                           +
+version   0.2.0                           +
 author    Arctic Ice Studio               +
 email     development@arcticicestudio.com +
 copyright Copyright (C) 2016              +

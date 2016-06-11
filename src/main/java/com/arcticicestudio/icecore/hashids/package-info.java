@@ -3,7 +3,7 @@
 title     Package Info                    +
 project   icecore-hashids                 +
 file      package-info.java               +
-version   0.1.0                           +
+version   0.2.0                           +
 author    Arctic Ice Studio               +
 email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
@@ -38,6 +38,6 @@ Arctic Versioning Specification (ArcVer)
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
  * @see <a href="http://hashids.org">Hashids</a>
- * @version 0.1.0
+ * @version 0.2.0
  */
 package com.arcticicestudio.icecore.hashids;
