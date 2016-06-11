@@ -3,13 +3,13 @@
 title     Hashids Public API              +
 project   icecore-hashids                 +
 file      Hashids.java                    +
-version   0.1.0                           +
+version   0.2.0                           +
 author    Arctic Ice Studio               +
 email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-05 22:48 UTC+0200       +
+modified  2016-06-11 12:27 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -125,6 +125,8 @@ public final class Hashids {
   private static final int GUARD_DIV = 12;
   private static final int MIN_ALPHABET_LENGTH = 16;
   private static final double SEP_DIV = 3.5;
+  private static final Pattern PATTERN_ENCODE_HEX = Pattern.compile("^[0-9a-fA-F]+$");
+  private static final Pattern PATTERN_ALPHABET_REPLACE = Pattern.compile("\\s+");
 
   private final String alphabet;
   private final String guards;
@@ -159,13 +161,13 @@ public final class Hashids {
     this.salt = salt == null ? "" : salt;
     this.minHashLength = minHashLength < 0 ? 0 : minHashLength;
 
-    String uniqueAlphabet = "";
+    StringBuilder uniqueAlphabet = new StringBuilder();
     for (int idx = 0; idx < alphabet.length(); idx++) {
-      if (!uniqueAlphabet.contains("" + alphabet.charAt(idx))) {
-        uniqueAlphabet += "" + alphabet.charAt(idx);
+      if (uniqueAlphabet.indexOf(String.valueOf(alphabet.charAt(idx))) == -1) {
+        uniqueAlphabet.append(alphabet.charAt(idx));
       }
     }
-    alphabet = uniqueAlphabet;
+    alphabet = uniqueAlphabet.toString();
 
     if (alphabet.length() < MIN_ALPHABET_LENGTH) {
       throw new IllegalArgumentException(
@@ -191,8 +193,8 @@ public final class Hashids {
       }
     }
 
-    alphabet = alphabet.replaceAll("\\s+", "");
-    seps = seps.replaceAll("\\s+", "");
+    alphabet = PATTERN_ALPHABET_REPLACE.matcher(alphabet).replaceAll("");
+    seps = PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll("");
     seps = consistentShuffle(seps, this.salt);
 
 
@@ -367,7 +369,7 @@ public final class Hashids {
    * @return The encoded string
    */
   public String encodeHex(String hex) {
-    if (!hex.matches("^[0-9a-fA-F]+$")) {
+    if (!PATTERN_ENCODE_HEX.matcher(hex).matches()) {
       throw new IllegalArgumentException(String.format("%s is not a hex string", hex));
     }
     Matcher matcher = Pattern.compile("[\\w\\W]{1,12}").matcher(hex);
@@ -530,7 +532,7 @@ public final class Hashids {
     return new Hashid(resultArray, hash);
   }
 
-  private String consistentShuffle(String alphabet, String salt) {
+  private static String consistentShuffle(String alphabet, String salt) {
     if (salt.length() <= 0) {
       return alphabet;
     }
@@ -550,7 +552,7 @@ public final class Hashids {
     return alphabet;
   }
 
-  private String hash(long input, String alphabet) {
+  private static String hash(long input, String alphabet) {
     String hash = "";
     final int alphabetLen = alphabet.length();
     final char[] alphabetChars = alphabet.toCharArray();
@@ -562,7 +564,7 @@ public final class Hashids {
     return hash;
   }
 
-  private Long unhash(String input, String alphabet) {
+  private static Long unhash(String input, String alphabet) {
     long number = 0;
     long pos;
     final char[] inputChars = input.toCharArray();
@@ -590,5 +592,17 @@ public final class Hashids {
    */
   private boolean isEmpty(String value) {
     return value == null || value.length() == 0;
+  }
+
+  /**
+   * Returns the ArcVer- and SemVer compatible version.
+   *
+   * @return The ArcVer and SemVer compatible version
+   * @see <a href="https://github.com/arcticicestudio/arcver">ArcVer</a>
+   * @see <a href="http://semver.org">SemVer</a>
+   * @since 0.2.0
+   */
+  public static String getVersion() {
+    return "0.2.0";
   }
 }
