@@ -161,7 +161,7 @@ public final class Hashids {
 
     String uniqueAlphabet = "";
     for (int idx = 0; idx < alphabet.length(); idx++) {
-      if (!uniqueAlphabet.contains("" + alphabet.charAt(idx))) {
+      if (!uniqueAlphabet.contains(String.valueOf(alphabet.charAt(idx)))) {
         uniqueAlphabet += "" + alphabet.charAt(idx);
       }
     }
