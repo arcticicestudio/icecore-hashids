@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-11 12:17 UTC+0200       +
+modified  2016-06-11 12:27 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -592,5 +592,17 @@ public final class Hashids {
    */
   private boolean isEmpty(String value) {
     return value == null || value.length() == 0;
+  }
+
+  /**
+   * Returns the ArcVer- and SemVer compatible version.
+   *
+   * @return The ArcVer and SemVer compatible version
+   * @see <a href="https://github.com/arcticicestudio/arcver">ArcVer</a>
+   * @see <a href="http://semver.org">SemVer</a>
+   * @since 0.2.0
+   */
+  public static String getVersion() {
+    return "0.1.0";
   }
 }
