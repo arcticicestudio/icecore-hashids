@@ -9,7 +9,7 @@ email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
 created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-11 12:27 UTC+0200       +
+modified  2016-06-23 15:45 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
 
 [Description]
@@ -133,6 +133,10 @@ public final class Hashids {
   private final int minHashLength;
   private final String salt;
   private final String separators;
+
+  public Hashids() {
+    this("", 0);
+  }
 
   public Hashids(String salt) {
     this(salt, 0);
