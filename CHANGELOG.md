@@ -1,7 +1,4 @@
-IceCore - Hashids
-=================
-
-![Hashids logo][hashids-logo] ![Hashids text banner][hashids-text-banner]
+![](https://bitbucket.org/arcticicestudio/icecore-hashids/raw/develop/src/main/assets/media/icecore-hashids-banner.png)
 
 ## 0.2.0 (2016-06-11)
 ### Features
