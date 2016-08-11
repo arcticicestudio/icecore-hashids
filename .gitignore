@@ -7,12 +7,11 @@
 # email     development@arcticicestudio.com +
 # copyright Copyright (C) 2016              +
 # created   2016-06-05 17:23 UTC+0200       +
-# modified  2016-06-05 17:25 UTC+0200       +
+# modified  2016-08-11 18:38 UTC+0200       +
 # +++++++++++++++++++++++++++++++++++++++++++
 #
 # [Description]
-# Git dotfile providing ignore pattern for the git-based "IceCore - Hashids" project.
-# Based on the Git Ignore Pattern Dotfile of the "Glacier - Git" project (glacier-git@0.23.0).
+# Provides git ignore pattern based on the "glacier-git@0.25.0" skeleton file.
 #
 # [Index]
 #   (1) Project Environment
@@ -57,15 +56,6 @@
 #     (6.1) SVN
 #     (6.2) Mercurial
 #   (7) Project Specific Configuration
-#     (7.0) Arctic Project Structure
-#       (7.0.0) Structure Skeleton
-#
-# [Dependencies]
-# Development
-#   Engines
-#     - git@2.8.* (http://git-scm.com)
-#   Skeletons
-#     - glacier-git@0.23.0 (https://github.com/arcticicestudio/glacier-git)
 #
 # [Copyright]
 # Copyright (C) 2016 Arctic Ice Studio <development@arcticicestudio.com>
@@ -197,6 +187,7 @@ build-secure.properties
 # + Project Environment - Build Tool - Apache Maven 3                  [1.3.3] +
 # +----------------------------------------------------------------------------+
 target/
+pom-secure.properties
 # +--------------------------------------------------------------------[1.3.3]-+
 # +----------------------------------------------------------------------[1.3]-+
 
@@ -374,14 +365,4 @@ hs_log_pid*
 # +----------------------------------------------------------------------------+
 # + Project Specific Configuration                                         [7] +
 # +----------------------------------------------------------------------------+
-# +----------------------------------------------------------------------------+
-# + Project Specific Configuration - Arctic Project Structure            [7.0] +
-# +----------------------------------------------------------------------------+
-# +----------------------------------------------------------------------------+
-# + Project Specific Configuration - Arctic Project Structure -                +
-# + Structure Skeleton                                                 [7.0.0] +
-# +----------------------------------------------------------------------------+
-
-# +--------------------------------------------------------------------[7.0.0]-+
-# +----------------------------------------------------------------------[7.0]-+
 # +------------------------------------------------------------------------[7]-+
