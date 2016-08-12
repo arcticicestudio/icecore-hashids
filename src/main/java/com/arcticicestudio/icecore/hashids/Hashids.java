@@ -8,24 +8,7 @@ author    Arctic Ice Studio               +
 email     development@arcticicestudio.com +
 website   http://arcticicestudio.com      +
 copyright Copyright (C) 2016              +
-created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-23 15:45 UTC+0200       +
 +++++++++++++++++++++++++++++++++++++++++++
-
-[Description]
-Generates short, unique, non-sequential and decodable hashids from positive unsigned (long) integer numbers.
-Serves as the entry point to the "IceCore - Hashids" public API.
-
-[Copyright]
-Copyright (C) 2016 Arctic Ice Studio <development@arcticicestudio.com>
-
-[References]
-Hashids
-  (http://hashids.org)
-Java 8 API Documentation
-  (https://docs.oracle.com/javase/8/docs/api/)
-Arctic Versioning Specification (ArcVer)
-  (http://specs.arcticicestudio.com/arcver)
 */
 package com.arcticicestudio.icecore.hashids;
 
