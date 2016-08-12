@@ -33,9 +33,8 @@ import java.util.Objects;
 
 /**
  * Represents a hashid which holds all numbers and the encoded string.
- *
  * <p>
- *   This class is immutable.
+ *   <strong>This class is immutable.</strong>
  * </p>
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
