@@ -481,6 +481,7 @@ public final class Hashids {
   }
 
   private Hashid doDecode(String hash, String alphabet) {
+    final List<Long> result = new ArrayList<>();
     int idx = 0;
     String[] hashArray = hash.replaceAll("[" + guards + "]", " ").split(" ");
     if (hashArray.length == 3 || hashArray.length == 2) {
@@ -488,23 +489,20 @@ public final class Hashids {
     }
     String hashBreakdown = hashArray[idx];
 
-    final char lottery = hashBreakdown.toCharArray()[0];
-    hashBreakdown = hashBreakdown.substring(1);
-    hashBreakdown = hashBreakdown.replaceAll("[" + separators + "]", " ");
-    hashArray = hashBreakdown.split(" ");
+    if (!hashBreakdown.isEmpty()) {
+      final char lottery = hashBreakdown.toCharArray()[0];
+      hashBreakdown = hashBreakdown.substring(1);
+      hashBreakdown = hashBreakdown.replaceAll("[" + separators + "]", " ");
+      hashArray = hashBreakdown.split(" ");
 
-    final List<Long> result = new ArrayList<>();
-
-    String buffer;
-    for (String subHash : hashArray) {
-      buffer = lottery + salt + alphabet;
-      alphabet = consistentShuffle(alphabet, buffer.substring(0, alphabet.length()));
-      result.add(unhash(subHash, alphabet));
+      String buffer;
+      for (String subHash : hashArray) {
+        buffer = lottery + salt + alphabet;
+        alphabet = consistentShuffle(alphabet, buffer.substring(0, alphabet.length()));
+        result.add(unhash(subHash, alphabet));
+      }
     }
     long[] resultArray = toArray(result);
-    if (!doEncode(resultArray).toString().equals(hash)) {
-      throw new IllegalArgumentException(String.format("%s is not a valid hashid", hash));
-    }
     return new Hashid(resultArray, hash);
   }
 
