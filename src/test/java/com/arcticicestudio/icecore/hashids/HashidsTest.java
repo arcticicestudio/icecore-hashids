@@ -14,10 +14,13 @@ package com.arcticicestudio.icecore.hashids;
 
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests the <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a>
@@ -188,12 +191,16 @@ public class HashidsTest {
     assertArrayEquals(numbers, decoded);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void invalidSalt() {
-    Hashids hashidsA = new Hashids("salt and pepper");
-    Hashids hashidsB = new Hashids("salt");
-    long number = 12_345L;
-    hashidsA.decodeLongNumbers(hashidsB.encodeToString(number));
+  @Test
+  public void invalidSaltCollision() {
+    Hashids hashidsA = new Hashids("salt and pepper", 4);
+    Hashids hashidsB = new Hashids("salt", 4);
+    long number = 123L;
+    String token = hashidsA.encodeToString(number);
+
+    long[] decodedWrongSalt = hashidsB.decodeLongNumbers(token);
+    long[] decodedCorrectSalt = hashidsA.decodeLongNumbers(token);
+    assertThat(decodedWrongSalt, not(equalTo(decodedCorrectSalt)));
   }
 
   @Test
