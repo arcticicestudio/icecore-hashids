@@ -430,7 +430,7 @@ public final class Hashids {
       numberHashInt += numbers[idx] % (idx + 100);
     }
     String decodeAlphabet = alphabet;
-    final char lottery = decodeAlphabet.toCharArray()[numberHashInt % decodeAlphabet.length()];
+    final char lottery = decodeAlphabet.charAt(numberHashInt % decodeAlphabet.length());
 
     String result = lottery + "";
 
@@ -446,21 +446,21 @@ public final class Hashids {
       result += last;
 
       if (idx + 1 < numbers.length) {
-        num %= ((int) last.toCharArray()[0] + idx);
+        num %= ((int) last.charAt(0) + idx);
         sepsIdx = (int) (num % separators.length());
-        result += separators.toCharArray()[sepsIdx];
+        result += separators.charAt(sepsIdx);
       }
     }
 
     if (result.length() < minHashLength) {
-      guardIdx = (numberHashInt + (int) (result.toCharArray()[0])) % guards.length();
-      char guard = guards.toCharArray()[guardIdx];
+      guardIdx = (numberHashInt + (int) (result.charAt(0))) % guards.length();
+      char guard = guards.charAt(guardIdx);
 
       result = guard + result;
 
       if (result.length() < minHashLength) {
-        guardIdx = (numberHashInt + (int) (result.toCharArray()[2])) % guards.length();
-        guard = guards.toCharArray()[guardIdx];
+        guardIdx = (numberHashInt + (int) (result.charAt(2))) % guards.length();
+        guard = guards.charAt(guardIdx);
 
         result += guard;
       }
@@ -490,7 +490,7 @@ public final class Hashids {
     String hashBreakdown = hashArray[idx];
 
     if (!hashBreakdown.isEmpty()) {
-      final char lottery = hashBreakdown.toCharArray()[0];
+      final char lottery = hashBreakdown.charAt(0);
       hashBreakdown = hashBreakdown.substring(1);
       hashBreakdown = hashBreakdown.replaceAll("[" + separators + "]", " ");
       hashArray = hashBreakdown.split(" ");
