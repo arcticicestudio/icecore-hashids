@@ -45,7 +45,6 @@ import java.util.regex.Pattern;
  *     String enc = (Math.abs(number) != number ? "-" : "") + hashids.encodeToString(Math.abs(number));
  *     long dec = enc.startsWith("-") ? hashids.decodeLongs(enc.substring(1))[0] : hashids.decodeLongs(enc)[0];
  *   </pre>
- * </p>
  *
  * <p>
  *   <strong>{@code Hashids} instances are thread-safe.</strong>
@@ -89,10 +88,8 @@ public final class Hashids {
    *     <li>{@code 2^53-1}</li>
    *     <li>{@code Number.MAX_VALUE-1}</li>
    *   </ul>
-   * </p>
    * <p>
    *   Value: {@code 9_007_199_254_740_992L - 1}
-   * </p>
    */
   public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
 
@@ -218,7 +215,6 @@ public final class Hashids {
    *     <li>no minimum hash length</li>
    *     <li>{@link #DEFAULT_SEPARATORS} ({@value #DEFAULT_SEPARATORS})</li>
    *   </ul>
-   * </p>
    */
   public static final class Builder {
 
