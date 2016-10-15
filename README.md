@@ -1,15 +1,17 @@
-![](https://bitbucket.org/arcticicestudio/icecore-hashids/raw/develop/src/main/assets/media/icecore-hashids-banner.png)
+<p align="center"><img src="https://bitbucket.org/arcticicestudio/icecore-hashids/raw/develop/src/main/assets/icecore-hashids-logo-banner.svg"/></p>
 
-<img src="https://bitbucket.org/favicon.ico" width=24 height=24/> [![release](https://img.shields.io/badge/release-v0.2.0-blue.svg)](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads) [![pre-release](https://img.shields.io/badge/pre--release---_-blue.svg)](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads) [![issues](https://img.shields.io/bitbucket/issues-raw/arcticicestudio/icecore-hashids.svg?maxAge=86400)](https://bitbucket.org/arcticicestudio/icecore-hashids/issues)
+<p align="center"><img src="https://cdn.travis-ci.org/images/favicon-c566132d45ab1a9bcae64d8d90e4378a.svg" width=24 height=24/> <a href="https://travis-ci.org/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/travis/arcticicestudio/icecore-hashids/develop.svg"/></a> <img src="https://circleci.com/favicon.ico" width=24 height=24/> <a href="https://circleci.com/bb/arcticicestudio/icecore-hashids"><img src="https://circleci.com/bb/arcticicestudio/icecore-hashids.svg?style=shield&circle-token=926fbd867d3c517246727a0c1486b46135483fbf"/></a> <img src="https://codecov.io/favicon.ico" width=24 height=24/> <a href="https://codecov.io/gh/arcticicestudio/icecore-hashids"><img src="https://codecov.io/gh/arcticicestudio/icecore-hashids/branch/develop/graph/badge.svg"/></a> <img src="https://bitbucket.org/favicon.ico" width=24 height=24/> <a href="https://bitbucket.org/arcticicestudio/icecore-hashids/downloads"><img src="https://img.shields.io/badge/release-0.2.0-blue.svg"/></a> <a href="https://bitbucket.org/arcticicestudio/icecore-hashids/downloads"><img src="https://img.shields.io/badge/pre--release---_-blue.svg"/></a> <img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot----blue.svg"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href='https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion'><img src='https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashidsimages/download.svg'></a></p>
 
-Lightweight module library as part of the [IceCore](https://bitbucket.org/arcticicestudio/icecore) engine to generate short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.
+<p align="center">Lightweight module library to generate short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.<br>
+Implementation of the [Hashids](http://hashids.org) project.</p>
+<p align="center"></p>
 
-This is a implementation of the [Hashids](http://hashids.org) project.
+---
 
-It was designed for websites to use in URL shortening, tracking stuff, or making pages private or at least unguessable.  
+Designed for websites to use in URL shortening, tracking stuff, or making pages private or at least unguessable.  
 Can be used to create e.g obfuscated database ids, invitation codes, store shard numbers and much more.
 
-It converts numbers like `347` into strings like "yr8", or array of numbers like `[27, 986]` into "3kTMd".  
+It converts numbers like `347` into strings like `yr8`, or array of numbers like `[27, 986]` into `3kTMd`.  
 You can also decode those ids back.  
 This is useful in bundling several parameters into one or simply using them as short UIDs.  
 
@@ -43,7 +45,9 @@ compile(group: 'com.arcticicestudio', name: 'icecore-hashids', version: '0.2.0')
 <img src="http://apache.org/favicons/favicon.ico" width=16 height=16/> <a href="https://ant.apache.org/ivy">Apache Ivy</a>
 ```xml
 <dependency org="com.arcticicestudio" name="icecore-hashids" rev="0.2.0" />
-```   
+```
+
+Development snapshots are available via [OSS Sonatype](https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids).
 
 ### Build
 Build and install icecore-hashids into your local repository without GPG signing:  
@@ -55,6 +59,8 @@ Signed artifacts may be build by using the `sign-gpg` profile with a provided `g
 ```
 mvn clean install -Dgpg.keyname=YourGPGKeyId
 ```
+
+A continuous integration build is running at [Travis-CI](https://travis-ci.org/arcticicestudio/icecore-hashids) and [CircleCI](https://circleci.com/bb/arcticicestudio/icecore-hashids).
 
 ## Usage Guide
 This is a basic guide to show the common usage of the icecore-hashids API.  
@@ -223,21 +229,15 @@ This is done by never placing the following letters next to each other:
 `c, C, s, S, f, F, h, H, u, U, i, I, t, T`
 
 ## Development
-[![](https://img.shields.io/badge/Changelog-v0.2.0-blue.svg)](https://bitbucket.org/arcticicestudio/icecore-hashids/raw/v0.2.0/CHANGELOG.md)
-
-### Workflow
-This project follows the [gitflow](http://nvie.com/posts/a-successful-git-branching-model) branching model.
-
-### Specifications
-This project follows the [Arctic Versioning Specification](https://github.com/arcticicestudio/arcver).
+[![](https://img.shields.io/badge/Changelog-0.2.0-blue.svg)](https://bitbucket.org/arcticicestudio/icecore-hashids/raw/v0.2.0/CHANGELOG.md) [![](https://img.shields.io/badge/Workflow-gitflow_Branching_Model-blue.svg)](http://nvie.com/posts/a-successful-git-branching-model) [![](https://img.shields.io/badge/Versioning-ArcVer_0.8.0-blue.svg)](https://github.com/arcticicestudio/arcver)
 
 ### Contribution
 Please report issues/bugs, feature requests and suggestions for improvements to the [issue tracker](https://bitbucket.org/arcticicestudio/icecore-hashids/issues).
 
 ---
 
-<img src="http://arcticicestudio.com/favicon.ico" width=16 height=16/> Copyright &copy; 2016 Arctic Ice Studio
+<p align="center"> <img src="http://arcticicestudio.com/favicon.ico" width=16 height=16/> Copyright &copy; 2016 Arctic Ice Studio</p>
 
-[![GPL-3.0](http://www.gnu.org/graphics/gplv3-88x31.png)](http://www.gnu.org/licenses/gpl.txt)
+<p align="center"><a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"/></a></p>
 
 [bitbucket-icecore-hashids]: https://bitbucket.org/arcticicestudio/icecore-hashids
