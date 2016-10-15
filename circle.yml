@@ -25,4 +25,4 @@ test:
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
   override:
     - mvn clean verify assembly:single -P code-coverage,assemble
-    - cp ./target/{*.jar,*.md5,*.sha1,*.asc,*.tar.gz,*.zip} $CIRCLE_ARTIFACTS
+    - cp ./target/{*.jar,*.md5,*.sha1,*.tar.gz,*.zip} $CIRCLE_ARTIFACTS
