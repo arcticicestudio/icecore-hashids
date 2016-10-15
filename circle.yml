@@ -1,0 +1,28 @@
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# title      Circle CI Build Configuration                         +
+# project    icecore-hashids                                       +
+# version                                                          +
+# repository https://bitbucket.org/arcticicestudio/icecore-hashids +
+# author     Arctic Ice Studio                                     +
+# email      development@arcticicestudio.com                       +
+# copyright  Copyright (C) 2016                                    +
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#
+# [References]
+# Circle CI
+#   (https://circleci.com/docs)
+machine:
+  java:
+    version: oraclejdk8
+
+general:
+  artifacts:
+    - ./target/*.jar
+
+test:
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+  override:
+    - mvn clean verify assembly:single -P code-coverage,assemble
+    - cp ./target/{*.jar,*.md5,*.sha1,*.asc,*.tar.gz,*.zip} $CIRCLE_ARTIFACTS

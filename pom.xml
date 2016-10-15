@@ -1,80 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-+++++++++++++++++++++++++++++++++++++++++++
-title     POM                             +
-project   icecore-hashids                 +
-file      pom.xml                         +
-version   0.2.0                           +
-author    Arctic Ice Studio               +
-email     development@arcticicestudio.com +
-copyright Copyright (C) 2016              +
-+++++++++++++++++++++++++++++++++++++++++++
-
-[Description]
-Project POM based on the skeleton file of the "glacier-apache-maven@0.4.0" project.
-
-[Index]
-  > Coordinates
-  > Project Information
-      Developers
-      Licenses
-      Contributors
-  > Project Properties
-  > Prerequisites
-  > Environment
-      SCM
-      Issue Management
-  > Dependencies
-      Scopes
-        test
-  > Build
-      Plugins
-        validate
-        process-resources
-        compile
-        package
-        verify
-        install
-  > Repositories
-      Central Repository
-  > Plugin Repositories
-      Central Repository
-  > Profiles
-      assemble
-      sign-gpg
-      sign-jarsigner
-      secure-properties
-      enforce-jdk-version
-
-[Copyright]
-Copyright (C) 2016 Arctic Ice Studio <development@arcticicestudio.com>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+title      POM                                                   +
+project    icecore-hashids                                       +
+version    0.2.0                                                 +
+repository https://bitbucket.org/arcticicestudio/icecore-hashids +
+author     Arctic Ice Studio                                     +
+email      development@arcticicestudio.com                       +
+copyright  Copyright (C) 2016                                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 [References]
-Apache Maven Documentation
+Apache Maven
   (https://maven.apache.org/guides)
   (https://maven.apache.org/pom.html)
   (https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html)
-Sonatype Maven Reference
+Sonatype
   (http://books.sonatype.com/mvnref-book/reference)
-Glacier Apache Maven Project
-  (https://github.com/arcticicestudio/glacier-apache-maven)
+JFrog Bintray
+  (https://bintray.com/docs/usermanual)
 -->
 <project
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <!--+- - - - - - -+
-      + Coordinates +
-      +- - - - - - -+-->
+
   <groupId>com.arcticicestudio</groupId>
   <artifactId>icecore-hashids</artifactId>
   <version>0.2.0</version>
   <packaging>jar</packaging>
 
-  <!--+- - - - - - - - - - -+
-      + Project Information +
-      +- - - - - - - - - - -+-->
   <name>icecore-hashids</name>
   <description>Lightweight Java library to generate short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.</description>
   <url>https://bitbucket.org/arcticicestudio/icecore-hashids</url>
@@ -84,7 +40,6 @@ Glacier Apache Maven Project
     <url>http://arcticicestudio.com</url>
   </organization>
 
-  <!--+- - - Developers - - -+-->
   <developers>
     <developer>
       <id>arcticicestudio</id>
@@ -105,15 +60,14 @@ Glacier Apache Maven Project
     </developer>
   </developers>
 
-  <!--+- - - Licenses - - -+-->
   <licenses>
     <license>
-      <name>GNU General Public License, Version 3.0</name>
-      <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
     </license>
   </licenses>
 
-  <!--+- - - Contributors - - -+-->
   <contributors>
     <contributor>
       <name>Arctic Ice Studio</name>
@@ -133,344 +87,80 @@ Glacier Apache Maven Project
     </contributor>
   </contributors>
 
-  <!--+- - - - - - - - - - +
-      + Project Properties +
-      +- - - - - - - - - - +-->
   <properties>
-    <!--
-    The external file providing the secure properties.
-
-    @since 0.3.0
-    -->
-    <securePropertyFile>${basedir}/pom-secure.properties</securePropertyFile>
-
-    <!--
-    The project source- and output encoding.
-
-    @since 0.3.0
-    -->
+    <assembly.descriptor.bin>${basedir}/src/main/assets/assembly-bin.xml</assembly.descriptor.bin>
+    <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
-
-    <!--
-    The required JDK version to run this project.
-
-    @since 0.3.0
-    -->
-    <requireJavaVersion>1.8.0-102</requireJavaVersion>
-
-    <!--
-    The application main class.
-
-    @since 0.3.0
-    -->
-    <applicationMainClass></applicationMainClass>
-
-    <!--
-    The application classpath prefix.
-
-    @since 0.3.0
-    -->
-    <applicationClasspathPrefix>lib</applicationClasspathPrefix>
-
-    <!--
-    The project build root directory.
-
-    @since 0.3.0
-    -->
-    <buildRootDirectory>${basedir}/build</buildRootDirectory>
-
-    <!--
-    The project build root directory.
-
-    @since 0.3.0
-    -->
-    <artifactBuildDirectory>${buildRootDirectory}/artifacts</artifactBuildDirectory>
-
-    <!--
-    The directory containing the main source code assets.
-
-    @since 0.3.0
-    -->
-    <mainAssetsDirectory>${basedir}/src/main/assets</mainAssetsDirectory>
-
-    <!--
-    The directory containing the test source code assets.
-
-    @since 0.3.0
-    -->
-    <testAssetsDirectory>${basedir}/src/test/assets</testAssetsDirectory>
-
-    <!--
-    The Java compiler source- and target version.
-
-    @since 0.3.0
-    -->
-    <javaCompileVersion>1.8</javaCompileVersion>
-
-    <!--
-    The scope of the dependency artifacts to copy to the classpath prefix directory.
-
-    @since 0.3.0
-    -->
-    <dependencyCopyScope>runtime</dependencyCopyScope>
   </properties>
 
-  <!--+- - - - - - - -+
-      + Prerequisites +
-      +- - - - - - - -+-->
-  <!--
-  The requirted Maven version in order to execute the POM correctly.
-
-  @since 0.3.0
-  -->
-  <prerequisites>
-    <maven>3.3.9</maven>
-  </prerequisites>
-
-  <!--+- - - - - - -+
-      + Environment +
-      +- - - - - - -+-->
-  <!--+- - - SCM - - -+-->
   <scm>
-    <connection>scm:git:git://bitbucket.org/arcticicestudio/icecore-hashids.git</connection>
-    <developerConnection>scm:git:git@bitbucket.org:arcticicestudio/icecore-hashids.git</developerConnection>
+    <connection>scm:git:https://bitbucket.org/arcticicestudio/icecore-hashids.git</connection>
+    <developerConnection>scm:git:git://git@bitbucket.org:arcticicestudio/icecore-hashids.git</developerConnection>
     <tag>HEAD</tag>
     <url>https://bitbucket.org/arcticicestudio/icecore-hashids</url>
   </scm>
 
-  <!--+- - - Issue Management - - -+-->
   <issueManagement>
     <system>Bitbucket</system>
     <url>https://bitbucket.org/arcticicestudio/icecore-hashids/issues</url>
   </issueManagement>
 
-  <!--+- - - - - - - +
-      + Dependencies +
-      +- - - - - - - +-->
-  <dependencies>
-    <!--+- - - - +
-        + Scopes +
-        +- - - - +-->
-    <!--+- - - test - - -+-->
-    <!--
-    JUnit is a unit testing framework for Java.
 
-    @see http://junit.org/junit4
-    @since 0.3.0
-    -->
+  <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
-      <optional>true</optional>
     </dependency>
 
-    <!--
-    Hamcrest is a library of matchers, which can be combined in to create flexible expressions of intent in tests.
-    This is the core API of hamcrest matcher framework to be used by third-party framework providers.
-    This includes the a foundation set of matcher implementations for common operations.
-
-    @see http://hamcrest.org
-    @since 0.3.0
-    -->
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
       <version>1.3</version>
       <scope>test</scope>
-      <optional>true</optional>
     </dependency>
 
-    <!--
-    Hamcrest is a library of matchers, which can be combined in to create flexible expressions of intent in tests.
-    Library of matcher implementations.
-
-    @see http://hamcrest.org
-    @since 0.3.0
-    -->
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-library</artifactId>
       <version>1.3</version>
       <scope>test</scope>
-      <optional>true</optional>
     </dependency>
   </dependencies>
 
-  <!--+- - - - +
-      + Build +
-      +- - - - +-->
   <build>
     <finalName>${project.artifactId}-${project.version}</finalName>
-    <directory>${buildRootDirectory}</directory>
-    <!--+- - - - +
-        + Plugins +
-        +- - - - +-->
     <plugins>
-      <!--+- - - validate - - -+-->
-      <!--
-      Verifies the existence of files using the specified verification descriptors.
-
-      @see http://maven.apache.org/plugins/maven-verifier-plugin/verify-mojo.html
-      @since 0.3.0
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-verifier-plugin</artifactId>
-        <version>1.1</version>
-        <inherited>true</inherited>
-        <executions>
-          <execution>
-            <id>verify-project</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <verificationFile>${mainAssetsDirectory}/verifications-project.xml</verificationFile>
-        </configuration>
-      </plugin>
-
-      <!--+- - - process-resources - - -+-->
-      <!--
-      Copies the resources for the main source code.
-
-      @see https://maven.apache.org/plugins/maven-resources-plugin/resources-mojo.html
-      @since 0.3.0
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.1</version>
-        <inherited>true</inherited>
-        <configuration>
-          <includeEmptyDirs>true</includeEmptyDirs>
-          <encoding>${project.build.sourceEncoding}</encoding>
-        </configuration>
-      </plugin>
-
-      <!--+- - - compile - - -+-->
-      <!--
-      Compiles the main Java source code.
-
-      @see https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html
-      @since 0.3.0
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
-        <inherited>true</inherited>
         <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <source>${javaCompileVersion}</source>
-          <target>${javaCompileVersion}</target>
-          <failOnError>true</failOnError>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
       </plugin>
 
-      <!--+- - - package - - -+-->
-      <!--
-      Copies the project dependency artifacts with the configured scope
-      to the specified prefixed directory and downloads the JavaDoc and sources artifacts
-      of all project dependencies.
-
-      @see http://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html
-      @see http://maven.apache.org/plugins/maven-dependency-plugin/sources-mojo.html
-      @since 0.3.0
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.10</version>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeScope>${dependencyCopyScope}</includeScope>
-              <outputDirectory>${artifactBuildDirectory}/${applicationClasspathPrefix}</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>download-sources</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>sources</goal>
-            </goals>
-            <configuration>
-              <classifier>sources</classifier>
-              <silent>true</silent>
-            </configuration>
-          </execution>
-          <execution>
-            <id>download-javadoc</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>sources</goal>
-            </goals>
-            <configuration>
-              <classifier>javadoc</classifier>
-              <silent>true</silent>
-            </configuration>
-          </execution>
-        </executions>
-        <configuration>
-          <overWriteIfNewer>true</overWriteIfNewer>
-        </configuration>
-      </plugin>
-
-      <!--
-      Builds the JAR project artifacts with the specified manifest values.
-      The POM and pom.properties files are not included.
-      The classpath will be prefixed with the specified classpath prefix property value
-      configured for the "dependency:copy-dependencies" goal.
-
-      @see https://maven.apache.org/plugins/maven-jar-plugin/jar-mojo.html
-      @since 0.3.0
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.0.2</version>
-        <inherited>true</inherited>
         <configuration>
-          <outputDirectory>${artifactBuildDirectory}</outputDirectory>
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
             <manifest>
-              <addClasspath>true</addClasspath>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
-              <classpathPrefix>${applicationClasspathPrefix}</classpathPrefix>
-              <classpathLayoutType>simple</classpathLayoutType>
-              <mainClass>${applicationMainClass}</mainClass>
               <packageName>${project.groupId}</packageName>
             </manifest>
           </archive>
         </configuration>
       </plugin>
 
-      <!--
-      Builds the sources JAR artifact for the main source code with the specified manifest values.
-      The classpath will be prefixed with the specified classpath prefix property value
-      configured for the "dependency:copy-dependencies" goal.
-
-      @see https://maven.apache.org/plugins/maven-source-plugin/jar-no-fork-mojo.html
-      @since 0.3.0
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <version>3.0.1</version>
-        <inherited>true</inherited>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -481,30 +171,20 @@ Glacier Apache Maven Project
           </execution>
         </executions>
         <configuration>
-          <outputDirectory>${artifactBuildDirectory}</outputDirectory>
           <classifier>sources</classifier>
           <archive>
-            <addMavenDescriptor>true</addMavenDescriptor>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
               <packageName>${project.groupId}</packageName>
             </manifest>
           </archive>
         </configuration>
       </plugin>
 
-      <!--
-      Builds the JavaDoc JAR artifact for the main source code.
-
-      @see https://maven.apache.org/plugins/maven-javadoc-plugin/jar-mojo.html
-      @since 0.3.0
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.10.4</version>
-        <inherited>true</inherited>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -516,24 +196,31 @@ Glacier Apache Maven Project
         </executions>
         <configuration>
           <classifier>javadoc</classifier>
-          <jarOutputDirectory>${artifactBuildDirectory}</jarOutputDirectory>
           <encoding>${project.build.sourceEncoding}</encoding>
-          <failOnError>false</failOnError>
           <author>true</author>
-          <bottom>Copyright &#169; {inceptionYear}-{currentYear} {organizationName}</bottom>
+          <bottom>Copyright &#169; ${project.inceptionYear} {organizationName}</bottom>
           <doctitle>${project.name} ${project.version} API</doctitle>
           <windowtitle>${project.name} ${project.version} API</windowtitle>
+          <tags>
+            <tag>
+              <name>apiNote</name>
+              <placement>a</placement>
+              <head>API Note:</head>
+            </tag>
+            <tag>
+              <name>implSpec</name>
+              <placement>a</placement>
+              <head>Implementation Specification:</head>
+            </tag>
+            <tag>
+              <name>implNote</name>
+              <placement>a</placement>
+              <head>Implementation Note:</head>
+            </tag>
+          </tags>
         </configuration>
       </plugin>
 
-      <!--+- - - verify - - -+-->
-      <!--
-      Creates checksum files for all artifacts and assemblies.
-
-      @see http://nicoulaj.github.io/checksum-maven-plugin/artifacts-mojo.html
-      @see http://nicoulaj.github.io/checksum-maven-plugin/files-mojo.html
-      @since 0.3.0
-      -->
       <plugin>
         <groupId>net.ju-n.maven.plugins</groupId>
         <artifactId>checksum-maven-plugin</artifactId>
@@ -546,13 +233,6 @@ Glacier Apache Maven Project
               <goal>artifacts</goal>
             </goals>
           </execution>
-          <execution>
-            <id>checksum-assemblies</id>
-            <phase>none</phase>
-            <goals>
-              <goal>files</goal>
-            </goals>
-          </execution>
         </executions>
         <configuration>
           <algorithms>
@@ -560,31 +240,13 @@ Glacier Apache Maven Project
             <algorithm>MD5</algorithm>
           </algorithms>
           <csvSummary>false</csvSummary>
-          <fileSets>
-            <fileSet>
-              <directory>${project.build.directory}/assembly</directory>
-              <includes>
-                <include>*.tar.gz</include>
-                <include>*.zip</include>
-              </includes>
-            </fileSet>
-          </fileSets>
         </configuration>
       </plugin>
 
-      <!--+- - - install - - -+-->
-      <!--
-      Installs the project's main artifact, and any other artifacts attached by other plugins in the lifecycle,
-      to the local repository and creates SHA-1 and MD5 checksum files.
-
-      @see http://maven.apache.org/plugins/maven-install-plugin/install-mojo.html
-      @since 0.3.0
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-install-plugin</artifactId>
         <version>2.5.2</version>
-        <inherited>true</inherited>
         <executions>
           <execution>
             <phase>install</phase>
@@ -600,20 +262,8 @@ Glacier Apache Maven Project
     </plugins>
   </build>
 
-  <!--+- - - - - - - +
-      + Repositories +
-      +- - - - - - - +-->
-  <repositories>
-      <!--+- - - Central Repository - - -+-->
-      <!--
-      The default Apache Maven Central Repository with enabled snapshots.
-      Inherited from the Super POM.
 
-      @see http://search.maven.org
-      @see https://oss.sonatype.org
-      @see http://central.sonatype.org
-      @since 0.3.0
-      -->
+  <repositories>
     <repository>
       <id>central</id>
       <name>Central Repository</name>
@@ -630,20 +280,7 @@ Glacier Apache Maven Project
     </repository>
   </repositories>
 
-  <!--+- - - - - - - - - - -+
-      + Plugin Repositories +
-      +- - - - - - - - - - -+-->
   <pluginRepositories>
-      <!--+- - - Central Repository - - -+-->
-      <!--
-      The default Apache Maven Plugin Repository with enabled snapshots.
-      Inherited from the Super POM.
-
-      @see http://search.maven.org
-      @see https://oss.sonatype.org
-      @see http://central.sonatype.org
-      @since 0.3.0
-      -->
     <pluginRepository>
       <id>central</id>
       <name>Central Repository</name>
@@ -660,26 +297,11 @@ Glacier Apache Maven Project
     </pluginRepository>
   </pluginRepositories>
 
-  <!--+- - - - - +
-      + Profiles +
-      +- - - - - +-->
   <profiles>
-    <!--+- - - assemble - - -+-->
-    <!--
-    Provides goals to creates assemblies with matching checksum files.
-
-    @since 0.3.0
-    -->
     <profile>
       <id>assemble</id>
       <build>
         <plugins>
-          <!--
-          Creates assemblies using the given assembly descriptors.
-
-          @see http://maven.apache.org/plugins/maven-assembly-plugin/single-mojo.html
-          @since 0.3.0
-          -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -694,11 +316,10 @@ Glacier Apache Maven Project
               </execution>
             </executions>
             <configuration>
-              <outputDirectory>${project.build.directory}/assembly</outputDirectory>
               <appendAssemblyId>true</appendAssemblyId>
               <recompressZippedFiles>false</recompressZippedFiles>
               <descriptors>
-                <descriptor>${mainAssetsDirectory}/assembly-bin.xml</descriptor>
+                <descriptor>${assembly.descriptor.bin}</descriptor>
               </descriptors>
             </configuration>
           </plugin>
@@ -706,12 +327,84 @@ Glacier Apache Maven Project
       </build>
     </profile>
 
-    <!--+- - - sign-gpg - - -+-->
-    <!--
-    Signs all project artifacts using GPG.
+    <profile>
+      <id>code-coverage</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.7.7.201606060606</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>coverage-report</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
 
-    @since 0.3.0
-    -->
+    <profile>
+      <id>jfrog</id>
+      <distributionManagement>
+        <downloadUrl>https://bitbucket.org/arcticicestudio/icecore-hashids</downloadUrl>
+          <snapshotRepository>
+            <id>bintray</id>
+            <name>OSS JFrog</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+          </snapshotRepository>
+        <repository>
+           <id>bintray</id>
+           <name>JFrog Bintray</name>
+           <url>https://api.bintray.com/maven/arcticicestudio/IceCore/icecore-hashids/;publish=1</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+
+    <profile>
+      <id>oss-sonatype</id>
+      <distributionManagement>
+        <downloadUrl>https://bitbucket.org/arcticicestudio/icecore-hashids</downloadUrl>
+        <snapshotRepository>
+          <id>ossrh</id>
+          <name>OSS Sonatype</name>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <layout>default</layout>
+        </snapshotRepository>
+        <repository>
+          <id>ossrh</id>
+          <name>OSS Sonatype</name>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+          <layout>default</layout>
+        </repository>
+      </distributionManagement>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <profile>
       <id>sign-gpg</id>
       <activation>
@@ -721,18 +414,10 @@ Glacier Apache Maven Project
       </activation>
       <build>
         <plugins>
-          <!--
-          Signs all project artifacts using the specified GPG alias/keyid.
-          The alias can be configured using the "gpg.keyname" external secure property.
-
-          @see http://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html
-          @since 0.3.0
-          -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>1.6</version>
-            <inherited>true</inherited>
             <executions>
               <execution>
                 <phase>verify</phase>
@@ -746,131 +431,6 @@ Glacier Apache Maven Project
               <keyname>${gpg.keyname}</keyname>
             </configuration>
           </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <!--+- - - sign-jarsigner - - -+-->
-    <!--
-    Signs all project artifacts using the jarsigner.
-
-    @since 0.3.0
-    -->
-    <profile>
-      <id>sign-jarsigner</id>
-      <build>
-        <plugins>
-          <!--
-          Signs all project artifacts using the jarsigner with the specified properties.
-
-          @see http://maven.apache.org/plugins/maven-jarsigner-plugin/sign-mojo.html
-          @since 0.3.0
-          -->
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jarsigner-plugin</artifactId>
-            <version>1.4</version>
-            <inherited>true</inherited>
-            <executions>
-              <execution>
-                <id>jarsigner-sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <keystore>${jarsigner.keystore}</keystore>
-              <alias>${jarsigner.alias}</alias>
-              <storepass>${jarsigner.storepass}</storepass>
-              <keypass>${jarsigner.keypass}</keypass>
-              <sigfile>AIS</sigfile>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <!--+- - - secure-properties - - -+-->
-    <!--
-    Reads all properties from the secure property file.
-
-    @since 0.3.0
-    -->
-    <profile>
-      <id>secure-properties</id>
-      <activation>
-        <file>
-          <exists>${securePropertyFile}</exists>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <!--
-          Reads all properties from the secure property file.
-
-          @see http://www.mojohaus.org/properties-maven-plugin/read-project-properties-mojo.html
-          @since 0.3.0
-          -->
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0.0</version>
-            <executions>
-              <execution>
-                <phase>validate</phase>
-                <goals>
-                  <goal>read-project-properties</goal>
-                </goals>
-                <configuration>
-                  <files>
-                    <file>${securePropertyFile}</file>
-                  </files>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <!--+- - - enforce-jdk-version - - -+-->
-    <!--
-    Enforces the usage of the specified JDK version.
-
-    @since 0.3.0
-    -->
-    <profile>
-      <id>enforce-jdk-version</id>
-      <build>
-        <plugins>
-      <!--
-      Enforces the usage of the specified JDK version.
-
-      @see http://maven.apache.org/enforcer/maven-enforcer-plugin/enforce-mojo.html
-      @since 0.3.0
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>1.4.1</version>
-        <executions>
-          <execution>
-            <id>enforce-jdk-version</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireJavaVersion>
-                  <version>${requireJavaVersion}</version>
-                </requireJavaVersion>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
         </plugins>
       </build>
     </profile>
