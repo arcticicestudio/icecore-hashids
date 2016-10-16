@@ -1,14 +1,13 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++
-title     Hashids Public API              +
-project   icecore-hashids                 +
-file      Hashids.java                    +
-version   0.2.0                           +
-author    Arctic Ice Studio               +
-email     development@arcticicestudio.com +
-website   http://arcticicestudio.com      +
-copyright Copyright (C) 2016              +
-+++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+title      Hashids Public API                                 +
+project    icecore-hashids                                    +
+version    0.2.0                                              +
+repository https://github.com/arcticicestudio/icecore-hashids +
+author     Arctic Ice Studio                                  +
+email      development@arcticicestudio.com                    +
+copyright  Copyright (C) 2016                                 +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;
 
@@ -21,7 +20,7 @@ import java.util.regex.Pattern;
  * Generates short, unique, non-sequential and decodable hashids from positive unsigned (long) integer numbers.
  * <p>
  *   Serves as the entry point to the
- *   <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a> public API.
+ *   <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a> public API.
  * </p>
  * <p>
  *   The Hashids's {@code salt} is used as a secret to generate unique strings using a given {@code alphabet}.
@@ -51,7 +50,7 @@ import java.util.regex.Pattern;
  * </p>
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
- * @see <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a>
+ * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
  * @see <a href="http://hashids.org">Hashids</a>
  * @since 0.1.0
  */
