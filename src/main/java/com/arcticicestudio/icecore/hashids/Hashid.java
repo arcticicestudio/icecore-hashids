@@ -1,14 +1,13 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++
-title     Hashid                          +
-project   icecore-hashids                 +
-file      Hashid.java                     +
-version   0.2.0                           +
-author    Arctic Ice Studio               +
-email     development@arcticicestudio.com +
-website   http://arcticicestudio.com      +
-copyright Copyright (C) 2016              +
-+++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+title      Hashid                                             +
+project    icecore-hashids                                    +
+version    0.2.0                                              +
+repository https://github.com/arcticicestudio/icecore-hashids +
+author     Arctic Ice Studio                                  +
+email      development@arcticicestudio.com                    +
+copyright  Copyright (C) 2016                                 +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;
 

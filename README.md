@@ -1,6 +1,6 @@
-<p align="center"><img src="https://bitbucket.org/arcticicestudio/icecore-hashids/raw/develop/src/main/assets/icecore-hashids-logo-banner.svg"/></p>
+<p align="center"><img src="https://cdn.rawgit.com/arcticicestudio/icecore-hashids/develop/src/main/assets/icecore-hashids-logo-banner.svg"/></p>
 
-<p align="center"><img src="https://cdn.travis-ci.org/images/favicon-c566132d45ab1a9bcae64d8d90e4378a.svg" width=24 height=24/> <a href="https://travis-ci.org/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/travis/arcticicestudio/icecore-hashids/develop.svg"/></a> <img src="https://circleci.com/favicon.ico" width=24 height=24/> <a href="https://circleci.com/bb/arcticicestudio/icecore-hashids"><img src="https://circleci.com/bb/arcticicestudio/icecore-hashids.svg?style=shield&circle-token=926fbd867d3c517246727a0c1486b46135483fbf"/></a> <img src="https://codecov.io/favicon.ico" width=24 height=24/> <a href="https://codecov.io/gh/arcticicestudio/icecore-hashids"><img src="https://codecov.io/gh/arcticicestudio/icecore-hashids/branch/develop/graph/badge.svg"/></a> <img src="https://bitbucket.org/favicon.ico" width=24 height=24/> <a href="https://bitbucket.org/arcticicestudio/icecore-hashids/downloads"><img src="https://img.shields.io/badge/release-0.2.0-blue.svg"/></a> <a href="https://bitbucket.org/arcticicestudio/icecore-hashids/downloads"><img src="https://img.shields.io/badge/pre--release---_-blue.svg"/></a> <img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot----blue.svg"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href='https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion'><img src='https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashidsimages/download.svg'></a></p>
+<p align="center"><img src="https://cdn.travis-ci.org/images/favicon-c566132d45ab1a9bcae64d8d90e4378a.svg" width=24 height=24/> <a href="https://travis-ci.org/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/travis/arcticicestudio/icecore-hashids/develop.svg"/></a> <img src="https://circleci.com/favicon.ico" width=24 height=24/> <a href="https://circleci.com/bb/arcticicestudio/icecore-hashids"><img src="https://circleci.com/bb/arcticicestudio/icecore-hashids.svg?style=shield&circle-token=926fbd867d3c517246727a0c1486b46135483fbf"/></a> <img src="https://codecov.io/favicon.ico" width=24 height=24/> <a href="https://codecov.io/gh/arcticicestudio/icecore-hashids"><img src="https://codecov.io/gh/arcticicestudio/icecore-hashids/branch/develop/graph/badge.svg"/></a> <img src="https://assets-cdn.github.com/favicon.ico" width=24 height=24/> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/github/release/arcticicestudio/icecore-hashids.svg"/></a> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/badge/pre--release---_-blue.svg"/></a> <img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot----blue.svg"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href='https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion'><img src='https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg'></a></p>
 
 <p align="center">A lightweight generator for short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.<br>
 Implementation of the [Hashids](http://hashids.org) project.</p>
@@ -25,7 +25,7 @@ This algorithm tries to satisfy the following requirements:
 ## Getting started
 ### Setup
 To use icecore-hashids it must be available on your classpath.  
-You can use it as a dependency for your favorite build tool or [download the latest version](https://bitbucket.org/arcticicestudio/icecore-hashids/downloads).
+You can use it as a dependency for your favorite build tool or [download the latest version](https://github.com/arcticicestudio/icecore-hashids/releases/latest).
 
 <img src="http://apache.org/favicons/favicon.ico" width=16 height=16/> <a href="https://maven.apache.org">Apache Maven</a>
 ```xml
@@ -65,7 +65,7 @@ A continuous integration build is running at [Travis-CI](https://travis-ci.org/a
 This is a basic guide to show the common usage of the icecore-hashids API.  
 The API documentation can be found in the JavaDoc.
 
-The class `Hashids` is the entrypoint to the [icecore-hashids][bitbucket-icecore-hashids] API.
+The class `Hashids` is the entrypoint to the [icecore-hashids][github-icecore-hashids] API.
 
   1. [Encoding a number](#encoding-a-number)
   2. [Decoding](#decoding)
@@ -228,10 +228,10 @@ This is done by never placing the following letters next to each other:
 `c, C, s, S, f, F, h, H, u, U, i, I, t, T`
 
 ## Development
-[![](https://img.shields.io/badge/Changelog-0.2.0-blue.svg)](https://bitbucket.org/arcticicestudio/icecore-hashids/raw/v0.2.0/CHANGELOG.md) [![](https://img.shields.io/badge/Workflow-gitflow_Branching_Model-blue.svg)](http://nvie.com/posts/a-successful-git-branching-model) [![](https://img.shields.io/badge/Versioning-ArcVer_0.8.0-blue.svg)](https://github.com/arcticicestudio/arcver)
+[![](https://img.shields.io/badge/Changelog-0.2.0-blue.svg)](https://github.com/arcticicestudio/icecore-hashids/blob/v0.2.0/CHANGELOG.md) [![](https://img.shields.io/badge/Workflow-gitflow_Branching_Model-blue.svg)](http://nvie.com/posts/a-successful-git-branching-model) [![](https://img.shields.io/badge/Versioning-ArcVer_0.8.0-blue.svg)](https://github.com/arcticicestudio/arcver)
 
 ### Contribution
-Please report issues/bugs, feature requests and suggestions for improvements to the [issue tracker](https://bitbucket.org/arcticicestudio/icecore-hashids/issues).
+Please report issues/bugs, feature requests and suggestions for improvements to the [issue tracker](https://github.com/arcticicestudio/icecore-hashids/issues).
 
 ---
 
@@ -239,4 +239,4 @@ Please report issues/bugs, feature requests and suggestions for improvements to 
 
 <p align="center"><a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"/></a></p>
 
-[bitbucket-icecore-hashids]: https://bitbucket.org/arcticicestudio/icecore-hashids
+[github-icecore-hashids]: https://github.com/arcticicestudio/icecore-hashids
