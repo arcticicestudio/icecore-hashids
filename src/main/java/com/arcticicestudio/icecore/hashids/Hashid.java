@@ -1,30 +1,13 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++
-title     Hashid                          +
-project   icecore-hashids                 +
-file      Hashid.java                     +
-version   0.2.0                           +
-author    Arctic Ice Studio               +
-email     development@arcticicestudio.com +
-website   http://arcticicestudio.com      +
-copyright Copyright (C) 2016              +
-created   2016-06-05 17:45 UTC+0200       +
-modified  2016-06-05 18:09 UTC+0200       +
-+++++++++++++++++++++++++++++++++++++++++++
-
-[Description]
-Represents a hashid which holds all numbers and the encoded string.
-
-[Copyright]
-Copyright (C) 2016 Arctic Ice Studio <development@arcticicestudio.com>
-
-[References]
-Hashids
-  (http://hashids.org)
-Java 8 API Documentation
-  (https://docs.oracle.com/javase/8/docs/api/)
-Arctic Versioning Specification (ArcVer)
-  (http://specs.arcticicestudio.com/arcver)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+title      Hashid                                             +
+project    icecore-hashids                                    +
+version    0.2.0                                              +
+repository https://github.com/arcticicestudio/icecore-hashids +
+author     Arctic Ice Studio                                  +
+email      development@arcticicestudio.com                    +
+copyright  Copyright (C) 2016                                 +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;
 
@@ -33,9 +16,8 @@ import java.util.Objects;
 
 /**
  * Represents a hashid which holds all numbers and the encoded string.
- *
  * <p>
- *   This class is immutable.
+ *   <strong>This class is immutable.</strong>
  * </p>
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;

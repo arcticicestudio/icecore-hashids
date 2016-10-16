@@ -1,43 +1,32 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++
-title     Hashids Public API Test         +
-project   icecore-hashids                 +
-file      HashidsTest.java                +
-version   0.2.0                           +
-author    Arctic Ice Studio               +
-email     development@arcticicestudio.com +
-website   http://arcticicestudio.com      +
-copyright Copyright (C) 2016              +
-created   2016-06-06 21:05 UTC+0200       +
-modified  2016-06-09 20:20 UTC+0200       +
-+++++++++++++++++++++++++++++++++++++++++++
-
-[Description]
-Tests the "IceCore - Hashids" public API class "Hashids".
-
-[Copyright]
-Copyright (C) 2016 Arctic Ice Studio <development@arcticicestudio.com>
-
-[References]
-Hashids
-  (http://hashids.org)
-Java 8 API Documentation
-  (https://docs.oracle.com/javase/8/docs/api/)
-Arctic Versioning Specification (ArcVer)
-  (http://specs.arcticicestudio.com/arcver)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+title      Hashids Public API Test                            +
+project    icecore-hashids                                    +
+version    0.2.0                                              +
+repository https://github.com/arcticicestudio/icecore-hashids +
+author     Arctic Ice Studio                                  +
+email      development@arcticicestudio.com                    +
+copyright  Copyright (C) 2016                                 +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 /**
- * Tests the <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a>
+ * Tests the <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
  * public API class {@link Hashids}.
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
- * @see <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a>
+ * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
  * @see <a href="http://hashids.org">Hashids</a>
  * @since 0.1.0
  */
@@ -201,12 +190,16 @@ public class HashidsTest {
     assertArrayEquals(numbers, decoded);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void invalidSalt() {
-    Hashids hashidsA = new Hashids("salt and pepper");
-    Hashids hashidsB = new Hashids("salt");
-    long number = 12_345L;
-    hashidsA.decodeLongNumbers(hashidsB.encodeToString(number));
+  @Test
+  public void invalidSaltCollision() {
+    Hashids hashidsA = new Hashids("salt and pepper", 4);
+    Hashids hashidsB = new Hashids("salt", 4);
+    long number = 123L;
+    String token = hashidsA.encodeToString(number);
+
+    long[] decodedWrongSalt = hashidsB.decodeLongNumbers(token);
+    long[] decodedCorrectSalt = hashidsA.decodeLongNumbers(token);
+    assertThat(decodedWrongSalt, not(equalTo(decodedCorrectSalt)));
   }
 
   @Test

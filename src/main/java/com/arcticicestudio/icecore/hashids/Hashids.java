@@ -1,31 +1,13 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++
-title     Hashids Public API              +
-project   icecore-hashids                 +
-file      Hashids.java                    +
-version   0.2.0                           +
-author    Arctic Ice Studio               +
-email     development@arcticicestudio.com +
-website   http://arcticicestudio.com      +
-copyright Copyright (C) 2016              +
-created   2016-06-05 19:58 UTC+0200       +
-modified  2016-06-11 12:27 UTC+0200       +
-+++++++++++++++++++++++++++++++++++++++++++
-
-[Description]
-Generates short, unique, non-sequential and decodable hashids from positive unsigned (long) integer numbers.
-Serves as the entry point to the "IceCore - Hashids" public API.
-
-[Copyright]
-Copyright (C) 2016 Arctic Ice Studio <development@arcticicestudio.com>
-
-[References]
-Hashids
-  (http://hashids.org)
-Java 8 API Documentation
-  (https://docs.oracle.com/javase/8/docs/api/)
-Arctic Versioning Specification (ArcVer)
-  (http://specs.arcticicestudio.com/arcver)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+title      Hashids Public API                                 +
+project    icecore-hashids                                    +
+version    0.2.0                                              +
+repository https://github.com/arcticicestudio/icecore-hashids +
+author     Arctic Ice Studio                                  +
+email      development@arcticicestudio.com                    +
+copyright  Copyright (C) 2016                                 +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;
 
@@ -36,22 +18,18 @@ import java.util.regex.Pattern;
 
 /**
  * Generates short, unique, non-sequential and decodable hashids from positive unsigned (long) integer numbers.
- *
  * <p>
  *   Serves as the entry point to the
- *   <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a> public API.
+ *   <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a> public API.
  * </p>
- *
  * <p>
  *   The Hashids's {@code salt} is used as a secret to generate unique strings using a given {@code alphabet}.
  *    Generated strings can have a {@code minHashLength}.
  * </p>
- *
  * <p>
  *   If used to obfuscates identities, make sure to not expose your {@code salt}, {@code alphabet} nor
  * {@code separators} to a client, client-side is not safe.
  * </p>
- *
  * <p>
  *   Only positive numbers are supported.
  *   All methods in this class will throw an {@link IllegalArgumentException} if a negative number is given.
@@ -65,15 +43,14 @@ import java.util.regex.Pattern;
  *     long number = -1234567890;
  *     String enc = (Math.abs(number) != number ? "-" : "") + hashids.encodeToString(Math.abs(number));
  *     long dec = enc.startsWith("-") ? hashids.decodeLongs(enc.substring(1))[0] : hashids.decodeLongs(enc)[0];
- * </pre>
- * </p>
+ *   </pre>
  *
  * <p>
- *   {@code Hashids} instances are thread-safe.
+ *   <strong>{@code Hashids} instances are thread-safe.</strong>
  * </p>
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
- * @see <a href="https://bitbucket.org/arcticicestudio/icecore-hashids">IceCore - Hashids</a>
+ * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
  * @see <a href="http://hashids.org">Hashids</a>
  * @since 0.1.0
  */
@@ -81,7 +58,6 @@ public final class Hashids {
 
   /**
    * Holds the default alphabet.
-   *
    * <p>
    *   Value: {@code abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890}
    * </p>
@@ -90,11 +66,9 @@ public final class Hashids {
 
   /**
    * Holds the default separators.
-   *
    * <p>
    *   Used to prevent the generation of strings that contain bad, offensive or rude words.
    * </p>
-   *
    * <p>
    *   Value: {@code cfhistuCFHISTU}
    * </p>
@@ -103,11 +77,9 @@ public final class Hashids {
 
   /**
    * Holds the maximum number value.
-   *
    * <p>
    *   This limit is mandatory in order to ensure interoperability.
    * </p>
-   *
    * <p>
    *   JavaScript equivalents used in <a href="https://github.com/ivanakimov/hashids.js">hashids.js</a>:
    *   <ul>
@@ -115,10 +87,8 @@ public final class Hashids {
    *     <li>{@code 2^53-1}</li>
    *     <li>{@code Number.MAX_VALUE-1}</li>
    *   </ul>
-   * </p>
    * <p>
    *   Value: {@code 9_007_199_254_740_992L - 1}
-   * </p>
    */
   public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
 
@@ -133,6 +103,10 @@ public final class Hashids {
   private final int minHashLength;
   private final String salt;
   private final String separators;
+
+  public Hashids() {
+    this("", 0);
+  }
 
   public Hashids(String salt) {
     this(salt, 0);
@@ -229,11 +203,9 @@ public final class Hashids {
 
   /**
    * An immutable and reusable {@link Hashids} builder.
-   *
    * <p>
    *   Each method returns a new builder instance.
    * </p>
-   *
    * <p>
    *   Defaults are
    *   <ul>
@@ -242,7 +214,6 @@ public final class Hashids {
    *     <li>no minimum hash length</li>
    *     <li>{@link #DEFAULT_SEPARATORS} ({@value #DEFAULT_SEPARATORS})</li>
    *   </ul>
-   * </p>
    */
   public static final class Builder {
 
@@ -454,7 +425,7 @@ public final class Hashids {
       numberHashInt += numbers[idx] % (idx + 100);
     }
     String decodeAlphabet = alphabet;
-    final char lottery = decodeAlphabet.toCharArray()[numberHashInt % decodeAlphabet.length()];
+    final char lottery = decodeAlphabet.charAt(numberHashInt % decodeAlphabet.length());
 
     String result = lottery + "";
 
@@ -470,21 +441,21 @@ public final class Hashids {
       result += last;
 
       if (idx + 1 < numbers.length) {
-        num %= ((int) last.toCharArray()[0] + idx);
+        num %= ((int) last.charAt(0) + idx);
         sepsIdx = (int) (num % separators.length());
-        result += separators.toCharArray()[sepsIdx];
+        result += separators.charAt(sepsIdx);
       }
     }
 
     if (result.length() < minHashLength) {
-      guardIdx = (numberHashInt + (int) (result.toCharArray()[0])) % guards.length();
-      char guard = guards.toCharArray()[guardIdx];
+      guardIdx = (numberHashInt + (int) (result.charAt(0))) % guards.length();
+      char guard = guards.charAt(guardIdx);
 
       result = guard + result;
 
       if (result.length() < minHashLength) {
-        guardIdx = (numberHashInt + (int) (result.toCharArray()[2])) % guards.length();
-        guard = guards.toCharArray()[guardIdx];
+        guardIdx = (numberHashInt + (int) (result.charAt(2))) % guards.length();
+        guard = guards.charAt(guardIdx);
 
         result += guard;
       }
@@ -505,6 +476,7 @@ public final class Hashids {
   }
 
   private Hashid doDecode(String hash, String alphabet) {
+    final List<Long> result = new ArrayList<>();
     int idx = 0;
     String[] hashArray = hash.replaceAll("[" + guards + "]", " ").split(" ");
     if (hashArray.length == 3 || hashArray.length == 2) {
@@ -512,23 +484,20 @@ public final class Hashids {
     }
     String hashBreakdown = hashArray[idx];
 
-    final char lottery = hashBreakdown.toCharArray()[0];
-    hashBreakdown = hashBreakdown.substring(1);
-    hashBreakdown = hashBreakdown.replaceAll("[" + separators + "]", " ");
-    hashArray = hashBreakdown.split(" ");
+    if (!hashBreakdown.isEmpty()) {
+      final char lottery = hashBreakdown.charAt(0);
+      hashBreakdown = hashBreakdown.substring(1);
+      hashBreakdown = hashBreakdown.replaceAll("[" + separators + "]", " ");
+      hashArray = hashBreakdown.split(" ");
 
-    final List<Long> result = new ArrayList<>();
-
-    String buffer;
-    for (String subHash : hashArray) {
-      buffer = lottery + salt + alphabet;
-      alphabet = consistentShuffle(alphabet, buffer.substring(0, alphabet.length()));
-      result.add(unhash(subHash, alphabet));
+      String buffer;
+      for (String subHash : hashArray) {
+        buffer = lottery + salt + alphabet;
+        alphabet = consistentShuffle(alphabet, buffer.substring(0, alphabet.length()));
+        result.add(unhash(subHash, alphabet));
+      }
     }
     long[] resultArray = toArray(result);
-    if (!doEncode(resultArray).toString().equals(hash)) {
-      throw new IllegalArgumentException(String.format("%s is not a valid hashid", hash));
-    }
     return new Hashid(resultArray, hash);
   }
 
@@ -595,9 +564,9 @@ public final class Hashids {
   }
 
   /**
-   * Returns the ArcVer- and SemVer compatible version.
+   * Returns the ArcVer / SemVer version of the public API.
    *
-   * @return The ArcVer and SemVer compatible version
+   * @return the ArcVer/SemVer version string
    * @see <a href="https://github.com/arcticicestudio/arcver">ArcVer</a>
    * @see <a href="http://semver.org">SemVer</a>
    * @since 0.2.0

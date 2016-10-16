@@ -1,19 +1,20 @@
-IceCore - Hashids
-=================
+<p align="center"><img src="https://cdn.rawgit.com/arcticicestudio/icecore-hashids/develop/src/main/assets/icecore-hashids-logo-banner.svg"/></p>
 
-![Hashids logo][hashids-logo] ![Hashids text banner][hashids-text-banner]
+<p align="center"><img src="https://assets-cdn.github.com/favicon.ico" width=24 height=24/> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/github/release/arcticicestudio/icecore-hashids.svg"/></a> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/badge/pre--release---_-blue.svg"/></a> <img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot----blue.svg"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href='https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion'><img src='https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg'></a></p>
 
-## 0.2.0 (2016-06-11)
-### Features
-#### API
+---
+
+# 0.2.0 (2016-06-11)
+## Features
+### API
   - Implemented public API Builder methods:
 
 | Class | Constructor | Description |
 | ----- | ----------- | ----------- |
 | `com.arcticicestudio.icecore.hashids.Hashids` | <u>`+ getVersion(String):Builder`</u> | Returns the [ArcVer][arcver-github]- and [SemVer][semver] compatible version. |
 
-### Improvements
-#### API
+## Improvements
+### API
   - Now using `StringBuilder` class for non-constant `String` attributes to avoid unnecessary `String` primitive-wrapping
   - No more boxing of primitive for `String` conversion only
     Make use of the static JDK method `+ String.valueOf(char):String` to avoid waste of memory and cycles by not using a primitive-wrapper with concatenating empty string `""` to a primitive.
@@ -28,9 +29,9 @@ IceCore - Hashids
   - Pre-compile regex `Pattern` pattern
     Improves the performance (less memory and CPU cycles) by using pre-compiled regex pattern instead of creating instances for each `Pattern` call.
 
-## 0.1.0 (2016-06-10) - Public API
-### Features
-#### API
+# 0.1.0 (2016-06-10) - Public API
+## Features
+### API
   - Implemented public API classes:
 
 | Class | Description |
@@ -84,11 +85,11 @@ IceCore - Hashids
 | `com.arcticicestudio.icecore.hashids.Hashids` | `+ DEFAULT_SEPARATORS:String` | `´cfhistuCFHISTU` | Holds the default separators. Used to prevent the generation of strings that contain bad, offensive or rude words. |
 | `com.arcticicestudio.icecore.hashids.Hashids` | `+ MAX_NUMBER_VALUE:long` | `9_007_199_254_740_992L - 1` | Holds the maximum number value. This limit is mandatory in order to ensure interoperability. |
 
-#### Documentation
+### Documentation
   - Added a usage guide for the API.
     This includes all currently implemented public API methods and general notes to the library algorithm.
 
-### Tests
+## Tests
   - Implemented public API test classes:
 
 | Class | Description |
