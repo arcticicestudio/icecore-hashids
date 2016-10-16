@@ -32,7 +32,7 @@ JFrog Bintray
   <packaging>jar</packaging>
 
   <name>icecore-hashids</name>
-  <description>Lightweight Java library to generate short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.</description>
+  <description>A lightweight generator for short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.</description>
   <url>https://bitbucket.org/arcticicestudio/icecore-hashids</url>
   <inceptionYear>2016</inceptionYear>
   <organization>
@@ -104,7 +104,6 @@ JFrog Bintray
     <system>Bitbucket</system>
     <url>https://bitbucket.org/arcticicestudio/icecore-hashids/issues</url>
   </issueManagement>
-
 
   <dependencies>
     <dependency>
@@ -261,7 +260,6 @@ JFrog Bintray
       </plugin>
     </plugins>
   </build>
-
 
   <repositories>
     <repository>
