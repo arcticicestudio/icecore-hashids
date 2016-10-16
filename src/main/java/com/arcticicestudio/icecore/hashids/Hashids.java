@@ -564,9 +564,9 @@ public final class Hashids {
   }
 
   /**
-   * Returns the ArcVer- and SemVer compatible version.
+   * Returns the ArcVer / SemVer version of the public API.
    *
-   * @return The ArcVer and SemVer compatible version
+   * @return the ArcVer/SemVer version string
    * @see <a href="https://github.com/arcticicestudio/arcver">ArcVer</a>
    * @see <a href="http://semver.org">SemVer</a>
    * @since 0.2.0
