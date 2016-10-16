@@ -1,12 +1,12 @@
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# title      Travis CI Build Configuration                         +
-# project    icecore-hashids                                       +
-# version                                                          +
-# repository https://bitbucket.org/arcticicestudio/icecore-hashids +
-# author     Arctic Ice Studio                                     +
-# email      development@arcticicestudio.com                       +
-# copyright  Copyright (C) 2016                                    +
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# title      Travis CI Build Configuration                      +
+# project    icecore-hashids                                    +
+# version                                                       +
+# repository https://github.com/arcticicestudio/icecore-hashids +
+# author     Arctic Ice Studio                                  +
+# email      development@arcticicestudio.com                    +
+# copyright  Copyright (C) 2016                                 +
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #
 # [References]
 # Travis CI Documentation

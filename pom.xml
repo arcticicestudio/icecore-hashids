@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-title      POM                                                   +
-project    icecore-hashids                                       +
-version    0.2.0                                                 +
-repository https://bitbucket.org/arcticicestudio/icecore-hashids +
-author     Arctic Ice Studio                                     +
-email      development@arcticicestudio.com                       +
-copyright  Copyright (C) 2016                                    +
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+title      POM                                                +
+project    icecore-hashids                                    +
+version    0.2.0                                              +
+repository https://github.com/arcticicestudio/icecore-hashids +
+author     Arctic Ice Studio                                  +
+email      development@arcticicestudio.com                    +
+copyright  Copyright (C) 2016                                 +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 [References]
 Apache Maven
@@ -33,7 +33,7 @@ JFrog Bintray
 
   <name>icecore-hashids</name>
   <description>A lightweight generator for short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.</description>
-  <url>https://bitbucket.org/arcticicestudio/icecore-hashids</url>
+  <url>https://github.com/arcticicestudio/icecore-hashids</url>
   <inceptionYear>2016</inceptionYear>
   <organization>
     <name>Arctic Ice Studio</name>
@@ -94,15 +94,15 @@ JFrog Bintray
   </properties>
 
   <scm>
-    <connection>scm:git:https://bitbucket.org/arcticicestudio/icecore-hashids.git</connection>
-    <developerConnection>scm:git:git://git@bitbucket.org:arcticicestudio/icecore-hashids.git</developerConnection>
+    <connection>scm:git:https://github.com/arcticicestudio/icecore-hashids.git</connection>
+    <developerConnection>scm:git:git://git@github.com:arcticicestudio/icecore-hashids.git</developerConnection>
     <tag>HEAD</tag>
-    <url>https://bitbucket.org/arcticicestudio/icecore-hashids</url>
+    <url>https://github.com/arcticicestudio/icecore-hashids</url>
   </scm>
 
   <issueManagement>
-    <system>Bitbucket</system>
-    <url>https://bitbucket.org/arcticicestudio/icecore-hashids/issues</url>
+    <system>GitHub</system>
+    <url>https://github.com/arcticicestudio/icecore-hashids/issues</url>
   </issueManagement>
 
   <dependencies>
@@ -355,7 +355,7 @@ JFrog Bintray
     <profile>
       <id>jfrog</id>
       <distributionManagement>
-        <downloadUrl>https://bitbucket.org/arcticicestudio/icecore-hashids</downloadUrl>
+        <downloadUrl>https://github.com/arcticicestudio/icecore-hashids</downloadUrl>
           <snapshotRepository>
             <id>bintray</id>
             <name>OSS JFrog</name>
@@ -372,7 +372,7 @@ JFrog Bintray
     <profile>
       <id>oss-sonatype</id>
       <distributionManagement>
-        <downloadUrl>https://bitbucket.org/arcticicestudio/icecore-hashids</downloadUrl>
+        <downloadUrl>https://github.com/arcticicestudio/icecore-hashids</downloadUrl>
         <snapshotRepository>
           <id>ossrh</id>
           <name>OSS Sonatype</name>
