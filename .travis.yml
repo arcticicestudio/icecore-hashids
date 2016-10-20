@@ -20,4 +20,4 @@ cache:
     - $HOME/.m2
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-script: mvn -B test -P code-coverage
+script: mvn -B clean verify -P code-coverage
