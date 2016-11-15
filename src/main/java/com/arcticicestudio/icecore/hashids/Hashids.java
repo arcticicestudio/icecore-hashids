@@ -92,6 +92,13 @@ public final class Hashids {
    */
   public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
 
+  /**
+   * Holds the current public API version of this library.
+   *
+   * @since 0.3.0
+   */
+  public static final String VERSION = "0.2.0";
+
   private static final int GUARD_DIV = 12;
   private static final int MIN_ALPHABET_LENGTH = 16;
   private static final double SEP_DIV = 3.5;
@@ -572,6 +579,6 @@ public final class Hashids {
    * @since 0.2.0
    */
   public static String getVersion() {
-    return "0.2.0";
+    return VERSION;
   }
 }
