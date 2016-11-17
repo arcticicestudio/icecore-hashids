@@ -148,15 +148,14 @@ public final class Hashids {
         uniqueAlphabet.append(alphabet.charAt(idx));
       }
     }
-    alphabet = uniqueAlphabet.toString();
 
-    if (alphabet.length() < MIN_ALPHABET_LENGTH) {
+    if (uniqueAlphabet.length() < MIN_ALPHABET_LENGTH) {
       throw new IllegalArgumentException(
         "Alphabet must contain at least " + MIN_ALPHABET_LENGTH + " unique characters"
       );
     }
 
-    if (alphabet.contains(" ")) {
+    if (uniqueAlphabet.toString().contains(" ")) {
       throw new IllegalArgumentException("Alphabet cannot contains spaces");
     }
 
@@ -166,45 +165,44 @@ public final class Hashids {
      */
     String seps = separators == null ? "" : separators;
     for (int sepIdx = 0; sepIdx < seps.length(); sepIdx++) {
-      int alphaIdx = alphabet.indexOf(seps.charAt(sepIdx));
+      int alphaIdx = uniqueAlphabet.indexOf(String.valueOf(seps.charAt(sepIdx)));
       if (alphaIdx == -1) {
         seps = seps.substring(0, sepIdx) + " " + seps.substring(sepIdx + 1);
       } else {
-        alphabet = alphabet.substring(0, alphaIdx) + " " + alphabet.substring(alphaIdx + 1);
+        uniqueAlphabet.replace(alphaIdx, alphaIdx + 1, " ");
       }
     }
 
-    alphabet = PATTERN_ALPHABET_REPLACE.matcher(alphabet).replaceAll("");
+    uniqueAlphabet.replace(0, uniqueAlphabet.length(), PATTERN_ALPHABET_REPLACE.matcher(uniqueAlphabet).replaceAll(""));
     seps = PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll("");
     seps = consistentShuffle(seps, this.salt);
 
-
-    if (isEmpty(seps) || ((float)alphabet.length() / seps.length()) > SEP_DIV) {
-      int sepsLen = (int) Math.ceil(alphabet.length() / SEP_DIV);
+    if (isEmpty(seps) || ((float)uniqueAlphabet.length() / seps.length()) > SEP_DIV) {
+      int sepsLen = (int) Math.ceil(uniqueAlphabet.length() / SEP_DIV);
       if (sepsLen == 1) {
         sepsLen++;
       }
       if (sepsLen > seps.length()) {
         int diff = sepsLen - seps.length();
-        seps += alphabet.substring(0, diff);
-        alphabet = alphabet.substring(diff);
+        seps += uniqueAlphabet.substring(0, diff);
+        uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(diff));
       } else {
         seps = seps.substring(0, sepsLen);
       }
     }
 
-    alphabet = consistentShuffle(alphabet, this.salt);
-    int guardCount = (int) Math.ceil((double)alphabet.length() / GUARD_DIV);
+    uniqueAlphabet.replace(0, uniqueAlphabet.length(), consistentShuffle(uniqueAlphabet.toString(), this.salt));
+    int guardCount = (int) Math.ceil((double)uniqueAlphabet.length() / GUARD_DIV);
 
-    if (alphabet.length() < 3) {
+    if (uniqueAlphabet.length() < 3) {
       guards = seps.substring(0, guardCount);
       seps = seps.substring(guardCount);
     } else {
-      guards = alphabet.substring(0, guardCount);
-      alphabet = alphabet.substring(guardCount);
+      guards = uniqueAlphabet.substring(0, guardCount);
+      uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(guardCount));
     }
 
-    this.alphabet = alphabet;
+    this.alphabet = uniqueAlphabet.toString();
     this.separators = seps;
   }
 
