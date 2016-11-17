@@ -2,7 +2,6 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 title      Hashids Public API                                 +
 project    icecore-hashids                                    +
-version    0.2.0                                              +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
@@ -33,7 +32,7 @@ import java.util.regex.Pattern;
  * <p>
  *   Only positive numbers are supported.
  *   All methods in this class will throw an {@link IllegalArgumentException} if a negative number is given.
- *   To use negative numbers prepend a hyphen character {@code -} to the hash string.
+ *   To use negative numbers prepend a hyphen character to the hash string.
  *   <strong>
  *     Note that this method is limited to single number hashes only and breaks the official Hashids definition!
  *   </strong>
@@ -42,7 +41,7 @@ import java.util.regex.Pattern;
  *     Hashids hashids = new Hashids("salt");
  *     long number = -1234567890;
  *     String enc = (Math.abs(number) != number ? "-" : "") + hashids.encodeToString(Math.abs(number));
- *     long dec = enc.startsWith("-") ? hashids.decodeLongs(enc.substring(1))[0] : hashids.decodeLongs(enc)[0];
+ *     long dec = enc.startsWith("-") ? hashids.decodeLongNumbers(enc.substring(1))[0] : hashids.decodeLongNumbers(enc)[0];
  *   </pre>
  *
  * <p>
@@ -52,25 +51,20 @@ import java.util.regex.Pattern;
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
  * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
  * @see <a href="http://hashids.org">Hashids</a>
+ * @version 0.2.0
  * @since 0.1.0
  */
 public final class Hashids {
 
   /**
    * Holds the default alphabet.
-   * <p>
-   *   Value: {@code abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890}
-   * </p>
    */
   public static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
   /**
    * Holds the default separators.
    * <p>
-   *   Used to prevent the generation of strings that contain bad, offensive or rude words.
-   * </p>
-   * <p>
-   *   Value: {@code cfhistuCFHISTU}
+   *   Used to prevent the generation of strings that contain bad, offensive and rude words.
    * </p>
    */
   public static final String DEFAULT_SEPARATORS = "cfhistuCFHISTU";
@@ -87,13 +81,11 @@ public final class Hashids {
    *     <li>{@code 2^53-1}</li>
    *     <li>{@code Number.MAX_VALUE-1}</li>
    *   </ul>
-   * <p>
-   *   Value: {@code 9_007_199_254_740_992L - 1}
    */
   public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
 
   /**
-   * Holds the version of the public API.
+   * The version of the public API.
    *
    * @since 0.3.0
    */
@@ -111,26 +103,89 @@ public final class Hashids {
   private final String salt;
   private final String separators;
 
+  /**
+   * Constructs a new Hashid with all default values.
+   * <p>
+   *   <ul>
+   *     <li>no salt</li>
+   *     <li>no minimal hash length</li>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   */
   public Hashids() {
     this("", 0);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt and the default minimal hash length, alphabet and separators.
+   * <p>
+   *   <ul>
+   *     <li>no minimal hash length</li>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   */
   public Hashids(String salt) {
     this(salt, 0);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt and the minimal hash length and the default alphabet and
+   * separators.
+   * <p>
+   *   <ul>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   * @param minHashLength the minimal length of the hash
+   */
   public Hashids(String salt, int minHashLength) {
     this(salt, minHashLength, DEFAULT_ALPHABET);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt and alphabet and the default minimal hash length and separators.
+   * <p>
+   *   <ul>
+   *     <li>no minimal hash length</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   * @param alphabet the alphabet value
+   */
   public Hashids(String salt, String alphabet) {
     this(salt, 0, alphabet);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt, minimal hash length and alphabet and the default separators.
+   * <p>
+   *   <ul>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   * @param minHashLength the minimal length of the hash
+   * @param alphabet the alphabet value
+   */
   public Hashids(String salt, int minHashLength, String alphabet) {
     this(salt, minHashLength, alphabet, DEFAULT_SEPARATORS);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt, minimal hash length, alphabet and separators.
+   *
+   * @param salt the salt value
+   * @param minHashLength the minimal length of the hash
+   * @param alphabet the alphabet value
+   * @param separators the chained separators
+   */
   public Hashids(String salt, int minHashLength, String alphabet, String separators) {
     if (alphabet == null) {
       throw new IllegalArgumentException("alphabet was null");
@@ -212,12 +267,12 @@ public final class Hashids {
    *   Each method returns a new builder instance.
    * </p>
    * <p>
-   *   Defaults are
+   *   Defaults to
    *   <ul>
    *     <li>no salt</li>
-   *     <li>{@link #DEFAULT_ALPHABET} ({@value #DEFAULT_ALPHABET})</li>
    *     <li>no minimum hash length</li>
-   *     <li>{@link #DEFAULT_SEPARATORS} ({@value #DEFAULT_SEPARATORS})</li>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
    *   </ul>
    */
   public static final class Builder {
@@ -297,8 +352,8 @@ public final class Hashids {
   /**
    * Encode number(s).
    *
-   * @param numbers The number(s) to encode
-   * @return The {@link Hashid} instance with the number(s) and the encoded string
+   * @param numbers the number(s) to encode
+   * @return the Hashid instance with the number(s) and the encoded string
    */
   public Hashid encode(long... numbers) {
     if (numbers.length == 0) {
@@ -310,8 +365,8 @@ public final class Hashids {
   /**
    * Encode number(s) to string.
    *
-   * @param numbers The number(s) to encode
-   * @return The encoded string
+   * @param numbers the number(s) to encode
+   * @return the encoded string
    */
   public String encodeToString(long... numbers) {
     if (numbers.length == 0) {
@@ -323,8 +378,8 @@ public final class Hashids {
   /**
    * Encode number(s) to string.
    *
-   * @param numbers The number(s) to encode
-   * @return The encoded string
+   * @param numbers the number(s) to encode
+   * @return the encoded string
    */
   public String encodeToString(int... numbers) {
     if (numbers.length == 0) {
@@ -341,8 +396,8 @@ public final class Hashids {
   /**
    * Encode an hexadecimal string to string.
    *
-   * @param hex The hexadecimal string to encode
-   * @return The encoded string
+   * @param hex the hexadecimal string to encode
+   * @return the encoded string
    */
   public String encodeHex(String hex) {
     if (!PATTERN_ENCODE_HEX.matcher(hex).matches()) {
@@ -359,8 +414,8 @@ public final class Hashids {
   /**
    * Decode an encoded string.
    *
-   * @param hash The encoded string
-   * @return The {@link Hashid} instance with the decoded hash and decoded number(s)
+   * @param hash the encoded string
+   * @return the Hashid instance with the decoded hash and decoded number(s)
    */
   public Hashid decode(String hash) {
     if (isEmpty(hash)) {
@@ -372,8 +427,8 @@ public final class Hashids {
   /**
    * Decode an encoded string to long numbers.
    *
-   * @param hash The encoded string
-   * @return The decoded long numbers
+   * @param hash the encoded string
+   * @return the decoded long numbers
    */
   public long[] decodeLongNumbers(String hash) {
     if (isEmpty(hash)) {
@@ -385,10 +440,9 @@ public final class Hashids {
   /**
    * Decode an encoded string to integer numbers.
    *
-   * @param hash The encoded string
-   * @return The decoded integer numbers
-   *
-   * @throws IllegalArgumentException if decoded number is out of integer range, shouldn't you be using longs instead?
+   * @param hash the encoded string
+   * @return the decoded integer numbers
+   * @throws IllegalArgumentException if the decoded number is out of the integer minimal- or maximal range
    */
   public int[] decodeIntegerNumbers(String hash) {
     if (isEmpty(hash)) {
@@ -409,8 +463,8 @@ public final class Hashids {
   /**
    * Decode an string to hexadecimal numbers.
    *
-   * @param hash The encoded string
-   * @return The decoded hexadecimal numbers string
+   * @param hash the encoded string
+   * @return the decoded hexadecimal numbers string
    */
   public String decodeHex(String hash) {
     StringBuilder sb = new StringBuilder();

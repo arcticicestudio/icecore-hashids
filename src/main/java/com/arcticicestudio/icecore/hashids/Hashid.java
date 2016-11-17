@@ -2,7 +2,6 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 title      Hashid                                             +
 project    icecore-hashids                                    +
-version    0.2.0                                              +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
@@ -15,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Represents a hashid which holds all numbers and the encoded string.
+ * Represents a hashid holding all numbers and the encoded string.
  * <p>
  *   <strong>This class is immutable.</strong>
  * </p>
@@ -29,8 +28,17 @@ public final class Hashid {
   private final long[] numbers;
   private final String hash;
 
+  /**
+   * A empty hashid with no numbers and no hash.
+   */
   public static final Hashid EMPTY = new Hashid(new long[0], "");
 
+  /**
+   * Constructs a new hashid with the specified numbers and hash.
+   *
+   * @param longs the numbers of this hashid
+   * @param hash the hash of this hashid
+   */
   public Hashid(long[] longs, String hash) {
     this.numbers = longs;
     this.hash = hash;
@@ -48,9 +56,9 @@ public final class Hashid {
   }
 
   /**
-   * Returns the hash string of this hashid
+   * Returns the hash of this hashid.
    *
-   * @return the hash string of this hashid
+   * @return the hash of this hashid
    */
   @Override
   public String toString() {

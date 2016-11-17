@@ -2,7 +2,6 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 title      Package Info                                       +
 project    icecore-hashids                                    +
-version    0.2.0                                              +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
