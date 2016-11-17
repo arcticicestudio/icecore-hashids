@@ -433,8 +433,7 @@ public final class Hashids {
     }
     String decodeAlphabet = alphabet;
     final char lottery = decodeAlphabet.charAt(numberHashInt % decodeAlphabet.length());
-
-    String result = lottery + "";
+    StringBuilder result = new StringBuilder(String.valueOf(lottery));
 
     String buffer;
     int sepsIdx, guardIdx;
@@ -444,42 +443,38 @@ public final class Hashids {
 
       decodeAlphabet = consistentShuffle(decodeAlphabet, buffer.substring(0, decodeAlphabet.length()));
       final String last = hash(num, decodeAlphabet);
-
-      result += last;
+      result.append(last);
 
       if (idx + 1 < numbers.length) {
         num %= ((int) last.charAt(0) + idx);
         sepsIdx = (int) (num % separators.length());
-        result += separators.charAt(sepsIdx);
+        result.append(separators.charAt(sepsIdx));
       }
     }
 
     if (result.length() < minHashLength) {
       guardIdx = (numberHashInt + (int) (result.charAt(0))) % guards.length();
       char guard = guards.charAt(guardIdx);
-
-      result = guard + result;
+      result.insert(0, guard);
 
       if (result.length() < minHashLength) {
         guardIdx = (numberHashInt + (int) (result.charAt(2))) % guards.length();
         guard = guards.charAt(guardIdx);
-
-        result += guard;
+        result.append(guard);
       }
     }
 
     final int halfLen = decodeAlphabet.length() / 2;
     while (result.length() < minHashLength) {
       decodeAlphabet = consistentShuffle(decodeAlphabet, decodeAlphabet);
-      result = decodeAlphabet.substring(halfLen) + result + decodeAlphabet.substring(0, halfLen);
+      result.insert(0, decodeAlphabet.substring(halfLen)).append(decodeAlphabet.substring(0, halfLen));
       final int excess = result.length() - minHashLength;
       if (excess > 0) {
         int startPos = excess / 2;
-        result = result.substring(startPos, startPos + minHashLength);
+        result.replace(0, result.length(), result.substring(startPos, startPos + minHashLength));
       }
     }
-
-    return new Hashid(numbers, result);
+    return new Hashid(numbers, result.toString());
   }
 
   private Hashid doDecode(String hash, String alphabet) {
@@ -529,15 +524,15 @@ public final class Hashids {
   }
 
   private static String hash(long input, String alphabet) {
-    String hash = "";
+    StringBuilder hash = new StringBuilder();
     final int alphabetLen = alphabet.length();
     final char[] alphabetChars = alphabet.toCharArray();
     do {
-      hash = alphabetChars[(int) (input % alphabetLen)] + hash;
+      hash.insert(0, alphabetChars[(int) (input % alphabetLen)]);
       input /= alphabetLen;
     }
     while (input > 0);
-    return hash;
+    return hash.toString();
   }
 
   private static Long unhash(String input, String alphabet) {
@@ -564,7 +559,7 @@ public final class Hashids {
    * Check if a string is {@code null} or empty.
    *
    * @param value The string to check
-   * @return {code true} if the string is {@code null} or empty, {@code false }otherwise
+   * @return {@code true} if the string is {@code null} or empty, {@code false} otherwise
    */
   private boolean isEmpty(String value) {
     return value == null || value.length() == 0;
