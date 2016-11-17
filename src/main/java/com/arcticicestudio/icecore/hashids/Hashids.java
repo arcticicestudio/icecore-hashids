@@ -163,31 +163,31 @@ public final class Hashids {
      * Separators should contain only characters present in alphabet.
      * Alphabet should not contain separators.
      */
-    String seps = separators == null ? "" : separators;
+    StringBuilder seps = new StringBuilder(separators == null ? "" : separators);
     for (int sepIdx = 0; sepIdx < seps.length(); sepIdx++) {
       int alphaIdx = uniqueAlphabet.indexOf(String.valueOf(seps.charAt(sepIdx)));
       if (alphaIdx == -1) {
-        seps = seps.substring(0, sepIdx) + " " + seps.substring(sepIdx + 1);
+        seps.replace(sepIdx, sepIdx + 1, " ");
       } else {
         uniqueAlphabet.replace(alphaIdx, alphaIdx + 1, " ");
       }
     }
 
     uniqueAlphabet.replace(0, uniqueAlphabet.length(), PATTERN_ALPHABET_REPLACE.matcher(uniqueAlphabet).replaceAll(""));
-    seps = PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll("");
-    seps = consistentShuffle(seps, this.salt);
+    seps.replace(0, seps.length(), PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll(""));
+    seps.replace(0, seps.length(), consistentShuffle(seps.toString(), this.salt));
 
-    if (isEmpty(seps) || ((float)uniqueAlphabet.length() / seps.length()) > SEP_DIV) {
+    if (isEmpty(seps.toString()) || ((float)uniqueAlphabet.length() / seps.length()) > SEP_DIV) {
       int sepsLen = (int) Math.ceil(uniqueAlphabet.length() / SEP_DIV);
       if (sepsLen == 1) {
         sepsLen++;
       }
       if (sepsLen > seps.length()) {
         int diff = sepsLen - seps.length();
-        seps += uniqueAlphabet.substring(0, diff);
+        seps.append(uniqueAlphabet.substring(0, diff));
         uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(diff));
       } else {
-        seps = seps.substring(0, sepsLen);
+        seps.replace(0, seps.length(), seps.substring(0, sepsLen));
       }
     }
 
@@ -196,14 +196,14 @@ public final class Hashids {
 
     if (uniqueAlphabet.length() < 3) {
       guards = seps.substring(0, guardCount);
-      seps = seps.substring(guardCount);
+      seps.replace(0, seps.length(), seps.substring(guardCount));
     } else {
       guards = uniqueAlphabet.substring(0, guardCount);
       uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(guardCount));
     }
 
     this.alphabet = uniqueAlphabet.toString();
-    this.separators = seps;
+    this.separators = seps.toString();
   }
 
   /**
