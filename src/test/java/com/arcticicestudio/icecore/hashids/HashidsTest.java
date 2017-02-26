@@ -2,11 +2,10 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 title      Hashids Public API Test                            +
 project    icecore-hashids                                    +
-version    0.2.0                                              +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2016                                 +
+copyright  Copyright (C) 2017                                 +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;

@@ -5,7 +5,7 @@ project    icecore-hashids                                    +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2016                                 +
+copyright  Copyright (C) 2017                                 +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;
