@@ -13,6 +13,7 @@ package com.arcticicestudio.icecore.hashids;
 
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -30,5 +31,10 @@ public class HashidTest {
 
     assertTrue(h1.equals(h2) && h2.equals(h1));
     assertTrue(h1.hashCode() == h2.hashCode());
+    assertTrue(h1.equals(h1));
+    assertFalse(h1.equals(null));
+
+    Long unequalClassObject = 12L;
+    assertFalse(h1.equals(unequalClassObject));
   }
 }
