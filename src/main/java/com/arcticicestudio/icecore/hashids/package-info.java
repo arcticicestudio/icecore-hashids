@@ -18,6 +18,6 @@ copyright  Copyright (C) 2017                                 +
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
  * @see <a href="http://hashids.org">Hashids</a>
- * @version 0.2.0
+ * @version 0.3.0
  */
 package com.arcticicestudio.icecore.hashids;

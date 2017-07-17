@@ -51,8 +51,7 @@ import java.util.regex.Pattern;
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
  * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
  * @see <a href="http://hashids.org">Hashids</a>
- * @version 0.2.0
- * @since 0.1.0
+ * @version 0.3.0
  */
 public final class Hashids {
 
@@ -89,7 +88,7 @@ public final class Hashids {
    *
    * @since 0.3.0
    */
-  public static final String VERSION = "0.2.0";
+  public static final String VERSION = "0.3.0";
 
   private static final int GUARD_DIV = 12;
   private static final int MIN_ALPHABET_LENGTH = 16;
