@@ -561,18 +561,18 @@ public final class Hashids {
     }
     final char[] saltChars = salt.toCharArray();
     int ascVal, j;
-    char tmp;
-    for (int idx = alphabet.length() - 1, v = 0, p = 0; idx > 0; idx--, v++) {
+    char [] tmpArr = alphabet.toCharArray();
+    for (int idx = tmpArr.length - 1, v = 0, p = 0; idx > 0; idx--, v++) {
       v %= salt.length();
       ascVal = (int) saltChars[v];
       p += ascVal;
       j = (ascVal + v + p) % idx;
 
-      tmp = alphabet.charAt(j);
-      alphabet = alphabet.substring(0, j) + alphabet.charAt(idx) + alphabet.substring(j + 1);
-      alphabet = alphabet.substring(0, idx) + tmp + alphabet.substring(idx + 1);
+      char tmp = tmpArr[j];
+      tmpArr[j] = tmpArr[idx];
+      tmpArr[idx] = tmp;
     }
-    return alphabet;
+    return new String(tmpArr);
   }
 
   private static String hash(long input, String alphabet) {
