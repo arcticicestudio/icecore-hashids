@@ -1,8 +1,47 @@
 <p align="center"><img src="https://cdn.rawgit.com/arcticicestudio/icecore-hashids/develop/src/main/assets/icecore-hashids-logo-banner.svg"/></p>
 
-<p align="center"><img src="https://assets-cdn.github.com/favicon.ico" width=24 height=24/> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/github/release/arcticicestudio/icecore-hashids.svg"/></a> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/badge/pre--release---_-blue.svg"/></a> <img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot-0.3.0--SNAPSHOT-blue.svg"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href='https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion'><img src='https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg'></a> <a href="https://oss.jfrog.org/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/artifactory-0.3.0--SNAPSHOT-green.svg"/></a> <img src="https://jitpack.io/favicon.ico"/> <a href="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg"><img src="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg?style=flat-square"></a></p>
+<p align="center"><img src="https://assets-cdn.github.com/favicon.ico" width=24 height=24/> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/github/release/arcticicestudio/icecore-hashids.svg"/></a> <img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href='https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion'><img src='https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg'></a> <img src="https://jitpack.io/favicon.ico"/> <a href="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg"><img src="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg?style=flat-square"></a></p>
 
 ---
+
+# 0.3.0
+<details>
+  <summary>Version Details</summary>
+  <p>
+    Release Date: 2017-07-17<br>
+    <a href="https://github.com/arcticicestudio/icecore-hashids/milestone/3">Milestone</a><br>
+    <a href="https://github.com/arcticicestudio/icecore-hashids/projects/4">Project Board</a>
+  </p>
+</details>
+
+## Features
+### API
+❯ Implemented a non-parameter constructor as an equivalent to the default `Hashids.Builder` instance. The builder supports the creation of an Hashids instance without parameters for custom configurations, but there was no equivalent constructor for this case. (#1)
+
+## Improvements
+### API
+#### Performance
+##### Internal
+❯ The private method `consistentShuffle(String,String)` now uses `char` arrays instead of `String` operations. This removes five additional `String` operations/methods and six String concatenations to three simple array assignments. (#7)
+
+❯ Replaced `toCharArray(int)` methods with `charAt(int)` since `Strings` are implemented as array internally so  there is no need to convert to a char array.
+
+❯ Adapted to SonarQube minor rule [squid:S3400](https://sonarcloud.io/coding_rules#q=squid%3AS3400). (#5)
+
+❯ Adapted to SonarQube minor rule [squid:S3400](https://sonarcloud.io/coding_rules#q=squid%3AS1643) to improve the performance. (#6)
+
+### Documentation
+❯ Adapted to a new project setup and documentation style. (#2)
+
+### Tests
+❯ Slighly increased the code coverage by implementation unit tests for the `Hashid` *equals* symmetric. (#8)
+
+## Bug Fixes
+### API
+❯ Fixed a `ArrayIndexOutOfBoundsException` when using a invalid decode salt.
+
+### JavaDoc
+❯ Fixed JavaDoc lint compilation errors for self-closed tags. (#3)
 
 # 0.2.0 (2016-06-11)
 ## Features
