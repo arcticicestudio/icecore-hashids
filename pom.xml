@@ -3,11 +3,10 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 title      POM                                                +
 project    icecore-hashids                                    +
-version    0.2.0                                              +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2016                                 +
+copyright  Copyright (C) 2017                                 +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 [References]
@@ -28,7 +27,7 @@ JFrog Bintray
 
   <groupId>com.arcticicestudio</groupId>
   <artifactId>icecore-hashids</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.0</version>
   <packaging>jar</packaging>
 
   <name>icecore-hashids</name>

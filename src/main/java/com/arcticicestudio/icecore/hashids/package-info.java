@@ -2,11 +2,10 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 title      Package Info                                       +
 project    icecore-hashids                                    +
-version    0.2.0                                              +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2016                                 +
+copyright  Copyright (C) 2017                                 +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 /**
@@ -19,6 +18,6 @@ copyright  Copyright (C) 2016                                 +
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
  * @see <a href="http://hashids.org">Hashids</a>
- * @version 0.2.0
+ * @version 0.3.0
  */
 package com.arcticicestudio.icecore.hashids;

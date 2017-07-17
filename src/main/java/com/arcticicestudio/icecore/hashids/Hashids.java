@@ -2,11 +2,10 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 title      Hashids Public API                                 +
 project    icecore-hashids                                    +
-version    0.2.0                                              +
 repository https://github.com/arcticicestudio/icecore-hashids +
 author     Arctic Ice Studio                                  +
 email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2016                                 +
+copyright  Copyright (C) 2017                                 +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 package com.arcticicestudio.icecore.hashids;
@@ -33,7 +32,7 @@ import java.util.regex.Pattern;
  * <p>
  *   Only positive numbers are supported.
  *   All methods in this class will throw an {@link IllegalArgumentException} if a negative number is given.
- *   To use negative numbers prepend a hyphen character {@code -} to the hash string.
+ *   To use negative numbers prepend a hyphen character to the hash string.
  *   <strong>
  *     Note that this method is limited to single number hashes only and breaks the official Hashids definition!
  *   </strong>
@@ -42,7 +41,7 @@ import java.util.regex.Pattern;
  *     Hashids hashids = new Hashids("salt");
  *     long number = -1234567890;
  *     String enc = (Math.abs(number) != number ? "-" : "") + hashids.encodeToString(Math.abs(number));
- *     long dec = enc.startsWith("-") ? hashids.decodeLongs(enc.substring(1))[0] : hashids.decodeLongs(enc)[0];
+ *     long dec = enc.startsWith("-") ? hashids.decodeLongNumbers(enc.substring(1))[0] : hashids.decodeLongNumbers(enc)[0];
  *   </pre>
  *
  * <p>
@@ -52,25 +51,19 @@ import java.util.regex.Pattern;
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
  * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
  * @see <a href="http://hashids.org">Hashids</a>
- * @since 0.1.0
+ * @version 0.3.0
  */
 public final class Hashids {
 
   /**
    * Holds the default alphabet.
-   * <p>
-   *   Value: {@code abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890}
-   * </p>
    */
   public static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
   /**
    * Holds the default separators.
    * <p>
-   *   Used to prevent the generation of strings that contain bad, offensive or rude words.
-   * </p>
-   * <p>
-   *   Value: {@code cfhistuCFHISTU}
+   *   Used to prevent the generation of strings that contain bad, offensive and rude words.
    * </p>
    */
   public static final String DEFAULT_SEPARATORS = "cfhistuCFHISTU";
@@ -87,10 +80,15 @@ public final class Hashids {
    *     <li>{@code 2^53-1}</li>
    *     <li>{@code Number.MAX_VALUE-1}</li>
    *   </ul>
-   * <p>
-   *   Value: {@code 9_007_199_254_740_992L - 1}
    */
   public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
+
+  /**
+   * The version of the public API.
+   *
+   * @since 0.3.0
+   */
+  public static final String VERSION = "0.3.0";
 
   private static final int GUARD_DIV = 12;
   private static final int MIN_ALPHABET_LENGTH = 16;
@@ -104,26 +102,89 @@ public final class Hashids {
   private final String salt;
   private final String separators;
 
+  /**
+   * Constructs a new Hashid with all default values.
+   * <p>
+   *   <ul>
+   *     <li>no salt</li>
+   *     <li>no minimal hash length</li>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   */
   public Hashids() {
     this("", 0);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt and the default minimal hash length, alphabet and separators.
+   * <p>
+   *   <ul>
+   *     <li>no minimal hash length</li>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   */
   public Hashids(String salt) {
     this(salt, 0);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt and the minimal hash length and the default alphabet and
+   * separators.
+   * <p>
+   *   <ul>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   * @param minHashLength the minimal length of the hash
+   */
   public Hashids(String salt, int minHashLength) {
     this(salt, minHashLength, DEFAULT_ALPHABET);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt and alphabet and the default minimal hash length and separators.
+   * <p>
+   *   <ul>
+   *     <li>no minimal hash length</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   * @param alphabet the alphabet value
+   */
   public Hashids(String salt, String alphabet) {
     this(salt, 0, alphabet);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt, minimal hash length and alphabet and the default separators.
+   * <p>
+   *   <ul>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
+   *   </ul>
+   *
+   * @param salt the salt value
+   * @param minHashLength the minimal length of the hash
+   * @param alphabet the alphabet value
+   */
   public Hashids(String salt, int minHashLength, String alphabet) {
     this(salt, minHashLength, alphabet, DEFAULT_SEPARATORS);
   }
 
+  /**
+   * Constructs a new Hashid with the specified salt, minimal hash length, alphabet and separators.
+   *
+   * @param salt the salt value
+   * @param minHashLength the minimal length of the hash
+   * @param alphabet the alphabet value
+   * @param separators the chained separators
+   */
   public Hashids(String salt, int minHashLength, String alphabet, String separators) {
     if (alphabet == null) {
       throw new IllegalArgumentException("alphabet was null");
@@ -141,15 +202,14 @@ public final class Hashids {
         uniqueAlphabet.append(alphabet.charAt(idx));
       }
     }
-    alphabet = uniqueAlphabet.toString();
 
-    if (alphabet.length() < MIN_ALPHABET_LENGTH) {
+    if (uniqueAlphabet.length() < MIN_ALPHABET_LENGTH) {
       throw new IllegalArgumentException(
         "Alphabet must contain at least " + MIN_ALPHABET_LENGTH + " unique characters"
       );
     }
 
-    if (alphabet.contains(" ")) {
+    if (uniqueAlphabet.toString().contains(" ")) {
       throw new IllegalArgumentException("Alphabet cannot contains spaces");
     }
 
@@ -157,48 +217,47 @@ public final class Hashids {
      * Separators should contain only characters present in alphabet.
      * Alphabet should not contain separators.
      */
-    String seps = separators == null ? "" : separators;
+    StringBuilder seps = new StringBuilder(separators == null ? "" : separators);
     for (int sepIdx = 0; sepIdx < seps.length(); sepIdx++) {
-      int alphaIdx = alphabet.indexOf(seps.charAt(sepIdx));
+      int alphaIdx = uniqueAlphabet.indexOf(String.valueOf(seps.charAt(sepIdx)));
       if (alphaIdx == -1) {
-        seps = seps.substring(0, sepIdx) + " " + seps.substring(sepIdx + 1);
+        seps.replace(sepIdx, sepIdx + 1, " ");
       } else {
-        alphabet = alphabet.substring(0, alphaIdx) + " " + alphabet.substring(alphaIdx + 1);
+        uniqueAlphabet.replace(alphaIdx, alphaIdx + 1, " ");
       }
     }
 
-    alphabet = PATTERN_ALPHABET_REPLACE.matcher(alphabet).replaceAll("");
-    seps = PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll("");
-    seps = consistentShuffle(seps, this.salt);
+    uniqueAlphabet.replace(0, uniqueAlphabet.length(), PATTERN_ALPHABET_REPLACE.matcher(uniqueAlphabet).replaceAll(""));
+    seps.replace(0, seps.length(), PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll(""));
+    seps.replace(0, seps.length(), consistentShuffle(seps.toString(), this.salt));
 
-
-    if (isEmpty(seps) || ((float)alphabet.length() / seps.length()) > SEP_DIV) {
-      int sepsLen = (int) Math.ceil(alphabet.length() / SEP_DIV);
+    if (isEmpty(seps.toString()) || ((float)uniqueAlphabet.length() / seps.length()) > SEP_DIV) {
+      int sepsLen = (int) Math.ceil(uniqueAlphabet.length() / SEP_DIV);
       if (sepsLen == 1) {
         sepsLen++;
       }
       if (sepsLen > seps.length()) {
         int diff = sepsLen - seps.length();
-        seps += alphabet.substring(0, diff);
-        alphabet = alphabet.substring(diff);
+        seps.append(uniqueAlphabet.substring(0, diff));
+        uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(diff));
       } else {
-        seps = seps.substring(0, sepsLen);
+        seps.replace(0, seps.length(), seps.substring(0, sepsLen));
       }
     }
 
-    alphabet = consistentShuffle(alphabet, this.salt);
-    int guardCount = (int) Math.ceil((double)alphabet.length() / GUARD_DIV);
+    uniqueAlphabet.replace(0, uniqueAlphabet.length(), consistentShuffle(uniqueAlphabet.toString(), this.salt));
+    int guardCount = (int) Math.ceil((double)uniqueAlphabet.length() / GUARD_DIV);
 
-    if (alphabet.length() < 3) {
+    if (uniqueAlphabet.length() < 3) {
       guards = seps.substring(0, guardCount);
-      seps = seps.substring(guardCount);
+      seps.replace(0, seps.length(), seps.substring(guardCount));
     } else {
-      guards = alphabet.substring(0, guardCount);
-      alphabet = alphabet.substring(guardCount);
+      guards = uniqueAlphabet.substring(0, guardCount);
+      uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(guardCount));
     }
 
-    this.alphabet = alphabet;
-    this.separators = seps;
+    this.alphabet = uniqueAlphabet.toString();
+    this.separators = seps.toString();
   }
 
   /**
@@ -207,12 +266,12 @@ public final class Hashids {
    *   Each method returns a new builder instance.
    * </p>
    * <p>
-   *   Defaults are
+   *   Defaults to
    *   <ul>
    *     <li>no salt</li>
-   *     <li>{@link #DEFAULT_ALPHABET} ({@value #DEFAULT_ALPHABET})</li>
    *     <li>no minimum hash length</li>
-   *     <li>{@link #DEFAULT_SEPARATORS} ({@value #DEFAULT_SEPARATORS})</li>
+   *     <li>{@link #DEFAULT_ALPHABET}</li>
+   *     <li>{@link #DEFAULT_SEPARATORS}</li>
    *   </ul>
    */
   public static final class Builder {
@@ -292,8 +351,8 @@ public final class Hashids {
   /**
    * Encode number(s).
    *
-   * @param numbers The number(s) to encode
-   * @return The {@link Hashid} instance with the number(s) and the encoded string
+   * @param numbers the number(s) to encode
+   * @return the Hashid instance with the number(s) and the encoded string
    */
   public Hashid encode(long... numbers) {
     if (numbers.length == 0) {
@@ -305,8 +364,8 @@ public final class Hashids {
   /**
    * Encode number(s) to string.
    *
-   * @param numbers The number(s) to encode
-   * @return The encoded string
+   * @param numbers the number(s) to encode
+   * @return the encoded string
    */
   public String encodeToString(long... numbers) {
     if (numbers.length == 0) {
@@ -318,8 +377,8 @@ public final class Hashids {
   /**
    * Encode number(s) to string.
    *
-   * @param numbers The number(s) to encode
-   * @return The encoded string
+   * @param numbers the number(s) to encode
+   * @return the encoded string
    */
   public String encodeToString(int... numbers) {
     if (numbers.length == 0) {
@@ -336,8 +395,8 @@ public final class Hashids {
   /**
    * Encode an hexadecimal string to string.
    *
-   * @param hex The hexadecimal string to encode
-   * @return The encoded string
+   * @param hex the hexadecimal string to encode
+   * @return the encoded string
    */
   public String encodeHex(String hex) {
     if (!PATTERN_ENCODE_HEX.matcher(hex).matches()) {
@@ -354,8 +413,8 @@ public final class Hashids {
   /**
    * Decode an encoded string.
    *
-   * @param hash The encoded string
-   * @return The {@link Hashid} instance with the decoded hash and decoded number(s)
+   * @param hash the encoded string
+   * @return the Hashid instance with the decoded hash and decoded number(s)
    */
   public Hashid decode(String hash) {
     if (isEmpty(hash)) {
@@ -367,8 +426,8 @@ public final class Hashids {
   /**
    * Decode an encoded string to long numbers.
    *
-   * @param hash The encoded string
-   * @return The decoded long numbers
+   * @param hash the encoded string
+   * @return the decoded long numbers
    */
   public long[] decodeLongNumbers(String hash) {
     if (isEmpty(hash)) {
@@ -380,10 +439,9 @@ public final class Hashids {
   /**
    * Decode an encoded string to integer numbers.
    *
-   * @param hash The encoded string
-   * @return The decoded integer numbers
-   *
-   * @throws IllegalArgumentException if decoded number is out of integer range, shouldn't you be using longs instead?
+   * @param hash the encoded string
+   * @return the decoded integer numbers
+   * @throws IllegalArgumentException if the decoded number is out of the integer minimal- or maximal range
    */
   public int[] decodeIntegerNumbers(String hash) {
     if (isEmpty(hash)) {
@@ -404,8 +462,8 @@ public final class Hashids {
   /**
    * Decode an string to hexadecimal numbers.
    *
-   * @param hash The encoded string
-   * @return The decoded hexadecimal numbers string
+   * @param hash the encoded string
+   * @return the decoded hexadecimal numbers string
    */
   public String decodeHex(String hash) {
     StringBuilder sb = new StringBuilder();
@@ -426,8 +484,7 @@ public final class Hashids {
     }
     String decodeAlphabet = alphabet;
     final char lottery = decodeAlphabet.charAt(numberHashInt % decodeAlphabet.length());
-
-    String result = lottery + "";
+    StringBuilder result = new StringBuilder(String.valueOf(lottery));
 
     String buffer;
     int sepsIdx, guardIdx;
@@ -437,42 +494,38 @@ public final class Hashids {
 
       decodeAlphabet = consistentShuffle(decodeAlphabet, buffer.substring(0, decodeAlphabet.length()));
       final String last = hash(num, decodeAlphabet);
-
-      result += last;
+      result.append(last);
 
       if (idx + 1 < numbers.length) {
         num %= ((int) last.charAt(0) + idx);
         sepsIdx = (int) (num % separators.length());
-        result += separators.charAt(sepsIdx);
+        result.append(separators.charAt(sepsIdx));
       }
     }
 
     if (result.length() < minHashLength) {
       guardIdx = (numberHashInt + (int) (result.charAt(0))) % guards.length();
       char guard = guards.charAt(guardIdx);
-
-      result = guard + result;
+      result.insert(0, guard);
 
       if (result.length() < minHashLength) {
         guardIdx = (numberHashInt + (int) (result.charAt(2))) % guards.length();
         guard = guards.charAt(guardIdx);
-
-        result += guard;
+        result.append(guard);
       }
     }
 
     final int halfLen = decodeAlphabet.length() / 2;
     while (result.length() < minHashLength) {
       decodeAlphabet = consistentShuffle(decodeAlphabet, decodeAlphabet);
-      result = decodeAlphabet.substring(halfLen) + result + decodeAlphabet.substring(0, halfLen);
+      result.insert(0, decodeAlphabet.substring(halfLen)).append(decodeAlphabet.substring(0, halfLen));
       final int excess = result.length() - minHashLength;
       if (excess > 0) {
         int startPos = excess / 2;
-        result = result.substring(startPos, startPos + minHashLength);
+        result.replace(0, result.length(), result.substring(startPos, startPos + minHashLength));
       }
     }
-
-    return new Hashid(numbers, result);
+    return new Hashid(numbers, result.toString());
   }
 
   private Hashid doDecode(String hash, String alphabet) {
@@ -507,30 +560,30 @@ public final class Hashids {
     }
     final char[] saltChars = salt.toCharArray();
     int ascVal, j;
-    char tmp;
-    for (int idx = alphabet.length() - 1, v = 0, p = 0; idx > 0; idx--, v++) {
+    char [] tmpArr = alphabet.toCharArray();
+    for (int idx = tmpArr.length - 1, v = 0, p = 0; idx > 0; idx--, v++) {
       v %= salt.length();
       ascVal = (int) saltChars[v];
       p += ascVal;
       j = (ascVal + v + p) % idx;
 
-      tmp = alphabet.charAt(j);
-      alphabet = alphabet.substring(0, j) + alphabet.charAt(idx) + alphabet.substring(j + 1);
-      alphabet = alphabet.substring(0, idx) + tmp + alphabet.substring(idx + 1);
+      char tmp = tmpArr[j];
+      tmpArr[j] = tmpArr[idx];
+      tmpArr[idx] = tmp;
     }
-    return alphabet;
+    return new String(tmpArr);
   }
 
   private static String hash(long input, String alphabet) {
-    String hash = "";
+    StringBuilder hash = new StringBuilder();
     final int alphabetLen = alphabet.length();
     final char[] alphabetChars = alphabet.toCharArray();
     do {
-      hash = alphabetChars[(int) (input % alphabetLen)] + hash;
+      hash.insert(0, alphabetChars[(int) (input % alphabetLen)]);
       input /= alphabetLen;
     }
     while (input > 0);
-    return hash;
+    return hash.toString();
   }
 
   private static Long unhash(String input, String alphabet) {
@@ -557,7 +610,7 @@ public final class Hashids {
    * Check if a string is {@code null} or empty.
    *
    * @param value The string to check
-   * @return {code true} if the string is {@code null} or empty, {@code false }otherwise
+   * @return {@code true} if the string is {@code null} or empty, {@code false} otherwise
    */
   private boolean isEmpty(String value) {
     return value == null || value.length() == 0;
@@ -572,6 +625,6 @@ public final class Hashids {
    * @since 0.2.0
    */
   public static String getVersion() {
-    return "0.2.0";
+    return VERSION;
   }
 }
