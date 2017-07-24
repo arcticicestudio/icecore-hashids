@@ -15,7 +15,7 @@ Please do your best to provide as much information as possible and use a clear a
 
 The metadata head should be added to the top of the issue as [Markdown text quote](https://help.github.com/articles/basic-writing-and-formatting-syntax) containing the [issue type](#issue-type) and if necessary the ID of other related issues.
 
-> Issue type:  
+> Issue type:
 Related issues:
 
 ### Issue Type
@@ -27,7 +27,7 @@ Set the *type* of this issue. It determines which information will be required i
 * *bug*
 * *test*
 * *task*
-  * *subtask*
+* *subtask*
 
 ## Description
 
