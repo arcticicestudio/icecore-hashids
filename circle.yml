@@ -9,7 +9,7 @@
 #
 # [References]
 # Circle CI
-#   (https://circleci.com/docs)
+#   https://circleci.com/docs
 machine:
   java:
     version: oraclejdk8
@@ -17,6 +17,10 @@ machine:
 general:
   artifacts:
     - ./target/*.jar
+
+dependencies:
+  post:
+    - mvn --version
 
 test:
   post:
