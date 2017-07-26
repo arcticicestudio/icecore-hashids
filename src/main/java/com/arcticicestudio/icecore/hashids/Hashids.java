@@ -1,13 +1,3 @@
-/*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-title      Hashids Public API                                 +
-project    icecore-hashids                                    +
-repository https://github.com/arcticicestudio/icecore-hashids +
-author     Arctic Ice Studio                                  +
-email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2017                                 +
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
 package com.arcticicestudio.icecore.hashids;
 
 import java.util.ArrayList;
@@ -40,8 +30,8 @@ import java.util.regex.Pattern;
  *   <pre>
  *     Hashids hashids = new Hashids("salt");
  *     long number = -1234567890;
- *     String enc = (Math.abs(number) != number ? "-" : "") + hashids.encodeToString(Math.abs(number));
- *     long dec = enc.startsWith("-") ? hashids.decodeLongNumbers(enc.substring(1))[0] : hashids.decodeLongNumbers(enc)[0];
+ *     String enc = (Math.abs(number) != number ? "-" : "") + hashids.encode(Math.abs(number));
+ *     long dec = enc.startsWith("-") ? hashids.decode(enc.substring(1))[0] : hashids.decode(enc)[0];
  *   </pre>
  *
  * <p>
@@ -362,37 +352,6 @@ public final class Hashids {
   }
 
   /**
-   * Encode number(s) to string.
-   *
-   * @param numbers the number(s) to encode
-   * @return the encoded string
-   */
-  public String encodeToString(long... numbers) {
-    if (numbers.length == 0) {
-      return "";
-    }
-    return encode(numbers).toString();
-  }
-
-  /**
-   * Encode number(s) to string.
-   *
-   * @param numbers the number(s) to encode
-   * @return the encoded string
-   */
-  public String encodeToString(int... numbers) {
-    if (numbers.length == 0) {
-      return "";
-    }
-    long[] longs = new long[numbers.length];
-    for (int idx = 0; idx < numbers.length; idx++) {
-      longs[idx] = numbers[idx];
-
-    }
-    return doEncode(longs).toString();
-  }
-
-  /**
    * Encode an hexadecimal string to string.
    *
    * @param hex the hexadecimal string to encode
@@ -424,42 +383,6 @@ public final class Hashids {
   }
 
   /**
-   * Decode an encoded string to long numbers.
-   *
-   * @param hash the encoded string
-   * @return the decoded long numbers
-   */
-  public long[] decodeLongNumbers(String hash) {
-    if (isEmpty(hash)) {
-      return new long[0];
-    }
-    return doDecode(hash, alphabet);
-  }
-
-  /**
-   * Decode an encoded string to integer numbers.
-   *
-   * @param hash the encoded string
-   * @return the decoded integer numbers
-   * @throws IllegalArgumentException if the decoded number is out of the integer minimal- or maximal range
-   */
-  public int[] decodeIntegerNumbers(String hash) {
-    if (isEmpty(hash)) {
-      return new int[0];
-    }
-    long[] numbers = doDecode(hash, alphabet);
-    int[] ints = new int[numbers.length];
-    for (int idx = 0; idx < numbers.length; idx++) {
-      long number = numbers[idx];
-      if (number < Integer.MIN_VALUE || number > Integer.MAX_VALUE) {
-        throw new IllegalArgumentException("Number out of range");
-      }
-      ints[idx] = (int) number;
-    }
-    return ints;
-  }
-
-  /**
    * Decode an string to hexadecimal numbers.
    *
    * @param hash the encoded string
@@ -467,7 +390,7 @@ public final class Hashids {
    */
   public String decodeHex(String hash) {
     StringBuilder sb = new StringBuilder();
-    long[] numbers = decodeLongNumbers(hash);
+    long[] numbers = decode(hash);
     for (long number : numbers) {
       sb.append(Long.toHexString(number).substring(1));
     }

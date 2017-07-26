@@ -1,13 +1,3 @@
-/*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-title      Package Info                                       +
-project    icecore-hashids                                    +
-repository https://github.com/arcticicestudio/icecore-hashids +
-author     Arctic Ice Studio                                  +
-email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2017                                 +
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
 /**
  * Represents the public API of the
  * <a href="https://github.com/arcticicestudio/icecore-hashids">"IceCore Hashids"</a> library.

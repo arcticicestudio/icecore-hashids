@@ -1,13 +1,3 @@
-/*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-title      Hashids Public API Test                            +
-project    icecore-hashids                                    +
-repository https://github.com/arcticicestudio/icecore-hashids +
-author     Arctic Ice Studio                                  +
-email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2017                                 +
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
 package com.arcticicestudio.icecore.hashids;
 
 import org.junit.Test;
@@ -36,9 +26,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     long number = 12_345L;
     String expected = "X4j1";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    long[] decoded = hashids.decode(hashids.encode(number));
 
-    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(hashids.encode(number), expected);
     assertEquals(decoded.length, 1);
     assertEquals(decoded[0], number);
   }
@@ -48,21 +38,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     long number = 9_007_199_254_740_991L;
     String expected = "wQpRRqRX24R";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    long[] decoded = hashids.decode(hashids.encode(number));
 
-    assertEquals(hashids.encodeToString(number), expected);
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
-  }
-
-  @Test
-  public void oneLargeIntegerNumber() {
-    Hashids hashids = new Hashids("salt");
-    int number = 2147483647;
-    String expected = "wqVYY1X";
-    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
-
-    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(hashids.encode(number), expected);
     assertEquals(decoded.length, 1);
     assertEquals(decoded[0], number);
   }
@@ -79,9 +57,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt", 8);
     long number = 12_345L;
     String expected = "xkX4j1kZ";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    long[] decoded = hashids.decode(hashids.encode(number));
 
-    assertEquals(hashids.encodeToString(number), expected);
+    assertEquals(hashids.encode(number), expected);
     assertEquals(decoded.length, 1);
     assertEquals(decoded[0], number);
   }
@@ -90,8 +68,8 @@ public class HashidsTest {
   public void oneNumberWithoutSeparators() {
     Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
     long number = 12_345L;
-    String hash = hashids.encodeToString(number);
-    long[] decoded = hashids.decodeLongNumbers(hash);
+    String hash = hashids.encode(number);
+    long[] decoded = hashids.decode(hash);
 
     assertEquals(1, decoded.length);
     assertEquals(number, decoded[0]);
@@ -101,8 +79,8 @@ public class HashidsTest {
   public void oneNumberWithCustomSeparators() {
     Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, "abcdefgABCDEFG1234567");
     long number = 12_345L;
-    String hash = hashids.encodeToString(number);
-    long[] decoded = hashids.decodeLongNumbers(hash);
+    String hash = hashids.encode(number);
+    long[] decoded = hashids.decode(hash);
 
     assertEquals(1, decoded.length);
     assertEquals(number, decoded[0]);
@@ -122,9 +100,9 @@ public class HashidsTest {
       "PDrWVB9lOGdqAQenj5aYBM7KWdNr6JXOgv2M9XNL0oAxJ2RqrGOngPjKyq2oPpEzdA5XORGQZa91Y0BlNxz96Bba7oVDnMgdrJvGKaMYKo9bvQ" +
       "6r04xXL1GP2AWOWR7x46rMLgjXyQnVAEw5zL76Aboq49vK2pQz5jNJywPlGg1KAV0aLWzJ5bRevE74qBPoy6Xzbqre1RnKa2NdVODOVnBaDERz" +
       "AgJGx41qe2LrpdWGE4QbxLJez6";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    long[] decoded = hashids.decode(hashids.encode(number));
 
-    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(expected, hashids.encode(number));
     assertEquals(1, decoded.length);
     assertEquals(number, decoded[0]);
   }
@@ -134,9 +112,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
     long number = 12_345L;
     String expected = "KQL1R";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    long[] decoded = hashids.decode(hashids.encode(number));
 
-    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(expected, hashids.encode(number));
     assertEquals(decoded.length, 1);
     assertEquals(decoded[0], number);
   }
@@ -146,9 +124,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
     long number = 12_345L;
     String expected = "kzkvx";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    long[] decoded = hashids.decode(hashids.encode(number));
 
-    assertEquals(expected, hashids.encodeToString(number));
+    assertEquals(expected, hashids.encode(number));
     assertEquals(1, decoded.length);
     assertEquals(number, decoded[0]);
   }
@@ -158,9 +136,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "1eMToyKzsRAfO";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
+    long[] decoded = hashids.decode(hashids.encode(numbers));
 
-    assertEquals(hashids.encodeToString(numbers), expected);
+    assertEquals(hashids.encode(numbers), expected);
     assertEquals(decoded.length, numbers.length);
     assertArrayEquals(decoded, numbers);
   }
@@ -170,9 +148,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {5L, 5L, 5L, 5L};
     String expected = "YBF7FKFz";
-    long[] decoded = hashids.decodeLongNumbers(expected);
+    long[] decoded = hashids.decode(expected);
 
-    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(expected, hashids.encode(numbers));
     assertEquals(numbers.length, decoded.length);
     assertArrayEquals(numbers, decoded);
   }
@@ -182,9 +160,9 @@ public class HashidsTest {
     Hashids hashids = new Hashids("salt");
     long[] numbers = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L};
     String expected = "rjiJulUECaFAS1TBhzcX";
-    long[] decoded = hashids.decodeLongNumbers(expected);
+    long[] decoded = hashids.decode(expected);
 
-    assertEquals(expected, hashids.encodeToString(numbers));
+    assertEquals(expected, hashids.encode(numbers));
     assertEquals(numbers.length, decoded.length);
     assertArrayEquals(numbers, decoded);
   }
@@ -194,10 +172,10 @@ public class HashidsTest {
     Hashids hashidsA = new Hashids("salt and pepper", 4);
     Hashids hashidsB = new Hashids("salt", 4);
     long number = 123L;
-    String token = hashidsA.encodeToString(number);
+    String token = hashidsA.encode(number);
 
-    long[] decodedWrongSalt = hashidsB.decodeLongNumbers(token);
-    long[] decodedCorrectSalt = hashidsA.decodeLongNumbers(token);
+    long[] decodedWrongSalt = hashidsB.decode(token);
+    long[] decodedCorrectSalt = hashidsA.decode(token);
     assertThat(decodedWrongSalt, not(equalTo(decodedCorrectSalt)));
   }
 
@@ -242,7 +220,7 @@ public class HashidsTest {
   public void negativeNumber() {
     Hashids hashids = new Hashids("salt");
     long number = -1L;
-    hashids.encodeToString(number);
+    hashids.encode(number);
   }
 
   @Test
@@ -254,7 +232,7 @@ public class HashidsTest {
       .separators(Hashids.DEFAULT_SEPARATORS)
       .build();
     long number = 12_345L;
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    long[] decoded = hashids.decode(hashids.encode(number));
 
     assertEquals(1, decoded.length);
     assertEquals(number, decoded[0]);
