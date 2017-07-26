@@ -23,7 +23,9 @@ public class HashidsTest {
 
   @Test
   public void oneNumber() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     long number = 12_345L;
     String expected = "X4j1";
     long[] decoded = hashids.decode(hashids.encode(number));
@@ -35,7 +37,9 @@ public class HashidsTest {
 
   @Test
   public void oneLargeNumber() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     long number = 9_007_199_254_740_991L;
     String expected = "wQpRRqRX24R";
     long[] decoded = hashids.decode(hashids.encode(number));
@@ -48,13 +52,18 @@ public class HashidsTest {
   @Test(expected = IllegalArgumentException.class)
   public void oneLargeNumberNotSupported() throws Exception {
     long number = 9007199254740993L;
-    Hashids a = new Hashids("salt");
-    a.encode(number);
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
+    hashids.encode(number);
   }
 
   @Test
   public void oneNumberWithCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 8);
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .minHashLength(8)
+      .build();
     long number = 12_345L;
     String expected = "xkX4j1kZ";
     long[] decoded = hashids.decode(hashids.encode(number));
@@ -66,7 +75,10 @@ public class HashidsTest {
 
   @Test
   public void oneNumberWithLargeCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 1000);
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .minHashLength(1000)
+      .build();
     long number = 12_345;
     String expected = "lPaNoKpAjg2O9bdQ5K6l9Yvj0o7MWXwZPNyZ90jxQp7WYlA5gJ4LvwEMGnwDNBZjpxQY692dXoPOMyrVrgXDGE0BnaeZdM" +
       "YO1WxRlevqJK0BloZNbYG29dP1paDDw7gpRqBzjy5OedVZlEJnNjPQ4LXZye5REY0qA2wW1pOnJNjvMbLKg6rexwWDVyl74ZW74pVdEYQBa6zv" +
@@ -87,7 +99,10 @@ public class HashidsTest {
 
   @Test
   public void oneNumberWithCustomUpperCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .alphabet("ABCDEFGHIJKLMNPQRSTUVWXYZ123456789")
+      .build();
     long number = 12_345L;
     String expected = "KQL1R";
     long[] decoded = hashids.decode(hashids.encode(number));
@@ -99,7 +114,10 @@ public class HashidsTest {
 
   @Test
   public void oneNumberWithCustomLowerCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .alphabet("abcdefghijklmnpqrstuvwxyz123456789")
+      .build();
     long number = 12_345L;
     String expected = "kzkvx";
     long[] decoded = hashids.decode(hashids.encode(number));
@@ -111,7 +129,9 @@ public class HashidsTest {
 
   @Test
   public void severalNumbers() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     long[] numbers = {683L, 94_108L, 123L, 5L};
     String expected = "1eMToyKzsRAfO";
     long[] decoded = hashids.decode(hashids.encode(numbers));
@@ -123,7 +143,9 @@ public class HashidsTest {
 
   @Test
   public void severalNumbersRandomness() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     long[] numbers = {5L, 5L, 5L, 5L};
     String expected = "YBF7FKFz";
     long[] decoded = hashids.decode(expected);
@@ -135,7 +157,9 @@ public class HashidsTest {
 
   @Test
   public void severalIncrementingNumbersRandomness() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     long[] numbers = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L};
     String expected = "rjiJulUECaFAS1TBhzcX";
     long[] decoded = hashids.decode(expected);
@@ -147,8 +171,14 @@ public class HashidsTest {
 
   @Test
   public void invalidSaltCollision() {
-    Hashids hashidsA = new Hashids("salt and pepper", 4);
-    Hashids hashidsB = new Hashids("salt", 4);
+    Hashids hashidsA = new Hashids.Builder()
+      .salt("salt and pepper")
+      .minHashLength(4)
+      .build();
+    Hashids hashidsB = new Hashids.Builder()
+      .salt("salt")
+      .minHashLength(4)
+      .build();
     long number = 123L;
     String token = hashidsA.encode(number);
 
@@ -159,7 +189,9 @@ public class HashidsTest {
 
   @Test
   public void hexString() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     String hex = "75bcd15";
     String hash = hashids.encodeHex(hex);
     String returnedHex = hashids.decodeHex(hash);
@@ -171,7 +203,10 @@ public class HashidsTest {
 
   @Test
   public void hexStringWithCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 8);
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .minHashLength(8)
+      .build();
     String hex = "75bcd15";
     String hash = hashids.encodeHex(hex);
     String returnedHex = hashids.decodeHex(hash);
@@ -184,7 +219,9 @@ public class HashidsTest {
 
   @Test
   public void longHexString() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     String hex = "f000000000000000000000000000000000000000000000000000000000000000000000000000000000000f";
     String hash = hashids.encodeHex(hex);
     String returnedHex = hashids.decodeHex(hash);
@@ -196,7 +233,9 @@ public class HashidsTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void negativeNumber() {
-    Hashids hashids = new Hashids("salt");
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .build();
     long number = -1L;
     hashids.encode(number);
   }

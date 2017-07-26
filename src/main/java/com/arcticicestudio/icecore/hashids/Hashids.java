@@ -91,68 +91,20 @@ public final class Hashids {
   private final String salt;
 
   /**
-   * Constructs a new instance with all default values.
-   * <p>
-   *   <ul>
-   *     <li>no salt</li>
-   *     <li>no minimal hash length</li>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *   </ul>
+   * Constructs a new instance without a salt, no minimum hash length and the {@link #DEFAULT_ALPHABET default alphabet}.
    */
   public Hashids() {
-    this("", 0);
+    this("", 0, DEFAULT_ALPHABET);
   }
 
   /**
-   * Constructs a new instance with the specified salt, the minimal hash length and default alphabet.
-   * <p>
-   *   <ul>
-   *     <li>no minimal hash length</li>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *   </ul>
+   * Constructs a new instance with the given salt, the minimum hash length and alphabet.
    *
-   * @param salt the salt value
+   * @param salt the salt to be used as entropy
+   * @param minLength the minimum hash length
+   * @param alphabet the alphabet to be used for the hash generation
    */
-  public Hashids(String salt) {
-    this(salt, 0);
-  }
-
-  /**
-   * Constructs a new instance with the specified salt and hash length and the default alphabet.
-   * <p>
-   *   <ul>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *   </ul>
-   *
-   * @param salt the salt value
-   * @param minHashLength the minimal length of the hash
-   */
-  public Hashids(String salt, int minHashLength) {
-    this(salt, minHashLength, DEFAULT_ALPHABET);
-  }
-
-  /**
-   * Constructs a new instance with the specified salt and alphabet and the minimal hash length.
-   * <p>
-   *   <ul>
-   *     <li>no minimal hash length</li>
-   *   </ul>
-   *
-   * @param salt the salt value
-   * @param alphabet the alphabet value
-   */
-  public Hashids(String salt, String alphabet) {
-    this(salt, 0, alphabet);
-  }
-
-  /**
-   * Constructs a new instance with the specified salt, minimal hash length and alphabet.
-   *
-   * @param salt the salt value
-   * @param minHashLength the minimal length of the hash
-   * @param alphabet the alphabet value
-   */
-  public Hashids(String salt, int minHashLength, String alphabet) {
+  private Hashids(String salt, int minLength, String alphabet) {
     if (alphabet == null) {
       throw new IllegalArgumentException("alphabet was null");
     }
@@ -161,7 +113,7 @@ public final class Hashids {
     }
 
     this.salt = salt == null ? "" : salt;
-    this.minHashLength = minHashLength < 0 ? 0 : minHashLength;
+    this.minHashLength = minLength < 0 ? 0 : minLength;
 
     StringBuilder uniqueAlphabet = new StringBuilder();
     for (int idx = 0; idx < alphabet.length(); idx++) {
@@ -224,76 +176,73 @@ public final class Hashids {
   }
 
   /**
-   * An immutable and reusable {@link Hashids} builder.
-   * <p>
-   *   Each method returns a new builder instance.
-   * </p>
-   * <p>
-   *   Defaults to
-   *   <ul>
-   *     <li>no salt</li>
-   *     <li>no minimum hash length</li>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *   </ul>
+   * Immutable {@link Hashids} instance builder.
    */
   public static final class Builder {
 
     private final String salt;
+    private final int minLength;
     private final String alphabet;
-    private final int minHashLength;
 
     /**
-     * Create a new {@link Hashids} builder.
+     * Constructs a new instance without a salt, no minimum hash length and the {@link #DEFAULT_ALPHABET default alphabet}.
      */
     public Builder() {
       this.salt = "";
       this.alphabet = DEFAULT_ALPHABET;
-      this.minHashLength = 0;
+      this.minLength = 0;
     }
 
-    private Builder(String salt, int minHashLength, String alphabet) {
+    /**
+     * Constructs a new instance with the given salt, the minimum hash length and alphabet.
+     *
+     * @param salt the salt to be used as entropy
+     * @param minLength the minimum hash length
+     * @param alphabet the alphabet to be used for the hash generation
+     */
+    private Builder(String salt, int minLength, String alphabet) {
       this.salt = salt;
-      this.minHashLength = minHashLength;
+      this.minLength = minLength;
       this.alphabet = alphabet;
     }
 
     /**
-     * Sets the salt string.
+     * Sets the salt to be used as entropy.
      *
-     * @param salt The string to use as salt
-     * @return The builder instance with the specified salt
+     * @param salt the salt to be used as entropy
+     * @return a new builder instance with the given salt
      */
     public Builder salt(String salt) {
-      return new Builder(salt, minHashLength, alphabet);
-    }
-
-    /**
-     * Sets the custom alphabet string.
-     *
-     * @param alphabet The string to use as custom alphabet
-     * @return The builder instance with the specified custom alphabet
-     */
-    public Builder alphabet(String alphabet) {
-      return new Builder(salt, minHashLength, alphabet);
+      return new Builder(salt, minLength, alphabet);
     }
 
     /**
      * Sets the minimum hash length.
      *
-     * @param minHashLength The minimum length of the hash
-     * @return The builder instance with the minimum hash length
+     * @param minLength the minimum hash length
+     * @return a new builder instance with the given minimum hash length
      */
-    public Builder minHashLength(int minHashLength) {
-      return new Builder(salt, minHashLength, alphabet);
+    public Builder minHashLength(int minLength) {
+      return new Builder(salt, minLength, alphabet);
     }
 
     /**
-     * Builds the {@link Hashids}.
+     * Sets the alphabet to be used for the hash generation.
      *
-     * @return The {@link Hashids} instance
+     * @param alphabet the alphabet to be used for the hash generation
+     * @return a new builder instance with the given alphabet
+     */
+    public Builder alphabet(String alphabet) {
+      return new Builder(salt, minLength, alphabet);
+    }
+
+    /**
+     * Builds a new {@link Hashids} instance.
+     *
+     * @return a new configured instance
      */
     public Hashids build() {
-      return new Hashids(salt, minHashLength, alphabet);
+      return new Hashids(salt, minLength, alphabet);
     }
   }
 
