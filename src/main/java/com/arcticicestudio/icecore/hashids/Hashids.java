@@ -103,7 +103,7 @@ public final class Hashids {
   private final String separators;
 
   /**
-   * Constructs a new Hashid with all default values.
+   * Constructs a new instance with all default values.
    * <p>
    *   <ul>
    *     <li>no salt</li>
@@ -117,7 +117,7 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new Hashid with the specified salt and the default minimal hash length, alphabet and separators.
+   * Constructs a new instance with the specified salt and the default minimal hash length, alphabet and separators.
    * <p>
    *   <ul>
    *     <li>no minimal hash length</li>
@@ -132,7 +132,7 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new Hashid with the specified salt and the minimal hash length and the default alphabet and
+   * Constructs a new instance with the specified salt and the minimal hash length and the default alphabet and
    * separators.
    * <p>
    *   <ul>
@@ -148,7 +148,7 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new Hashid with the specified salt and alphabet and the default minimal hash length and separators.
+   * Constructs a new instance with the specified salt and alphabet and the default minimal hash length and separators.
    * <p>
    *   <ul>
    *     <li>no minimal hash length</li>
@@ -163,7 +163,7 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new Hashid with the specified salt, minimal hash length and alphabet and the default separators.
+   * Constructs a new instance with the specified salt, minimal hash length and alphabet and the default separators.
    * <p>
    *   <ul>
    *     <li>{@link #DEFAULT_SEPARATORS}</li>
@@ -178,7 +178,7 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new Hashid with the specified salt, minimal hash length, alphabet and separators.
+   * Constructs a new instance with the specified salt, minimal hash length, alphabet and separators.
    *
    * @param salt the salt value
    * @param minHashLength the minimal length of the hash
@@ -352,11 +352,11 @@ public final class Hashids {
    * Encode number(s).
    *
    * @param numbers the number(s) to encode
-   * @return the Hashid instance with the number(s) and the encoded string
+   * @return the hash
    */
-  public Hashid encode(long... numbers) {
+  public String encode(long... numbers) {
     if (numbers.length == 0) {
-      return Hashid.EMPTY;
+      return "";
     }
     return doEncode(numbers);
   }
@@ -407,18 +407,18 @@ public final class Hashids {
     while (matcher.find()) {
       matched.add(Long.parseLong("1" + matcher.group(), 16));
     }
-    return doEncode(toArray(matched)).toString();
+    return doEncode(toArray(matched));
   }
 
   /**
    * Decode an encoded string.
    *
    * @param hash the encoded string
-   * @return the Hashid instance with the decoded hash and decoded number(s)
+   * @return the decoded number(s)
    */
-  public Hashid decode(String hash) {
+  public long[] decode(String hash) {
     if (isEmpty(hash)) {
-      return Hashid.EMPTY;
+      return new long[0];
     }
     return doDecode(hash, alphabet);
   }
@@ -433,7 +433,7 @@ public final class Hashids {
     if (isEmpty(hash)) {
       return new long[0];
     }
-    return doDecode(hash, alphabet).numbers();
+    return doDecode(hash, alphabet);
   }
 
   /**
@@ -447,7 +447,7 @@ public final class Hashids {
     if (isEmpty(hash)) {
       return new int[0];
     }
-    long[] numbers = doDecode(hash, alphabet).numbers();
+    long[] numbers = doDecode(hash, alphabet);
     int[] ints = new int[numbers.length];
     for (int idx = 0; idx < numbers.length; idx++) {
       long number = numbers[idx];
@@ -474,7 +474,7 @@ public final class Hashids {
     return sb.toString();
   }
 
-  private Hashid doEncode(long... numbers) {
+  private String doEncode(long... numbers) {
     int numberHashInt = 0;
     for (int idx = 0; idx < numbers.length; idx++) {
       if (numbers[idx] < 0 || numbers[idx] > MAX_NUMBER_VALUE) {
@@ -525,10 +525,10 @@ public final class Hashids {
         result.replace(0, result.length(), result.substring(startPos, startPos + minHashLength));
       }
     }
-    return new Hashid(numbers, result.toString());
+    return result.toString();
   }
 
-  private Hashid doDecode(String hash, String alphabet) {
+  private long[] doDecode(String hash, String alphabet) {
     final List<Long> result = new ArrayList<>();
     int idx = 0;
     String[] hashArray = hash.replaceAll("[" + guards + "]", " ").split(" ");
@@ -550,8 +550,7 @@ public final class Hashids {
         result.add(unhash(subHash, alphabet));
       }
     }
-    long[] resultArray = toArray(result);
-    return new Hashid(resultArray, hash);
+    return toArray(result);
   }
 
   private static String consistentShuffle(String alphabet, String salt) {
