@@ -16,8 +16,7 @@ import java.util.regex.Pattern;
  *    Generated strings can have a {@code minHashLength}.
  * </p>
  * <p>
- *   If used to obfuscates identities, make sure to not expose your {@code salt}, {@code alphabet} nor
- * {@code separators} to a client, client-side is not safe.
+ *   If used to obfuscate identities make sure to not expose your {@code salt} or {@code alphabet}.
  * </p>
  * <p>
  *   Only positive numbers are supported.
@@ -51,12 +50,12 @@ public final class Hashids {
   public static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
   /**
-   * Holds the default separators.
+   * The default separators.
    * <p>
    *   Used to prevent the generation of strings that contain bad, offensive and rude words.
    * </p>
    */
-  public static final String DEFAULT_SEPARATORS = "cfhistuCFHISTU";
+  private static final String DEFAULT_SEPARATORS = "cfhistuCFHISTU";
 
   /**
    * Holds the maximum number value.
@@ -90,7 +89,6 @@ public final class Hashids {
   private final String guards;
   private final int minHashLength;
   private final String salt;
-  private final String separators;
 
   /**
    * Constructs a new instance with all default values.
@@ -99,7 +97,6 @@ public final class Hashids {
    *     <li>no salt</li>
    *     <li>no minimal hash length</li>
    *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
    *   </ul>
    */
   public Hashids() {
@@ -107,12 +104,11 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new instance with the specified salt and the default minimal hash length, alphabet and separators.
+   * Constructs a new instance with the specified salt, the minimal hash length and default alphabet.
    * <p>
    *   <ul>
    *     <li>no minimal hash length</li>
    *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
    *   </ul>
    *
    * @param salt the salt value
@@ -122,12 +118,10 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new instance with the specified salt and the minimal hash length and the default alphabet and
-   * separators.
+   * Constructs a new instance with the specified salt and hash length and the default alphabet.
    * <p>
    *   <ul>
    *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
    *   </ul>
    *
    * @param salt the salt value
@@ -138,11 +132,10 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new instance with the specified salt and alphabet and the default minimal hash length and separators.
+   * Constructs a new instance with the specified salt and alphabet and the minimal hash length.
    * <p>
    *   <ul>
    *     <li>no minimal hash length</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
    *   </ul>
    *
    * @param salt the salt value
@@ -153,29 +146,13 @@ public final class Hashids {
   }
 
   /**
-   * Constructs a new instance with the specified salt, minimal hash length and alphabet and the default separators.
-   * <p>
-   *   <ul>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
-   *   </ul>
+   * Constructs a new instance with the specified salt, minimal hash length and alphabet.
    *
    * @param salt the salt value
    * @param minHashLength the minimal length of the hash
    * @param alphabet the alphabet value
    */
   public Hashids(String salt, int minHashLength, String alphabet) {
-    this(salt, minHashLength, alphabet, DEFAULT_SEPARATORS);
-  }
-
-  /**
-   * Constructs a new instance with the specified salt, minimal hash length, alphabet and separators.
-   *
-   * @param salt the salt value
-   * @param minHashLength the minimal length of the hash
-   * @param alphabet the alphabet value
-   * @param separators the chained separators
-   */
-  public Hashids(String salt, int minHashLength, String alphabet, String separators) {
     if (alphabet == null) {
       throw new IllegalArgumentException("alphabet was null");
     }
@@ -203,11 +180,8 @@ public final class Hashids {
       throw new IllegalArgumentException("Alphabet cannot contains spaces");
     }
 
-    /*
-     * Separators should contain only characters present in alphabet.
-     * Alphabet should not contain separators.
-     */
-    StringBuilder seps = new StringBuilder(separators == null ? "" : separators);
+    // Alphabet should not contain separators.
+    StringBuilder seps = new StringBuilder(DEFAULT_SEPARATORS);
     for (int sepIdx = 0; sepIdx < seps.length(); sepIdx++) {
       int alphaIdx = uniqueAlphabet.indexOf(String.valueOf(seps.charAt(sepIdx)));
       if (alphaIdx == -1) {
@@ -247,7 +221,6 @@ public final class Hashids {
     }
 
     this.alphabet = uniqueAlphabet.toString();
-    this.separators = seps.toString();
   }
 
   /**
@@ -261,14 +234,12 @@ public final class Hashids {
    *     <li>no salt</li>
    *     <li>no minimum hash length</li>
    *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
    *   </ul>
    */
   public static final class Builder {
 
     private final String salt;
     private final String alphabet;
-    private final String separators;
     private final int minHashLength;
 
     /**
@@ -277,15 +248,13 @@ public final class Hashids {
     public Builder() {
       this.salt = "";
       this.alphabet = DEFAULT_ALPHABET;
-      this.separators = DEFAULT_SEPARATORS;
       this.minHashLength = 0;
     }
 
-    private Builder(String salt, String alphabet, String separators, int minHashLength) {
+    private Builder(String salt, int minHashLength, String alphabet) {
       this.salt = salt;
-      this.alphabet = alphabet;
-      this.separators = separators;
       this.minHashLength = minHashLength;
+      this.alphabet = alphabet;
     }
 
     /**
@@ -295,7 +264,7 @@ public final class Hashids {
      * @return The builder instance with the specified salt
      */
     public Builder salt(String salt) {
-      return new Builder(salt, alphabet, separators, minHashLength);
+      return new Builder(salt, minHashLength, alphabet);
     }
 
     /**
@@ -305,17 +274,7 @@ public final class Hashids {
      * @return The builder instance with the specified custom alphabet
      */
     public Builder alphabet(String alphabet) {
-      return new Builder(salt, alphabet, separators, minHashLength);
-    }
-
-    /**
-     * Sets the custom separators string.
-     *
-     * @param separators The string to use as custom alphabet
-     * @return The builder instance with the specified custom separators
-     */
-    public Builder separators(String separators) {
-      return new Builder(salt, alphabet, separators, minHashLength);
+      return new Builder(salt, minHashLength, alphabet);
     }
 
     /**
@@ -325,7 +284,7 @@ public final class Hashids {
      * @return The builder instance with the minimum hash length
      */
     public Builder minHashLength(int minHashLength) {
-      return new Builder(salt, alphabet, separators, minHashLength);
+      return new Builder(salt, minHashLength, alphabet);
     }
 
     /**
@@ -334,7 +293,7 @@ public final class Hashids {
      * @return The {@link Hashids} instance
      */
     public Hashids build() {
-      return new Hashids(salt, minHashLength, alphabet, separators);
+      return new Hashids(salt, minHashLength, alphabet);
     }
   }
 
@@ -421,8 +380,8 @@ public final class Hashids {
 
       if (idx + 1 < numbers.length) {
         num %= ((int) last.charAt(0) + idx);
-        sepsIdx = (int) (num % separators.length());
-        result.append(separators.charAt(sepsIdx));
+        sepsIdx = (int) (num % DEFAULT_SEPARATORS.length());
+        result.append(DEFAULT_SEPARATORS.charAt(sepsIdx));
       }
     }
 
@@ -463,7 +422,7 @@ public final class Hashids {
     if (!hashBreakdown.isEmpty()) {
       final char lottery = hashBreakdown.charAt(0);
       hashBreakdown = hashBreakdown.substring(1);
-      hashBreakdown = hashBreakdown.replaceAll("[" + separators + "]", " ");
+      hashBreakdown = Pattern.compile("[" + DEFAULT_SEPARATORS + "]").matcher(hashBreakdown).replaceAll(" ");
       hashArray = hashBreakdown.split(" ");
 
       String buffer;

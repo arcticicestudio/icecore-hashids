@@ -65,28 +65,6 @@ public class HashidsTest {
   }
 
   @Test
-  public void oneNumberWithoutSeparators() {
-    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
-    long number = 12_345L;
-    String hash = hashids.encode(number);
-    long[] decoded = hashids.decode(hash);
-
-    assertEquals(1, decoded.length);
-    assertEquals(number, decoded[0]);
-  }
-
-  @Test
-  public void oneNumberWithCustomSeparators() {
-    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, "abcdefgABCDEFG1234567");
-    long number = 12_345L;
-    String hash = hashids.encode(number);
-    long[] decoded = hashids.decode(hash);
-
-    assertEquals(1, decoded.length);
-    assertEquals(number, decoded[0]);
-  }
-
-  @Test
   public void oneNumberWithLargeCustomMinimumHashLength() {
     Hashids hashids = new Hashids("salt", 1000);
     long number = 12_345;
@@ -229,7 +207,6 @@ public class HashidsTest {
       .salt("salt")
       .minHashLength(16)
       .alphabet(Hashids.DEFAULT_ALPHABET)
-      .separators(Hashids.DEFAULT_SEPARATORS)
       .build();
     long number = 12_345L;
     long[] decoded = hashids.decode(hashids.encode(number));
