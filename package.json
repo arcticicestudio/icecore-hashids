@@ -1,0 +1,16 @@
+{
+  "name": "icecore-hashids",
+  "version": "0.3.0",
+  "private": true,
+  "description": "A lightweight generator for short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.",
+  "author": {
+    "name": "Arctic Ice Studio",
+    "url": "http://arcticicestudio.com"
+  },
+  "license": "Apache 2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "hashids": "1.1.1"
+  },
+  "scripts": {}
+}
