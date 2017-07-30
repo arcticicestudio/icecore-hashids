@@ -309,16 +309,15 @@ public final class Hashids {
         deriveNewAlphabet(currentAlphabet, salt, lottery);
         final int initialLength = global.length();
         transform(numbers[idx], currentAlphabet, global, initialLength);
-        // Prepend the lottery
-        if (idx == 0) {
-          global.insert(0, lottery);
-        }
         // Append the separator
         if (idx + 1 < numbers.length) {
-          long n = numbers[idx] % (global.charAt(initialLength) + 1);
+          long n = numbers[idx] % (global.charAt(initialLength) + idx);
           global.append(separators[(int) (n % separators.length)]);
         }
       });
+
+    // Prepend the lottery
+    global.insert(0, lottery);
 
     // Add the guards if there is any space left
     if (minLength > global.length()) {
