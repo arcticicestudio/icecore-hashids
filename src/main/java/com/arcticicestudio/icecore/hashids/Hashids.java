@@ -1,630 +1,758 @@
-/*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-title      Hashids Public API                                 +
-project    icecore-hashids                                    +
-repository https://github.com/arcticicestudio/icecore-hashids +
-author     Arctic Ice Studio                                  +
-email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2017                                 +
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
 package com.arcticicestudio.icecore.hashids;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.toSet;
+
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
- * Generates short, unique, non-sequential and decodable hashids from positive unsigned (long) integer numbers.
- * <p>
- *   Serves as the entry point to the
- *   <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a> public API.
- * </p>
- * <p>
- *   The Hashids's {@code salt} is used as a secret to generate unique strings using a given {@code alphabet}.
- *    Generated strings can have a {@code minHashLength}.
- * </p>
- * <p>
- *   If used to obfuscates identities, make sure to not expose your {@code salt}, {@code alphabet} nor
- * {@code separators} to a client, client-side is not safe.
- * </p>
- * <p>
- *   Only positive numbers are supported.
- *   All methods in this class will throw an {@link IllegalArgumentException} if a negative number is given.
- *   To use negative numbers prepend a hyphen character to the hash string.
- *   <strong>
- *     Note that this method is limited to single number hashes only and breaks the official Hashids definition!
- *   </strong>
- *   Example:
- *   <pre>
- *     Hashids hashids = new Hashids("salt");
- *     long number = -1234567890;
- *     String enc = (Math.abs(number) != number ? "-" : "") + hashids.encodeToString(Math.abs(number));
- *     long dec = enc.startsWith("-") ? hashids.decodeLongNumbers(enc.substring(1))[0] : hashids.decodeLongNumbers(enc)[0];
- *   </pre>
+ * A lightweight generator for short, unique, case-sensitive and non-sequential decodable hashes from positive unsigned (long) integer numbers.
  *
- * <p>
- *   <strong>{@code Hashids} instances are thread-safe.</strong>
- * </p>
+ * <p>Implementation of the <a href="http://hashids.org">Hashids</a> algorithm:
+ * <ul>
+ *   <li>Generation of short, unique, case-sensitive and non-sequential decodable hashes of natural numbers</li>
+ *   <li>Additional entropy through salt usage</li>
+ *   <li>Configurable minimum hash size</li>
+ *   <li>Combining of several numbers to one hash</li>
+ *   <li>Deterministic hash computation given the same input and parametrization/configuration</li>
+ * </ul>
+ *
+ * <p>An instance with the default interoperable configurations is available through the {@link Hashids#Hashids() default constructor}.
+ *
+ * <p>Configured instances can be created via {@link Hashids.Builder} to set a {@link Hashids.Builder#salt salt}, define a
+ * ·{@link Hashids.Builder#minLength minimum hash length} or use a {@link Hashids.Builder#alphabet custom alphabet}. Optional {@link HashidsFeature features}
+ * can be enabled via the {@link Hashids.Builder#features features(HashidsFeature)} method. <strong>Please note that most features will break the
+ * interoperability with the origin algorithm implementation!</strong>
+ *
+ * <p><strong>Instances of this class are thread-safe.</strong>
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
- * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
- * @see <a href="http://hashids.org">Hashids</a>
+ * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids GitHub Repository</a>
  * @version 0.3.0
  */
 public final class Hashids {
 
-  /**
-   * Holds the default alphabet.
-   */
-  public static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  private static final String VERSION = "0.3.0";
+  private static final String VERSION_INTEROP = "1.0.0";
+
+  private static final int LOTTERY_MOD = 100;
+  private static final double GUARD_THRESHOLD = 12;
+  private static final double SEPARATOR_THRESHOLD = 3.5;
+  private static final Pattern HEX_VALUES_PATTERN = Pattern.compile("[\\w\\W]{1,12}");
+  private static final Pattern HEX_FORMAT_PATTERN = Pattern.compile("^[0-9a-fA-F]+$");
 
   /**
-   * Holds the default separators.
-   * <p>
-   *   Used to prevent the generation of strings that contain bad, offensive and rude words.
-   * </p>
-   */
-  public static final String DEFAULT_SEPARATORS = "cfhistuCFHISTU";
-
-  /**
-   * Holds the maximum number value.
-   * <p>
-   *   This limit is mandatory in order to ensure interoperability.
-   * </p>
-   * <p>
-   *   JavaScript equivalents used in <a href="https://github.com/ivanakimov/hashids.js">hashids.js</a>:
-   *   <ul>
-   *     <li>{@code 9_007_199_254_740_991}</li>
-   *     <li>{@code 2^53-1}</li>
-   *     <li>{@code Number.MAX_VALUE-1}</li>
-   *   </ul>
-   */
-  public static final long MAX_NUMBER_VALUE = 9_007_199_254_740_992L - 1;
-
-  /**
-   * The version of the public API.
+   * The maximum number size to ensure interoperability with the origin algorithm implementation <a href="https://github.com/ivanakimov/hashids.js">hashids
+   * .js</a>.
    *
-   * @since 0.3.0
+   * <p>This limit is based on the
+   * JavaScript <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>
+   * constant which represents the maximum safe integer.
+   *
+   *<p>The limit can be canceled by enabling the {@link HashidsFeature#NO_MAX_INTEROP_NUMBER_SIZE NO_MAX_INTEROP_NUMBER_SIZE} feature. <strong>Please
+   * note that this will break the interoperability with the origin algorithm implementation!</strong>
+   *
+   * @see <a href="https://www.ecma-international.org/ecma-262/7.0/#sec-number.max_safe_integer">ECMAScript 2016 Language Specification</a>
    */
-  public static final String VERSION = "0.3.0";
-
-  private static final int GUARD_DIV = 12;
-  private static final int MIN_ALPHABET_LENGTH = 16;
-  private static final double SEP_DIV = 3.5;
-  private static final Pattern PATTERN_ENCODE_HEX = Pattern.compile("^[0-9a-fA-F]+$");
-  private static final Pattern PATTERN_ALPHABET_REPLACE = Pattern.compile("\\s+");
-
-  private final String alphabet;
-  private final String guards;
-  private final int minHashLength;
-  private final String salt;
-  private final String separators;
+  public static final long MAX_INTEROP_NUMBER_SIZE = (long) Math.pow(2, 53) - 1;
 
   /**
-   * Constructs a new Hashid with all default values.
-   * <p>
-   *   <ul>
-   *     <li>no salt</li>
-   *     <li>no minimal hash length</li>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
-   *   </ul>
+   * The minimum length of the hash generation alphabet.
+   */
+  private static final int MIN_ALPHABET_LENGTH = 16;
+
+  /**
+   * The default alphabet for the hash generation.
+   *
+   * <p>A customized alphabet can be set via the instance builder {@link Hashids.Builder#alphabet alphabet} method.
+   */
+  public static final char[] DEFAULT_ALPHABET = {
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+  };
+
+  /**
+   * The default separators to prevent bad, offensive and rude words in generated hashes.
+   */
+  private static final char[] DEFAULT_SEPARATORS = {'c', 'f', 'h', 'i', 's', 't', 'u', 'C', 'F', 'H', 'I', 'S', 'T', 'U'};
+
+  private final char[] alphabet;
+  private final char[] separators;
+  private final char[] salt;
+  private final char[] guards;
+  private final int minLength;
+  private final Set<Character> separatorsSet;
+
+  /**
+   * A set of all enabled {@link HashidsFeature features}.
+   *
+   * @since 0.4.0
+   */
+  private final EnumSet<HashidsFeature> features;
+
+  /**
+   * Constructs a new instance without a salt, no minimum hash length, the {@link #DEFAULT_ALPHABET default alphabet} and no enabled
+   * {@link HashidsFeature features}.
    */
   public Hashids() {
-    this("", 0);
+    this(new char[0], 0, DEFAULT_ALPHABET, EnumSet.noneOf(HashidsFeature.class));
   }
 
   /**
-   * Constructs a new Hashid with the specified salt and the default minimal hash length, alphabet and separators.
-   * <p>
-   *   <ul>
-   *     <li>no minimal hash length</li>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
-   *   </ul>
+   * Constructs a new instance with the given configuration and enabled {@link HashidsFeature features}.
    *
-   * @param salt the salt value
+   * @param salt the salt to be used as entropy
+   * @param minLength the minimum hash length
+   * @param alphabet the alphabet to be used for the hash generation
+   * @param features the set of enabled Hashids features
    */
-  public Hashids(String salt) {
-    this(salt, 0);
-  }
+  private Hashids(final char[] salt, final int minLength, final char[] alphabet, final EnumSet<HashidsFeature> features) {
+    this.minLength = minLength;
+    this.salt = Arrays.copyOf(salt, salt.length);
+    this.features = features;
+    char[] tmpSeparators = shuffle(filterSeparators(DEFAULT_SEPARATORS, alphabet), this.salt);
+    char[] tmpAlphabet = validateAndFilterAlphabet(alphabet, tmpSeparators);
 
-  /**
-   * Constructs a new Hashid with the specified salt and the minimal hash length and the default alphabet and
-   * separators.
-   * <p>
-   *   <ul>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
-   *   </ul>
-   *
-   * @param salt the salt value
-   * @param minHashLength the minimal length of the hash
-   */
-  public Hashids(String salt, int minHashLength) {
-    this(salt, minHashLength, DEFAULT_ALPHABET);
-  }
-
-  /**
-   * Constructs a new Hashid with the specified salt and alphabet and the default minimal hash length and separators.
-   * <p>
-   *   <ul>
-   *     <li>no minimal hash length</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
-   *   </ul>
-   *
-   * @param salt the salt value
-   * @param alphabet the alphabet value
-   */
-  public Hashids(String salt, String alphabet) {
-    this(salt, 0, alphabet);
-  }
-
-  /**
-   * Constructs a new Hashid with the specified salt, minimal hash length and alphabet and the default separators.
-   * <p>
-   *   <ul>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
-   *   </ul>
-   *
-   * @param salt the salt value
-   * @param minHashLength the minimal length of the hash
-   * @param alphabet the alphabet value
-   */
-  public Hashids(String salt, int minHashLength, String alphabet) {
-    this(salt, minHashLength, alphabet, DEFAULT_SEPARATORS);
-  }
-
-  /**
-   * Constructs a new Hashid with the specified salt, minimal hash length, alphabet and separators.
-   *
-   * @param salt the salt value
-   * @param minHashLength the minimal length of the hash
-   * @param alphabet the alphabet value
-   * @param separators the chained separators
-   */
-  public Hashids(String salt, int minHashLength, String alphabet, String separators) {
-    if (alphabet == null) {
-      throw new IllegalArgumentException("alphabet was null");
-    }
-    if (alphabet.length() == 0) {
-      throw new IllegalArgumentException("alphabet was empty");
-    }
-
-    this.salt = salt == null ? "" : salt;
-    this.minHashLength = minHashLength < 0 ? 0 : minHashLength;
-
-    StringBuilder uniqueAlphabet = new StringBuilder();
-    for (int idx = 0; idx < alphabet.length(); idx++) {
-      if (uniqueAlphabet.indexOf(String.valueOf(alphabet.charAt(idx))) == -1) {
-        uniqueAlphabet.append(alphabet.charAt(idx));
+    // Check the separator threshold
+    if (tmpSeparators.length == 0 || (tmpAlphabet.length / tmpSeparators.length) > SEPARATOR_THRESHOLD) {
+      final int minSeparatorsSize = (int) Math.ceil(tmpAlphabet.length / SEPARATOR_THRESHOLD);
+      // Check the minimum size of the separators
+      if (minSeparatorsSize > tmpSeparators.length) {
+        // Fill the separators from the alphabet
+        final int missingSeparators = minSeparatorsSize - tmpSeparators.length;
+        tmpSeparators = Arrays.copyOf(tmpSeparators, tmpSeparators.length + missingSeparators);
+        System.arraycopy(tmpAlphabet, 0, tmpSeparators, tmpSeparators.length - missingSeparators, missingSeparators);
+        tmpAlphabet = Arrays.copyOfRange(tmpAlphabet, missingSeparators, tmpAlphabet.length);
       }
     }
 
-    if (uniqueAlphabet.length() < MIN_ALPHABET_LENGTH) {
-      throw new IllegalArgumentException(
-        "Alphabet must contain at least " + MIN_ALPHABET_LENGTH + " unique characters"
-      );
-    }
+    // Shuffle the current alphabet
+    shuffle(tmpAlphabet, this.salt);
 
-    if (uniqueAlphabet.toString().contains(" ")) {
-      throw new IllegalArgumentException("Alphabet cannot contains spaces");
-    }
-
-    /*
-     * Separators should contain only characters present in alphabet.
-     * Alphabet should not contain separators.
-     */
-    StringBuilder seps = new StringBuilder(separators == null ? "" : separators);
-    for (int sepIdx = 0; sepIdx < seps.length(); sepIdx++) {
-      int alphaIdx = uniqueAlphabet.indexOf(String.valueOf(seps.charAt(sepIdx)));
-      if (alphaIdx == -1) {
-        seps.replace(sepIdx, sepIdx + 1, " ");
-      } else {
-        uniqueAlphabet.replace(alphaIdx, alphaIdx + 1, " ");
-      }
-    }
-
-    uniqueAlphabet.replace(0, uniqueAlphabet.length(), PATTERN_ALPHABET_REPLACE.matcher(uniqueAlphabet).replaceAll(""));
-    seps.replace(0, seps.length(), PATTERN_ALPHABET_REPLACE.matcher(seps).replaceAll(""));
-    seps.replace(0, seps.length(), consistentShuffle(seps.toString(), this.salt));
-
-    if (isEmpty(seps.toString()) || ((float)uniqueAlphabet.length() / seps.length()) > SEP_DIV) {
-      int sepsLen = (int) Math.ceil(uniqueAlphabet.length() / SEP_DIV);
-      if (sepsLen == 1) {
-        sepsLen++;
-      }
-      if (sepsLen > seps.length()) {
-        int diff = sepsLen - seps.length();
-        seps.append(uniqueAlphabet.substring(0, diff));
-        uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(diff));
-      } else {
-        seps.replace(0, seps.length(), seps.substring(0, sepsLen));
-      }
-    }
-
-    uniqueAlphabet.replace(0, uniqueAlphabet.length(), consistentShuffle(uniqueAlphabet.toString(), this.salt));
-    int guardCount = (int) Math.ceil((double)uniqueAlphabet.length() / GUARD_DIV);
-
-    if (uniqueAlphabet.length() < 3) {
-      guards = seps.substring(0, guardCount);
-      seps.replace(0, seps.length(), seps.substring(guardCount));
+    // Check the guards
+    this.guards = new char[(int) Math.ceil(tmpAlphabet.length / GUARD_THRESHOLD)];
+    if (alphabet.length < 3) {
+      System.arraycopy(tmpSeparators, 0, guards, 0, guards.length);
+      this.separators = Arrays.copyOfRange(tmpSeparators, guards.length, tmpSeparators.length);
+      this.alphabet = tmpAlphabet;
     } else {
-      guards = uniqueAlphabet.substring(0, guardCount);
-      uniqueAlphabet.replace(0, uniqueAlphabet.length(), uniqueAlphabet.substring(guardCount));
+      System.arraycopy(tmpAlphabet, 0, guards, 0, guards.length);
+      this.separators = tmpSeparators;
+      this.alphabet = Arrays.copyOfRange(tmpAlphabet, guards.length, tmpAlphabet.length);
     }
 
-    this.alphabet = uniqueAlphabet.toString();
-    this.separators = seps.toString();
+    // Populate the separators set
+    this.separatorsSet = IntStream.range(0, separators.length)
+      .mapToObj(idx -> separators[idx])
+      .collect(toSet());
   }
 
   /**
-   * An immutable and reusable {@link Hashids} builder.
-   * <p>
-   *   Each method returns a new builder instance.
-   * </p>
-   * <p>
-   *   Defaults to
-   *   <ul>
-   *     <li>no salt</li>
-   *     <li>no minimum hash length</li>
-   *     <li>{@link #DEFAULT_ALPHABET}</li>
-   *     <li>{@link #DEFAULT_SEPARATORS}</li>
-   *   </ul>
+   * An immutable {@link Hashids} instance builder with optional {@link HashidsFeature features}.
    */
   public static final class Builder {
 
-    private final String salt;
-    private final String alphabet;
-    private final String separators;
-    private final int minHashLength;
+    private char[] salt;
+    private int minLength;
+    private char[] alphabet;
+
+    private EnumSet<HashidsFeature> features;
 
     /**
-     * Create a new {@link Hashids} builder.
+     * Constructs a new instance without a salt, no minimum hash length, the {@link #DEFAULT_ALPHABET default alphabet} and no enabled
+     * {@link HashidsFeature features}.
      */
     public Builder() {
-      this.salt = "";
+      this.salt = new char[0];
       this.alphabet = DEFAULT_ALPHABET;
-      this.separators = DEFAULT_SEPARATORS;
-      this.minHashLength = 0;
-    }
-
-    private Builder(String salt, String alphabet, String separators, int minHashLength) {
-      this.salt = salt;
-      this.alphabet = alphabet;
-      this.separators = separators;
-      this.minHashLength = minHashLength;
+      this.minLength = 0;
+      this.features = EnumSet.noneOf(HashidsFeature.class);
     }
 
     /**
-     * Sets the salt string.
+     * Sets the salt to be used as entropy.
      *
-     * @param salt The string to use as salt
-     * @return The builder instance with the specified salt
-     */
-    public Builder salt(String salt) {
-      return new Builder(salt, alphabet, separators, minHashLength);
-    }
-
-    /**
-     * Sets the custom alphabet string.
+     * <p>By default the salt is empty.
      *
-     * @param alphabet The string to use as custom alphabet
-     * @return The builder instance with the specified custom alphabet
+     * @param salt the salt to be used as entropy
+     * @return a new builder instance with the given salt
      */
-    public Builder alphabet(String alphabet) {
-      return new Builder(salt, alphabet, separators, minHashLength);
-    }
-
-    /**
-     * Sets the custom separators string.
-     *
-     * @param separators The string to use as custom alphabet
-     * @return The builder instance with the specified custom separators
-     */
-    public Builder separators(String separators) {
-      return new Builder(salt, alphabet, separators, minHashLength);
+    public Builder salt(final String salt) {
+      this.salt = salt.toCharArray();
+      return this;
     }
 
     /**
      * Sets the minimum hash length.
      *
-     * @param minHashLength The minimum length of the hash
-     * @return The builder instance with the minimum hash length
+     * <p>The default value is {@code 0}.
+     *
+     * @param minLength the minimum hash length
+     * @return a new builder instance with the given minimum hash length
      */
-    public Builder minHashLength(int minHashLength) {
-      return new Builder(salt, alphabet, separators, minHashLength);
+    public Builder minLength(final int minLength) {
+      this.minLength = minLength;
+      return this;
     }
 
     /**
-     * Builds the {@link Hashids}.
+     * Sets the alphabet to be used for the hash generation.
      *
-     * @return The {@link Hashids} instance
+     * <p>The default value is the {@link #DEFAULT_ALPHABET default alphabet}.
+     *
+     * @param alphabet the alphabet to be used for the hash generation
+     * @return a new builder instance with the given alphabet
+     */
+    public Builder alphabet(final String alphabet) {
+      this.alphabet = alphabet.toCharArray();
+      return this;
+    }
+
+    /**
+     * Enables the given instance {@link HashidsFeature features}.
+     *
+     * <p>By default no features are enabled.
+     *
+     * @param features the features to be enabled for this instance
+     * @return a new builder instance with the enabled features
+     * @since 0.4.0
+     */
+    public Builder features(final HashidsFeature... features) {
+      this.features.addAll(Arrays.asList(features));
+      return this;
+    }
+
+    /**
+     * Builds a new configured {@link Hashids} instance.
+     *
+     * @return a new configured instance
      */
     public Hashids build() {
-      return new Hashids(salt, minHashLength, alphabet, separators);
+      return new Hashids(salt, minLength, alphabet, features);
     }
   }
 
   /**
-   * Encode number(s).
+   * Encodes the given positive numbers based on this instance configuration.
    *
-   * @param numbers the number(s) to encode
-   * @return the Hashid instance with the number(s) and the encoded string
-   */
-  public Hashid encode(long... numbers) {
-    if (numbers.length == 0) {
-      return Hashid.EMPTY;
-    }
-    return doEncode(numbers);
-  }
-
-  /**
-   * Encode number(s) to string.
+   * <p>The given numbers size must not be larger than the {@link #MAX_INTEROP_NUMBER_SIZE maximum interoperability size} unless the
+   * {@link HashidsFeature#NO_MAX_INTEROP_NUMBER_SIZE NO_MAX_INTEROP_NUMBER_SIZE} feature is enabled. <strong>Please
+   * note that this will break the interoperability with the origin algorithm implementation!</strong>
    *
-   * @param numbers the number(s) to encode
-   * @return the encoded string
+   * @param numbers the positive numbers to be encoded
+   * @return the resultant hash of the encoding of the numbers, empty otherwise
+   * @throws IllegalArgumentException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the total length of
+   * numbers is zero, any numbers size is invalid or larger than the {@link #MAX_INTEROP_NUMBER_SIZE maximum interoperability size}
+   * @throws NullPointerException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the given numbers are {@code null}
    */
-  public String encodeToString(long... numbers) {
-    if (numbers.length == 0) {
+  public String encode(final long... numbers) {
+    if (numbers == null) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new NullPointerException("numbers must not be null!");
+      }
       return "";
     }
-    return encode(numbers).toString();
-  }
 
-  /**
-   * Encode number(s) to string.
-   *
-   * @param numbers the number(s) to encode
-   * @return the encoded string
-   */
-  public String encodeToString(int... numbers) {
     if (numbers.length == 0) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new IllegalArgumentException("length of numbers must be greater than or equal to one!");
+      }
       return "";
     }
-    long[] longs = new long[numbers.length];
-    for (int idx = 0; idx < numbers.length; idx++) {
-      longs[idx] = numbers[idx];
 
+    for (long number : numbers) {
+      if (number < 0) {
+        if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+          throw new IllegalArgumentException("number must not be less than zero: " + number);
+        }
+        return "";
+      }
+
+      if (number > MAX_INTEROP_NUMBER_SIZE && !features.contains(HashidsFeature.NO_MAX_INTEROP_NUMBER_SIZE)) {
+        if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+          throw new IllegalArgumentException("number must not exceed the maximum number size: " + number + " > " + MAX_INTEROP_NUMBER_SIZE);
+        }
+        return "";
+      }
     }
-    return doEncode(longs).toString();
+
+    final char[] currentAlphabet = Arrays.copyOf(alphabet, alphabet.length);
+
+    // Determine the lottery number
+    final long lotteryId = LongStream.range(0, numbers.length)
+      .reduce(0, (state, idx) -> state + numbers[(int) idx] % (idx + LOTTERY_MOD));
+    final char lottery = currentAlphabet[(int) (lotteryId % currentAlphabet.length)];
+
+    // Encode each number
+    final StringBuilder global = new StringBuilder();
+    IntStream.range(0, numbers.length)
+      .forEach(idx -> {
+        deriveNewAlphabet(currentAlphabet, salt, lottery);
+        final int initialLength = global.length();
+        transform(numbers[idx], currentAlphabet, global, initialLength);
+        // Append the separator
+        if (idx + 1 < numbers.length) {
+          long n = numbers[idx] % (global.charAt(initialLength) + idx);
+          global.append(separators[(int) (n % separators.length)]);
+        }
+      });
+
+    // Prepend the lottery
+    global.insert(0, lottery);
+
+    // Add the guards if there is any space left
+    if (minLength > global.length()) {
+      int guardIdx = (int) ((lotteryId + lottery) % guards.length);
+      global.insert(0, guards[guardIdx]);
+      if (minLength > global.length()) {
+        guardIdx = (int) ((lotteryId + global.charAt(2)) % guards.length);
+        global.append(guards[guardIdx]);
+      }
+    }
+
+    // Add the necessary padding
+    int paddingLeft = minLength - global.length();
+    while (paddingLeft > 0) {
+      shuffle(currentAlphabet, Arrays.copyOf(currentAlphabet, currentAlphabet.length));
+
+      final int alphabetHalfSize = currentAlphabet.length / 2;
+      final int initialSize = global.length();
+      if (paddingLeft > currentAlphabet.length) {
+        int offset = alphabetHalfSize + (currentAlphabet.length % 2 == 0 ? 0 : 1);
+
+        global.insert(0, currentAlphabet, alphabetHalfSize, offset);
+        global.insert(offset + initialSize, currentAlphabet, 0, alphabetHalfSize);
+
+        paddingLeft -= currentAlphabet.length;
+      } else {
+        // Calculate the excess
+        final int excess = currentAlphabet.length + global.length() - minLength;
+        final int secondHalfStartOffset = alphabetHalfSize + Math.floorDiv(excess, 2);
+        final int secondHalfLength = currentAlphabet.length - secondHalfStartOffset;
+        final int firstHalfLength = paddingLeft - secondHalfLength;
+
+        global.insert(0, currentAlphabet, secondHalfStartOffset, secondHalfLength);
+        global.insert(secondHalfLength + initialSize, currentAlphabet, 0, firstHalfLength);
+
+        paddingLeft = 0;
+      }
+    }
+
+    return global.toString();
   }
 
   /**
-   * Encode an hexadecimal string to string.
+   * Encodes the given numbers in hexadecimal format based on this instance configuration.
    *
-   * @param hex the hexadecimal string to encode
-   * @return the encoded string
+   * <p>The given hexadecimal numbers must not be prefixed ({@code 0x} or {@code 0X}) unless the
+   * {@link HashidsFeature#ALLOW_HEXADECIMAL_NUMBER_PREFIX ALLOW_HEXADECIMAL_NUMBER_PREFIX} feature is enabled. <strong>Please
+   * note that this will break the interoperability with the origin algorithm implementation!</strong>
+   *
+   * @param hexNumbers the numbers in hexadecimal format to be encoded
+   * @return the resultant hash of the encoding of the hexadecimal numbers, empty otherwise
+   * @throws IllegalArgumentException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and any of the numbers is invalid
+   * @throws NullPointerException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the given numbers are {@code null}
    */
-  public String encodeHex(String hex) {
-    if (!PATTERN_ENCODE_HEX.matcher(hex).matches()) {
-      throw new IllegalArgumentException(String.format("%s is not a hex string", hex));
+  public String encodeHex(final String hexNumbers) {
+    if (hexNumbers == null) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new NullPointerException("hexNumbers must not be null!");
+      }
+      return "";
     }
-    Matcher matcher = Pattern.compile("[\\w\\W]{1,12}").matcher(hex);
-    List<Long> matched = new ArrayList<>();
+
+    final String hex;
+    if (hexNumbers.startsWith("0x") || hexNumbers.startsWith("0X")) {
+      if (features.contains(HashidsFeature.ALLOW_HEXADECIMAL_NUMBER_PREFIX)) {
+        hex = hexNumbers.substring(2);
+      } else {
+        if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+          throw new IllegalArgumentException("numbers must not contain a hexadecimal prefix: " + hexNumbers.substring(0, 2));
+        }
+        return "";
+      }
+    } else {
+      hex = hexNumbers;
+    }
+
+    if (!HEX_FORMAT_PATTERN.matcher(hex).matches()) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new IllegalArgumentException("hexNumbers must be a valid hexadecimal number!");
+      }
+      return "";
+    }
+
+    // Resolve the associated long value and encode it
+    LongStream values = LongStream.empty();
+    final Matcher matcher = HEX_VALUES_PATTERN.matcher(hex);
     while (matcher.find()) {
-      matched.add(Long.parseLong("1" + matcher.group(), 16));
+      final long value = new BigInteger("1" + matcher.group(), 16).longValue();
+      values = LongStream.concat(values, LongStream.of(value));
     }
-    return doEncode(toArray(matched)).toString();
+
+    return encode(values.toArray());
   }
 
   /**
-   * Decode an encoded string.
+   * Decodes the given hash into its numeric representation based on this instance configuration.
    *
-   * @param hash the encoded string
-   * @return the Hashid instance with the decoded hash and decoded number(s)
+   * @param hash the hash to be decoded
+   * @return an array of long values with each numeric number present in the hash, empty otherwise
+   * @throws IllegalArgumentException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the hash is invalid
+   * @throws NullPointerException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the given hash is {@code null}
    */
-  public Hashid decode(String hash) {
-    if (isEmpty(hash)) {
-      return Hashid.EMPTY;
-    }
-    return doDecode(hash, alphabet);
-  }
-
-  /**
-   * Decode an encoded string to long numbers.
-   *
-   * @param hash the encoded string
-   * @return the decoded long numbers
-   */
-  public long[] decodeLongNumbers(String hash) {
-    if (isEmpty(hash)) {
+  public long[] decode(final String hash) {
+    if (hash == null) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new NullPointerException("hash must not be null!");
+      }
       return new long[0];
     }
-    return doDecode(hash, alphabet).numbers();
-  }
 
-  /**
-   * Decode an encoded string to integer numbers.
-   *
-   * @param hash the encoded string
-   * @return the decoded integer numbers
-   * @throws IllegalArgumentException if the decoded number is out of the integer minimal- or maximal range
-   */
-  public int[] decodeIntegerNumbers(String hash) {
-    if (isEmpty(hash)) {
-      return new int[0];
-    }
-    long[] numbers = doDecode(hash, alphabet).numbers();
-    int[] ints = new int[numbers.length];
-    for (int idx = 0; idx < numbers.length; idx++) {
-      long number = numbers[idx];
-      if (number < Integer.MIN_VALUE || number > Integer.MAX_VALUE) {
-        throw new IllegalArgumentException("Number out of range");
+    // Validate that the hash only consists of valid characters
+    final Set<Character> validInputChars = new HashSet<>(alphabet.length + guards.length + separators.length);
+    Stream.of(alphabet, guards, separators)
+      .forEach(chars -> IntStream.range(0, chars.length)
+        .mapToObj(idx -> chars[idx])
+        .forEach(validInputChars::add));
+    if (!IntStream.range(0, hash.length()).allMatch(idx -> validInputChars.contains(hash.charAt(idx)))) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new IllegalArgumentException("invalid hash: " + hash);
       }
-      ints[idx] = (int) number;
+      return new long[0];
     }
-    return ints;
+
+    // Create a set of the guards and count the total amount
+    final Set<Character> guardsSet = IntStream.range(0, guards.length)
+      .mapToObj(idx -> guards[idx])
+      .collect(toSet());
+    final int[] guardsIdx = IntStream.range(0, hash.length())
+      .filter(idx -> guardsSet.contains(hash.charAt(idx)))
+      .toArray();
+
+    // Calculate the start- and end index based on the guards count
+    final int startIdx;
+    final int endIdx;
+    if (guardsIdx.length > 0) {
+      startIdx = guardsIdx[0] + 1;
+      endIdx = guardsIdx.length > 1 ? guardsIdx[1] : hash.length();
+    } else {
+      startIdx = 0;
+      endIdx = hash.length();
+    }
+
+    LongStream decoded = LongStream.empty();
+    if (hash.length() > 0) {
+      final char lottery = hash.charAt(startIdx);
+
+      // Create the initial accumulation string
+      final int length = hash.length() - guardsIdx.length - 1;
+      StringBuilder block = new StringBuilder(length);
+
+      // Create the base salt
+      final char[] decodeSalt = new char[alphabet.length];
+      decodeSalt[0] = lottery;
+      final int saltLength = salt.length >= alphabet.length ? alphabet.length - 1 : salt.length;
+      System.arraycopy(salt, 0, decodeSalt, 1, saltLength);
+      final int saltLeft = alphabet.length - saltLength - 1;
+
+      final char[] currentAlphabet = Arrays.copyOf(alphabet, alphabet.length);
+
+      for (int i = startIdx + 1; i < endIdx; i++) {
+        if (!separatorsSet.contains(hash.charAt(i))) {
+          block.append(hash.charAt(i));
+          if (i < endIdx - 1) {
+            continue;
+          }
+        }
+
+        if (block.length() > 0) {
+          // Create the salt
+          if (saltLeft > 0) {
+            System.arraycopy(currentAlphabet, 0, decodeSalt, alphabet.length - saltLeft, saltLeft);
+          }
+
+          // Prepend the decoded value and create a new block
+          shuffle(currentAlphabet, decodeSalt);
+          final long number = transform(block.toString().toCharArray(), currentAlphabet);
+          decoded = LongStream.concat(decoded, LongStream.of(number));
+          block = new StringBuilder(length);
+        }
+      }
+    }
+
+    final long[] decodedValue = decoded.toArray();
+    if (!Objects.equals(hash, encode(decodedValue))) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new IllegalArgumentException("invalid hash: " + hash);
+      }
+      return new long[0];
+    }
+
+    return decodedValue;
   }
 
   /**
-   * Decode an string to hexadecimal numbers.
+   * Decodes the given hash into its hexadecimal representation based on this instance configuration.
    *
-   * @param hash the encoded string
-   * @return the decoded hexadecimal numbers string
+   * @param hash the hash to be decoded
+   * @return the hexadecimal representation of the hash values with each numeric number present in the hash, empty otherwise
+   * @throws NullPointerException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the given hash is {@code null}
    */
-  public String decodeHex(String hash) {
-    StringBuilder sb = new StringBuilder();
-    long[] numbers = decodeLongNumbers(hash);
-    for (long number : numbers) {
-      sb.append(Long.toHexString(number).substring(1));
+  public String decodeHex(final String hash) {
+    if (hash == null) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new NullPointerException("hash must not be null!");
+      }
+      return "";
     }
+
+    final StringBuilder sb = new StringBuilder();
+    Arrays.stream(decode(hash))
+      .mapToObj(Long::toHexString)
+      .forEach(hex -> sb.append(hex, 1, hex.length()));
     return sb.toString();
   }
 
-  private Hashid doEncode(long... numbers) {
-    int numberHashInt = 0;
-    for (int idx = 0; idx < numbers.length; idx++) {
-      if (numbers[idx] < 0 || numbers[idx] > MAX_NUMBER_VALUE) {
-        throw new IllegalArgumentException("Number out of range");
-      }
-      numberHashInt += numbers[idx] % (idx + 100);
-    }
-    String decodeAlphabet = alphabet;
-    final char lottery = decodeAlphabet.charAt(numberHashInt % decodeAlphabet.length());
-    StringBuilder result = new StringBuilder(String.valueOf(lottery));
-
-    String buffer;
-    int sepsIdx, guardIdx;
-    for (int idx = 0; idx < numbers.length; idx++) {
-      long num = numbers[idx];
-      buffer = lottery + salt + decodeAlphabet;
-
-      decodeAlphabet = consistentShuffle(decodeAlphabet, buffer.substring(0, decodeAlphabet.length()));
-      final String last = hash(num, decodeAlphabet);
-      result.append(last);
-
-      if (idx + 1 < numbers.length) {
-        num %= ((int) last.charAt(0) + idx);
-        sepsIdx = (int) (num % separators.length());
-        result.append(separators.charAt(sepsIdx));
-      }
-    }
-
-    if (result.length() < minHashLength) {
-      guardIdx = (numberHashInt + (int) (result.charAt(0))) % guards.length();
-      char guard = guards.charAt(guardIdx);
-      result.insert(0, guard);
-
-      if (result.length() < minHashLength) {
-        guardIdx = (numberHashInt + (int) (result.charAt(2))) % guards.length();
-        guard = guards.charAt(guardIdx);
-        result.append(guard);
-      }
-    }
-
-    final int halfLen = decodeAlphabet.length() / 2;
-    while (result.length() < minHashLength) {
-      decodeAlphabet = consistentShuffle(decodeAlphabet, decodeAlphabet);
-      result.insert(0, decodeAlphabet.substring(halfLen)).append(decodeAlphabet.substring(0, halfLen));
-      final int excess = result.length() - minHashLength;
-      if (excess > 0) {
-        int startPos = excess / 2;
-        result.replace(0, result.length(), result.substring(startPos, startPos + minHashLength));
-      }
-    }
-    return new Hashid(numbers, result.toString());
-  }
-
-  private Hashid doDecode(String hash, String alphabet) {
-    final List<Long> result = new ArrayList<>();
-    int idx = 0;
-    String[] hashArray = hash.replaceAll("[" + guards + "]", " ").split(" ");
-    if (hashArray.length == 3 || hashArray.length == 2) {
-      idx = 1;
-    }
-    String hashBreakdown = hashArray[idx];
-
-    if (!hashBreakdown.isEmpty()) {
-      final char lottery = hashBreakdown.charAt(0);
-      hashBreakdown = hashBreakdown.substring(1);
-      hashBreakdown = hashBreakdown.replaceAll("[" + separators + "]", " ");
-      hashArray = hashBreakdown.split(" ");
-
-      String buffer;
-      for (String subHash : hashArray) {
-        buffer = lottery + salt + alphabet;
-        alphabet = consistentShuffle(alphabet, buffer.substring(0, alphabet.length()));
-        result.add(unhash(subHash, alphabet));
-      }
-    }
-    long[] resultArray = toArray(result);
-    return new Hashid(resultArray, hash);
-  }
-
-  private static String consistentShuffle(String alphabet, String salt) {
-    if (salt.length() <= 0) {
-      return alphabet;
-    }
-    final char[] saltChars = salt.toCharArray();
-    int ascVal, j;
-    char [] tmpArr = alphabet.toCharArray();
-    for (int idx = tmpArr.length - 1, v = 0, p = 0; idx > 0; idx--, v++) {
-      v %= salt.length();
-      ascVal = (int) saltChars[v];
-      p += ascVal;
-      j = (ascVal + v + p) % idx;
-
-      char tmp = tmpArr[j];
-      tmpArr[j] = tmpArr[idx];
-      tmpArr[idx] = tmp;
-    }
-    return new String(tmpArr);
-  }
-
-  private static String hash(long input, String alphabet) {
-    StringBuilder hash = new StringBuilder();
-    final int alphabetLen = alphabet.length();
-    final char[] alphabetChars = alphabet.toCharArray();
-    do {
-      hash.insert(0, alphabetChars[(int) (input % alphabetLen)]);
-      input /= alphabetLen;
-    }
-    while (input > 0);
-    return hash.toString();
-  }
-
-  private static Long unhash(String input, String alphabet) {
-    long number = 0;
-    long pos;
-    final char[] inputChars = input.toCharArray();
-    for (int idx = 0; idx < input.length(); idx++) {
-      pos = alphabet.indexOf(inputChars[idx]);
-      number += pos * Math.pow(alphabet.length(), input.length() - idx - 1);
-    }
-    return number;
-  }
-
-  private long[] toArray(List<Long> longs) {
-    final long[] result = new long[longs.size()];
-    int idx = 0;
-    for (Long aLong : longs) {
-      result[idx++] = aLong;
-    }
-    return result;
-  }
-
   /**
-   * Check if a string is {@code null} or empty.
+   * Decodes the given valid hash into its single numeric representation based on this instance configuration.
    *
-   * @param value The string to check
-   * @return {@code true} if the string is {@code null} or empty, {@code false} otherwise
+   * <p>Simplifies the use-case where the amount of resulting numbers is known before to handle the return value as single value instead of an array.
+   * <strong>The given hash must resolve into a one number only</strong>, otherwise see the {@link #decode(String) decode} method.
+   *
+   * @param hash the valid hash to be decoded
+   * @return the decoded number if the given hash is valid, empty otherwise
+   * @throws IllegalArgumentException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the hash is invalid
+   * @throws NullPointerException if the {@link HashidsFeature#EXCEPTION_HANDLING EXCEPTION_HANDLING} feature is enabled and the given hash is {@code null}
+   * @since 0.4.0
    */
-  private boolean isEmpty(String value) {
-    return value == null || value.length() == 0;
+  public Optional<Long> decodeOne(final String hash) {
+    if (hash == null) {
+      if (features.contains(HashidsFeature.EXCEPTION_HANDLING)) {
+        throw new NullPointerException("hash must not be null!");
+      }
+      return Optional.empty();
+    }
+
+    long[] decoded = decode(hash);
+    return decoded.length == 1 ? Optional.of(decoded[0]) : Optional.empty();
   }
 
   /**
-   * Returns the ArcVer / SemVer version of the public API.
+   * Returns the version of the public API.
    *
-   * @return the ArcVer/SemVer version string
-   * @see <a href="https://github.com/arcticicestudio/arcver">ArcVer</a>
-   * @see <a href="http://semver.org">SemVer</a>
+   * @return the version of the public API
+   * @see <a href="https://github.com/arcticicestudio/arcver">Arctic Versioning Specification</a>
+   * @see <a href="http://semver.org">Semantic Versioning Specification</a>
    * @since 0.2.0
    */
   public static String getVersion() {
     return VERSION;
+  }
+
+  /**
+   * Returns the version of the original algorithm implementation <a href="https://github.com/ivanakimov/hashids.js">hashids
+   * .js</a> with which the public API is interoperable.
+   *
+   * @return the version of the original algorithm implementation with which the public API is interoperable
+   * @see <a href="http://hashids.org/#compatibility">Hashids Compatibility</a>
+   * @since 0.4.0
+   */
+  public static String getInteropVersion() {
+    return VERSION_INTEROP;
+  }
+
+  @Override
+  public boolean equals(final Object otherObject) {
+    if (null == otherObject) {
+      return false;
+    }
+    if (this.getClass() != otherObject.getClass()) {
+      return false;
+    }
+    final Hashids otherHashids = (Hashids) otherObject;
+    return Arrays.equals(salt, otherHashids.salt)
+      && Objects.equals(minLength, otherHashids.minLength)
+      && Arrays.equals(alphabet, otherHashids.alphabet)
+      && Objects.equals(features, otherHashids.features);
+  }
+
+  @Override
+  public String toString() {
+    return "Hashids{" +
+      "salt=" + Arrays.toString(salt) +
+      ", minLength=" + minLength +
+      ", alphabet=" + Arrays.toString(alphabet) +
+      ", features=" + features +
+      '}';
+  }
+
+  /**
+   * Derives a new alphabet using the given salt and lottery character.
+   *
+   * @param alphabet the current alphabet
+   * @param salt the salt to be used as entropy
+   * @param lottery the lottery character
+   * @return a new derived alphabet
+   * @since 0.4.0
+   */
+  private char[] deriveNewAlphabet(final char[] alphabet, final char[] salt, final char lottery) {
+    final char[] newSalt = new char[alphabet.length];
+    newSalt[0] = lottery;
+    int spaceLeft = newSalt.length - 1;
+    int offset = 1;
+
+    if (salt.length > 0 && spaceLeft > 0) {
+      int length = salt.length > spaceLeft ? spaceLeft : salt.length;
+      System.arraycopy(salt, 0, newSalt, offset, length);
+      spaceLeft -= length;
+      offset += length;
+    }
+    if (spaceLeft > 0) {
+      System.arraycopy(alphabet, 0, newSalt, offset, spaceLeft);
+    }
+
+    return shuffle(alphabet, newSalt);
+  }
+
+  /**
+   * Filters the given alphabet after the separators.
+   *
+   * @param separators the separators to be filtered
+   * @param alphabet the alphabet to be filtered
+   * @return the filtered alphabet
+   * @since 0.4.0
+   */
+  private char[] filterSeparators(final char[] separators, final char[] alphabet) {
+    final Set<Character> valid = IntStream.range(0, alphabet.length)
+      .mapToObj(idx -> alphabet[idx])
+      .collect(toSet());
+
+    return IntStream.range(0, separators.length)
+      .mapToObj(idx -> (separators[idx]))
+      .filter(valid::contains)
+      .map(c -> Character.toString(c))
+      .collect(joining())
+      .toCharArray();
+  }
+
+  /**
+   * Shuffles the alphabet with the given salt.
+   *
+   * @param alphabet the alphabet to be shuffled
+   * @param salt the salt with which the alphabet is shuffled
+   * @return the shuffled alphabet
+   */
+  private char[] shuffle(final char[] alphabet, final char[] salt) {
+    for (int idx = alphabet.length - 1, mod = 0, idxChar = 0, idxMatch, num; salt.length > 0 && idx > 0; idx--, mod++) {
+      mod %= salt.length;
+      idxChar += num = salt[mod];
+      idxMatch = (num + mod + idxChar) % idx;
+      final char tmp = alphabet[idxMatch];
+      alphabet[idxMatch] = alphabet[idx];
+      alphabet[idx] = tmp;
+    }
+    return alphabet;
+  }
+
+  /**
+   * Transforms the hash into the encoded hash state using the given alphabet.
+   *
+   * @param number the number to be transformed into the encoded hash state
+   * @param alphabet the alphabet to be used for the transformation
+   * @param sb the string builder to prepend the transformed number
+   * @param start the start index for the given alphabet
+   * @return the given string builder with the prepended transformed number
+   */
+  private StringBuilder transform(final long number, final char[] alphabet, final StringBuilder sb, final int start) {
+    long input = number;
+    do {
+      // Prepend the matched character and trim the input
+      sb.insert(start, alphabet[(int) (input % alphabet.length)]);
+      input = input / alphabet.length;
+    } while (input > 0);
+
+    return sb;
+  }
+
+  /**
+   * Transforms the hash into the decoded number state using the given alphabet.
+   *
+   * @param hash the hash to be transformed into the decoded number state
+   * @param alphabet the alphabet to be used for the transformation
+   * @return the transformed hash in the decoded number state
+   */
+  private long transform(final char[] hash, final char[] alphabet) {
+    long number = 0;
+
+    final Map<Character, Integer> alphabetMapping = IntStream.range(0, alphabet.length)
+      .mapToObj(idx -> new Object[]{alphabet[idx], idx})
+      .collect(groupingBy(arr -> (Character) arr[0], mapping(arr -> (Integer) arr[1], reducing(null, (a, b) -> a == null ? b : a))));
+
+    for (int idx = 0; idx < hash.length; ++idx) {
+      number += alphabetMapping.get(hash[idx]) * (long) Math.pow(alphabet.length, hash.length - idx - 1);
+    }
+
+    return number;
+  }
+
+  /**
+   * Validates and filters the given alphabet.
+   *
+   * @param alphabet The alphabet to be validated and filtered
+   * @param separators the separators to be filtered
+   * @return the filtered alphabet
+   * @throws IllegalArgumentException if the given alphabet does not contain the {@link #MIN_ALPHABET_LENGTH minimum length of unique characters} or contains
+   * spaces.
+   * @since 0.4.0
+   */
+  private char[] validateAndFilterAlphabet(final char[] alphabet, final char[] separators) {
+    if (alphabet.length < MIN_ALPHABET_LENGTH) {
+      throw new IllegalArgumentException("alphabet must contain at least " + MIN_ALPHABET_LENGTH + " unique characters: " + alphabet.length);
+    }
+
+    final Set<Character> validated = new LinkedHashSet<>(alphabet.length);
+    final Set<Character> invalid = IntStream.range(0, separators.length)
+      .mapToObj(idx -> separators[idx])
+      .collect(toSet());
+
+    // Add the validated characters
+    IntStream.range(0, alphabet.length)
+      .forEach(idx -> {
+        if (alphabet[idx] == ' ') {
+          throw new IllegalArgumentException("alphabet must not contain spaces: index " + idx);
+        }
+        final Character c = alphabet[idx];
+        if (!invalid.contains(c)) {
+          validated.add(c);
+        }
+      });
+
+    // Create a new alphabet from the validated characters
+    final char[] uniqueAlphabet = new char[validated.size()];
+    int idx = 0;
+    for (char c : validated) {
+      uniqueAlphabet[idx++] = c;
+    }
+    return uniqueAlphabet;
   }
 }
