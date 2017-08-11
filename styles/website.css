@@ -1,0 +1,35 @@
+/* Remove the sidebar link to the hosted gitbook service */
+.gitbook-link {
+  display: none !important;
+}
+
+/* Sidebar links */
+.book .book-summary nav ul.summary li a {
+  color: #444444;
+  text-decoration: none;
+}
+
+.book .book-summary nav ul.summary li a:hover,
+.book .book-summary nav ul.summary li a:focus {
+  color: #000000;
+}
+
+.book .book-summary nav ul.summary li.active > a {
+  color: #008cff;
+}
+
+/* anchor.js hover icons */
+.book .book-body .page-wrapper .page-inner section.normal a.anchorjs-link {
+  color: #008cff;
+}
+
+/* Block quotes */
+.book .book-body .page-wrapper .page-inner section.normal blockquote {
+  border: 2px solid #e4e4e4;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal blockquote p {
+  margin: 0;
+}
