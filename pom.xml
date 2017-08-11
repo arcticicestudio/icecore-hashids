@@ -67,7 +67,6 @@
   </contributors>
 
   <properties>
-    <assembly.descriptor.bin>${basedir}/src/main/assets/assembly-bin.xml</assembly.descriptor.bin>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version.min>3.0.4</maven.version.min>
