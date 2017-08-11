@@ -17,9 +17,10 @@ machine:
 general:
   artifacts:
     - ./target/*.jar
+    - ./target/docs
 
 dependencies:
-  post:
+  pre:
     - mvn --version
 
 test:
@@ -29,3 +30,5 @@ test:
   override:
     - mvn -B clean verify -P node,code-coverage
     - find . -type f -regextype posix-egrep -regex ".*/target/(.*asc|.*jar|.*md5|.*pom|.*sha1)" -exec cp {} $CIRCLE_ARTIFACTS \;
+    - npm install
+    - npm run docs:build
