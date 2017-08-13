@@ -9,7 +9,7 @@
 #
 # [References]
 # Circle CI
-#   (https://circleci.com/docs)
+#   https://circleci.com/docs
 machine:
   java:
     version: oraclejdk8
@@ -17,11 +17,18 @@ machine:
 general:
   artifacts:
     - ./target/*.jar
+    - ./target/docs
+
+dependencies:
+  pre:
+    - mvn --version
 
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
   override:
-    - mvn clean verify assembly:single -P code-coverage,assemble
-    - find . -type f -regextype posix-egrep -regex ".*/target/(.*asc|.*jar|.*md5|.*pom|.*sha1|.*tar.gz|.*zip)" -exec cp {} $CIRCLE_ARTIFACTS \;
+    - mvn -B clean verify -P node,code-coverage
+    - find . -type f -regextype posix-egrep -regex ".*/target/(.*asc|.*jar|.*md5|.*pom|.*sha1)" -exec cp {} $CIRCLE_ARTIFACTS \;
+    - npm install
+    - npm run docs:build

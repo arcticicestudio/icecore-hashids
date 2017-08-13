@@ -1,262 +1,423 @@
-/*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-title      Hashids Public API Test                            +
-project    icecore-hashids                                    +
-repository https://github.com/arcticicestudio/icecore-hashids +
-author     Arctic Ice Studio                                  +
-email      development@arcticicestudio.com                    +
-copyright  Copyright (C) 2017                                 +
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
 package com.arcticicestudio.icecore.hashids;
 
-import org.junit.Test;
+import static com.arcticicestudio.icecore.hashids.HashidsFeature.ALLOW_HEXADECIMAL_NUMBER_PREFIX;
+import static com.arcticicestudio.icecore.hashids.HashidsFeature.EXCEPTION_HANDLING;
+import static com.arcticicestudio.icecore.hashids.HashidsFeature.NO_MAX_INTEROP_NUMBER_SIZE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import java.util.Optional;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
- * Tests the <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
- * public API class {@link Hashids}.
+ * Units tests for the <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a> public API.
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
- * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids</a>
- * @see <a href="http://hashids.org">Hashids</a>
  * @since 0.1.0
  */
 public class HashidsTest {
 
-  @Test
-  public void oneNumber() {
-    Hashids hashids = new Hashids("salt");
-    long number = 12_345L;
-    String expected = "X4j1";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(hashids.encodeToString(number), expected);
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
-  }
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void oneLargeNumber() {
-    Hashids hashids = new Hashids("salt");
-    long number = 9_007_199_254_740_991L;
-    String expected = "wQpRRqRX24R";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(hashids.encodeToString(number), expected);
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
+  public void defaultInstanceConfigurationEquality() {
+    final Hashids hashidsBuilder = new Hashids.Builder().build();
+    final Hashids hashids = new Hashids();
+    assertThat(hashidsBuilder, equalTo(hashids));
+    assertThat(hashidsBuilder.toString(), equalTo(hashids.toString()));
   }
 
   @Test
-  public void oneLargeIntegerNumber() {
-    Hashids hashids = new Hashids("salt");
-    int number = 2147483647;
-    String expected = "wqVYY1X";
-    int[] decoded = hashids.decodeIntegerNumbers(hashids.encodeToString(number));
-
-    assertEquals(hashids.encodeToString(number), expected);
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void oneLargeNumberNotSupported() throws Exception {
-    long number = 9007199254740993L;
-    Hashids a = new Hashids("salt");
-    a.encode(number);
+  public void invalidAlphabetLength() {
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("alphabet must contain at least 16 unique characters: 6");
+    final Hashids hashids = new Hashids.Builder()
+      .alphabet("abc123")
+      .build();
   }
 
   @Test
-  public void oneNumberWithCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 8);
-    long number = 12_345L;
-    String expected = "xkX4j1kZ";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(hashids.encodeToString(number), expected);
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
+  public void alphabetWithSpaces() {
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("alphabet must not contain spaces: index 1");
+    final Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .alphabet("a bcdefg1234567890")
+      .build();
   }
 
   @Test
-  public void oneNumberWithoutSeparators() {
-    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, null);
-    long number = 12_345L;
-    String hash = hashids.encodeToString(number);
-    long[] decoded = hashids.decodeLongNumbers(hash);
-
-    assertEquals(1, decoded.length);
-    assertEquals(number, decoded[0]);
+  public void alphabetWithSymbols() {
+    Hashids hashids = new Hashids.Builder()
+      .alphabet("`~!@#$%^&*()-_=+|';:/?.>,<{[}]")
+      .build();
+    assertThat(hashids.encode(123456L), equalTo("]]''?"));
   }
 
   @Test
-  public void oneNumberWithCustomSeparators() {
-    Hashids hashids = new Hashids("salt", 0, Hashids.DEFAULT_ALPHABET, "abcdefgABCDEFG1234567");
-    long number = 12_345L;
-    String hash = hashids.encodeToString(number);
-    long[] decoded = hashids.decodeLongNumbers(hash);
-
-    assertEquals(1, decoded.length);
-    assertEquals(number, decoded[0]);
+  public void transcode() {
+    Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encode(123456L), equalTo("xkNDJ"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("x7SQJh8kQ"));
+    assertThat(hashids.decode("xkNDJ"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("x7SQJh8kQ"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("xkNDJ"), equalTo(Optional.of(123456L)));
   }
 
   @Test
-  public void oneNumberWithLargeCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 1000);
-    long number = 12_345;
-    String expected = "lPaNoKpAjg2O9bdQ5K6l9Yvj0o7MWXwZPNyZ90jxQp7WYlA5gJ4LvwEMGnwDNBZjpxQY692dXoPOMyrVrgXDGE0BnaeZdM" +
-      "YO1WxRlevqJK0BloZNbYG29dP1paDDw7gpRqBzjy5OedVZlEJnNjPQ4LXZye5REY0qA2wW1pOnJNjvMbLKg6rexwWDVyl74ZW74pVdEYQBa6zv" +
-      "15eDbwlVqpzoDZ14AwlxbGL0RyE9P250JQ4egxYbwaoz17vXZENyrgxzn6V2pW5eA9vMPRdBoa7w5Vo9GMge1nPqQYJxlEZVyrxYKONAepM0lw" +
-      "L42g7PdgK6V0xvdQlao1ANOG92LpYONBLEyYvqeZwnDA6WMaGb7jaQOVlPerdbJ7B1LzDyY59b4AJOeo6l9RpgGWVnzZqjNVDpraMYz2bQxdKv" +
-      "y5PEwe7OP7WZDzeQANv9o6ga0jG2dDYj4xlKLZpa5qBbzMyGvrNp9nl4bLoy7E2dPB6AGYqzxkX4j1kZWaevwVKNR01OrMX5DgjJQAdPXJ9W16" +
-      "OwQeR2go07VEnb1MqKxJ4YLr5XEVlwpnRyBqOlZG9Rg1AnN4o6XLBJ0jWP2yrvYX7QMB0a5LdxKwED1g0KMRpWnXv26oZx4GEqAwNdVg9PR25z" +
-      "rJQjxKoXl104pzZeqEb7J5Pyw4BXWjRMnrD5RqWnoa1EGzX6JvDQbjBZ9NB6Av2bjd4LRy0WOXzrKDp0DlXKJZL7YNjOwQqbE1a4GpMLnj6RKy" +
-      "PDrWVB9lOGdqAQenj5aYBM7KWdNr6JXOgv2M9XNL0oAxJ2RqrGOngPjKyq2oPpEzdA5XORGQZa91Y0BlNxz96Bba7oVDnMgdrJvGKaMYKo9bvQ" +
-      "6r04xXL1GP2AWOWR7x46rMLgjXyQnVAEw5zL76Aboq49vK2pQz5jNJywPlGg1KAV0aLWzJ5bRevE74qBPoy6Xzbqre1RnKa2NdVODOVnBaDERz" +
-      "AgJGx41qe2LrpdWGE4QbxLJez6";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(expected, hashids.encodeToString(number));
-    assertEquals(1, decoded.length);
-    assertEquals(number, decoded[0]);
-  }
-
-  @Test
-  public void oneNumberWithCustomUpperCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789");
-    long number = 12_345L;
-    String expected = "KQL1R";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(expected, hashids.encodeToString(number));
-    assertEquals(decoded.length, 1);
-    assertEquals(decoded[0], number);
-  }
-
-  @Test
-  public void oneNumberWithCustomLowerCaseAndNumbersAlphabet() {
-    Hashids hashids = new Hashids("salt", "abcdefghijklmnpqrstuvwxyz123456789");
-    long number = 12_345L;
-    String expected = "kzkvx";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
-
-    assertEquals(expected, hashids.encodeToString(number));
-    assertEquals(1, decoded.length);
-    assertEquals(number, decoded[0]);
-  }
-
-  @Test
-  public void severalNumbers() {
-    Hashids hashids = new Hashids("salt");
-    long[] numbers = {683L, 94_108L, 123L, 5L};
-    String expected = "1eMToyKzsRAfO";
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(numbers));
-
-    assertEquals(hashids.encodeToString(numbers), expected);
-    assertEquals(decoded.length, numbers.length);
-    assertArrayEquals(decoded, numbers);
-  }
-
-  @Test
-  public void severalNumbersRandomness() {
-    Hashids hashids = new Hashids("salt");
-    long[] numbers = {5L, 5L, 5L, 5L};
-    String expected = "YBF7FKFz";
-    long[] decoded = hashids.decodeLongNumbers(expected);
-
-    assertEquals(expected, hashids.encodeToString(numbers));
-    assertEquals(numbers.length, decoded.length);
-    assertArrayEquals(numbers, decoded);
-  }
-
-  @Test
-  public void severalIncrementingNumbersRandomness() {
-    Hashids hashids = new Hashids("salt");
-    long[] numbers = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L};
-    String expected = "rjiJulUECaFAS1TBhzcX";
-    long[] decoded = hashids.decodeLongNumbers(expected);
-
-    assertEquals(expected, hashids.encodeToString(numbers));
-    assertEquals(numbers.length, decoded.length);
-    assertArrayEquals(numbers, decoded);
-  }
-
-  @Test
-  public void invalidSaltCollision() {
-    Hashids hashidsA = new Hashids("salt and pepper", 4);
-    Hashids hashidsB = new Hashids("salt", 4);
-    long number = 123L;
-    String token = hashidsA.encodeToString(number);
-
-    long[] decodedWrongSalt = hashidsB.decodeLongNumbers(token);
-    long[] decodedCorrectSalt = hashidsA.decodeLongNumbers(token);
-    assertThat(decodedWrongSalt, not(equalTo(decodedCorrectSalt)));
-  }
-
-  @Test
-  public void hexString() {
-    Hashids hashids = new Hashids("salt");
-    String hex = "75bcd15";
-    String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash);
-
-    assertNotNull(hash);
-    assertNotEquals(0, hash.length());
-    assertEquals(hex, returnedHex);
-  }
-
-  @Test
-  public void hexStringWithCustomMinimumHashLength() {
-    Hashids hashids = new Hashids("salt", 8);
-    String hex = "75bcd15";
-    String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash);
-
-    assertNotNull(hash);
-    assertNotEquals(0, hash.length());
-    assertEquals(hex, returnedHex);
-    assertEquals(8, hash.length());
-  }
-
-  @Test
-  public void longHexString() {
-    Hashids hashids = new Hashids("salt");
-    String hex = "f000000000000000000000000000000000000000000000000000000000000000000000000000000000000f";
-    String hash = hashids.encodeHex(hex);
-    String returnedHex = hashids.decodeHex(hash);
-
-    assertNotNull(hash);
-    assertNotEquals(0, hash.length());
-    assertEquals(hex, returnedHex);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void negativeNumber() {
-    Hashids hashids = new Hashids("salt");
-    long number = -1L;
-    hashids.encodeToString(number);
-  }
-
-  @Test
-  public void hashidsBuilder() {
+  public void transcodeWithSalt() {
     Hashids hashids = new Hashids.Builder()
       .salt("salt")
-      .minHashLength(16)
-      .alphabet(Hashids.DEFAULT_ALPHABET)
-      .separators(Hashids.DEFAULT_SEPARATORS)
       .build();
-    long number = 12_345L;
-    long[] decoded = hashids.decodeLongNumbers(hashids.encodeToString(number));
+    assertThat(hashids.encode(123456L), equalTo("7E1dX"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("7NfvoFvAJ"));
+    assertThat(hashids.decode("7E1dX"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("7NfvoFvAJ"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("7E1dX"), equalTo(Optional.of(123456L)));
+  }
 
-    assertEquals(1, decoded.length);
-    assertEquals(number, decoded[0]);
+  @Test
+  public void transcodeWithMinLength() {
+    Hashids hashids = new Hashids.Builder()
+      .minLength(16)
+      .build();
+    assertThat(hashids.encode(123456L), equalTo("VoJX7axkNDJeyv4E"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("vDLax7SQJh8kQe6p"));
+    assertThat(hashids.decode("VoJX7axkNDJeyv4E"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("vDLax7SQJh8kQe6p"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("VoJX7axkNDJeyv4E"), equalTo(Optional.of(123456L)));
+  }
+
+  @Test
+  public void transcodeWithCustomAlphabet() {
+    Hashids hashids = new Hashids.Builder()
+      .alphabet("abcdefghij1234560")
+      .build();
+    assertThat(hashids.encode(123456L), equalTo("e60655"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("e43i3j2hg6e4"));
+    assertThat(hashids.decode("e60655"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("e43i3j2hg6e4"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("e60655"), equalTo(Optional.of(123456L)));
+
+    Hashids hashidsSymbols = new Hashids.Builder()
+      .alphabet("!#$%&'()*+,-./:;<=>?@[]^_`{|}~")
+      .build();
+    assertThat(hashidsSymbols.encode(123456L), equalTo("~_--:"));
+    assertThat(hashidsSymbols.encode(11L, 222L, 3333L), equalTo("<~$-{$:;="));
+    assertThat(hashidsSymbols.decode("~_--:"), equalTo(new long[] {123456L}));
+    assertThat(hashidsSymbols.decode("<~$-{$:;="), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashidsSymbols.decodeOne("~_--:"), equalTo(Optional.of(123456L)));
+  }
+
+  @Test
+  public void transcodeWithSaltAndMinLength() {
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .minLength(16)
+      .build();
+    assertThat(hashids.encode(123456L), equalTo("lgaRz37E1dXkB1XL"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("Wnj37NfvoFvAJmze"));
+    assertThat(hashids.decode("lgaRz37E1dXkB1XL"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("Wnj37NfvoFvAJmze"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("lgaRz37E1dXkB1XL"), equalTo(Optional.of(123456L)));
+  }
+
+  @Test
+  public void transcodeWithSaltAndCustomAlphabet() {
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .alphabet("abcdefghij1234560")
+      .build();
+    assertThat(hashids.encode(123456L), equalTo("534300"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("5eahg15cbea1"));
+    assertThat(hashids.decode("534300"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("5eahg15cbea1"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("534300"), equalTo(Optional.of(123456L)));
+  }
+
+  @Test
+  public void transcodeWithMinLengthAndCustomAlphabet() {
+    Hashids hashids = new Hashids.Builder()
+      .minLength(16)
+      .alphabet("abcdefghij1234560")
+      .build();
+    assertThat(hashids.encode(123456L), equalTo("6125ebe60655adg0"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("e1be43i3j2hg6e4a"));
+    assertThat(hashids.decode("6125ebe60655adg0"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("e1be43i3j2hg6e4a"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("6125ebe60655adg0"), equalTo(Optional.of(123456L)));
+  }
+
+  @Test
+  public void transcodeWithSaltAndMinLengthAndCustomAlphabet() {
+    Hashids hashids = new Hashids.Builder()
+      .salt("salt")
+      .minLength(16)
+      .alphabet("abcdefghij1234560")
+      .build();
+    assertThat(hashids.encode(123456L), equalTo("61a0425343002gd3"));
+    assertThat(hashids.encode(11L, 222L, 3333L), equalTo("4d25eahg15cbea12"));
+    assertThat(hashids.decode("61a0425343002gd3"), equalTo(new long[] {123456L}));
+    assertThat(hashids.decode("4d25eahg15cbea12"), equalTo(new long[] {11L, 222L, 3333L}));
+    assertThat(hashids.decodeOne("61a0425343002gd3"), equalTo(Optional.of(123456L)));
+  }
+
+  @Test
+  public void transcodeMaximumNumberSize() {
+    Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encode(Hashids.MAX_INTEROP_NUMBER_SIZE), equalTo("lEW77X7g527"));
+    assertThat(hashids.decode("lEW77X7g527"), equalTo(new long[] {Hashids.MAX_INTEROP_NUMBER_SIZE}));
+    assertThat(hashids.decodeOne("lEW77X7g527"), equalTo(Optional.of(Hashids.MAX_INTEROP_NUMBER_SIZE)));
+  }
+
+  @Test
+  public void transcodeNullInput() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encode((long[]) null), emptyString());
+    assertThat(hashids.decode(null), equalTo(new long[0]));
+    assertThat(hashids.decodeOne(null), equalTo(Optional.empty()));
+  }
+
+  @Test
+  public void transcodeHex() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encodeHex("75bcd15"), equalTo("j2g9K4y"));
+    assertThat(hashids.decodeHex("j2g9K4y"), equalTo("75bcd15"));
+  }
+
+  @Test
+  public void transcodeHexPrefixedInput() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encodeHex("0x75bcd15"), emptyString());
+    assertThat(hashids.encodeHex("0X75bcd15"), emptyString());
+    assertThat(hashids.decodeHex("0x75bcd15"), emptyString());
+    assertThat(hashids.decodeHex("0X75bcd15"), emptyString());
+  }
+
+  @Test
+  public void transcodeHexWithAllowedHexadecimalNumberPrefix() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(ALLOW_HEXADECIMAL_NUMBER_PREFIX)
+      .build();
+    final String hex = hashids.encodeHex("75bcd15");
+    final String hexPrefixLowercase = hashids.encodeHex("0x75bcd15");
+    final String hexPrefixUppercase = hashids.encodeHex("0X75bcd15");
+    assertThat(hex, equalTo("j2g9K4y"));
+    assertThat(hex, equalTo(hexPrefixLowercase));
+    assertThat(hex, equalTo(hexPrefixUppercase));
+    assertThat(hashids.decodeHex(hex), equalTo("75bcd15"));
+  }
+
+  @Test
+  public void transcodeHexNullInput() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encodeHex(null), emptyString());
+    assertThat(hashids.decodeHex(null), emptyString());
+  }
+
+  @Test
+  public void encodeMaximumNumberSizeExceeded() {
+    Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encode(Hashids.MAX_INTEROP_NUMBER_SIZE + 1L), emptyString());
+  }
+
+  @Test
+  public void encodeMaximumNumberSizeExceededWithExceptionHandling() {
+    Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("number must not exceed the maximum number size: 9007199254740992 > 9007199254740991");
+    hashids.encode(Hashids.MAX_INTEROP_NUMBER_SIZE + 1L);
+  }
+
+  @Test
+  public void encodeWithNoMaximumNumberSizeLimit() {
+    Hashids hashids = new Hashids.Builder()
+      .features(NO_MAX_INTEROP_NUMBER_SIZE)
+      .build();
+    assertThat(hashids.encode(Hashids.MAX_INTEROP_NUMBER_SIZE + 1L), not(emptyString()));
+  }
+
+  @Test
+  public void encodeNegativeInput() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encode(-123456L), emptyString());
+    assertThat(hashids.encode(-10L, -222L, -3333L), emptyString());
+  }
+
+  @Test
+  public void encodeNegativeInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("number must not be less than zero: -1");
+    hashids.encode(-1L);
+  }
+
+  @Test
+  public void encodeNullInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(NullPointerException.class);
+    thrown.expectMessage("numbers must not be null!");
+    hashids.encode((long[]) null);
+  }
+
+  @Test
+  public void decodeNullInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(NullPointerException.class);
+    thrown.expectMessage("hash must not be null!");
+    hashids.decode(null);
+  }
+
+  @Test
+  public void decodeOneNullInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(NullPointerException.class);
+    thrown.expectMessage("hash must not be null!");
+    hashids.decodeOne(null);
+  }
+
+  @Test
+  public void encodeNoInput() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encode(), emptyString());
+  }
+
+  @Test
+  public void encodeNoInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("length of numbers must be greater than or equal to one!");
+    hashids.encode();
+  }
+
+  @Test
+  public void encodeHexInvalidHexadecimalFormat() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.encodeHex("z"), emptyString());
+  }
+
+  @Test
+  public void encodeHexInvalidHexadecimalFormatWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("hexNumbers must be a valid hexadecimal number!");
+    hashids.encodeHex("z");
+  }
+
+  @Test
+  public void encodeHexLowercasePrefixedInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("numbers must not contain a hexadecimal prefix: 0x");
+    hashids.encodeHex("0x75bcd15");
+  }
+
+  @Test
+  public void encodeHexUppercasePrefixedInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("numbers must not contain a hexadecimal prefix: 0X");
+    hashids.encodeHex("0X75bcd15");
+  }
+
+  @Test
+  public void encodeHexNullInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(NullPointerException.class);
+    thrown.expectMessage("hexNumbers must not be null!");
+    hashids.encodeHex(null);
+  }
+
+  @Test
+  public void decodeHexNullInputWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(NullPointerException.class);
+    thrown.expectMessage("hash must not be null!");
+    hashids.decodeHex(null);
+  }
+
+  @Test
+  public void decodeInvalidHash() {
+    final Hashids hashids = new Hashids.Builder().build();
+    assertThat(hashids.decode("yogurt"), equalTo(new long[0]));
+    assertThat(hashids.decode("()"), equalTo(new long[0]));
+    assertThat(hashids.decode("[]"), equalTo(new long[0]));
+    assertThat(hashids.decodeOne("yogurt"), equalTo(Optional.empty()));
+    assertThat(hashids.decodeOne("()"), equalTo(Optional.empty()));
+    assertThat(hashids.decodeOne("[]"), equalTo(Optional.empty()));
+  }
+
+  @Test
+  public void decodeInvalidSalt() {
+    final Hashids hashidsSalt = new Hashids.Builder()
+      .salt("salt")
+      .build();
+    final Hashids hashidsPepper = new Hashids.Builder()
+      .salt("pepper")
+      .build();
+    String salt = hashidsSalt.encode(123456L);
+    String pepper = hashidsPepper.encode(123456L);
+    assertThat(salt, not(equalTo(pepper)));
+    assertThat(hashidsSalt.decode(pepper), equalTo(new long[0]));
+    assertThat(hashidsSalt.decodeOne(pepper), equalTo(Optional.empty()));
+    assertThat(hashidsPepper.decode(salt), equalTo(new long[0]));
+    assertThat(hashidsPepper.decodeOne(salt), equalTo(Optional.empty()));
+  }
+
+  @Test
+  public void decodeInvalidHashWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("invalid hash: yogurt");
+    hashids.decode("yogurt");
+  }
+
+  @Test
+  public void decodeOneInvalidHashWithExceptionHandling() {
+    final Hashids hashids = new Hashids.Builder()
+      .features(EXCEPTION_HANDLING)
+      .build();
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("invalid hash: yogurt");
+    hashids.decodeOne("yogurt");
+  }
+
+  @Test
+  public void validVersion() {
+    assertThat(Hashids.getVersion(), equalTo("0.4.0"));
+  }
+
+  @Test
+  public void validInteropVersion() {
+    assertThat(Hashids.getInteropVersion(), equalTo("1.0.0"));
   }
 }

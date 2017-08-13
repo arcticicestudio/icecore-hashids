@@ -1,0 +1,24 @@
+{
+  "name": "icecore-hashids",
+  "version": "0.4.0",
+  "private": true,
+  "description": "A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers.",
+  "author": {
+    "name": "Arctic Ice Studio",
+    "url": "http://arcticicestudio.com"
+  },
+  "license": "Apache 2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "gitbook-cli": "2.3.2",
+    "hashids": "1.1.1"
+  },
+  "scripts": {
+    "docs:build": "npm run docs:clean && gitbook install ./src/main/docs && gitbook build ./src/main/docs ./target/docs",
+    "docs:clean": "rm -rf ./target/docs",
+    "docs:serve": "npm run docs:build && gitbook serve ./src/main/docs ./target/docs"
+  },
+  "engines": {
+    "node": "<=6.5"
+  }
+}
