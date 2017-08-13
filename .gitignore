@@ -12,6 +12,8 @@ out/
 !.idea/runConfigurations
 !.idea/compiler.xml
 !.idea/encodings.xml
+!.idea/icon_dark.png
+!.idea/icon.png
 !.idea/misc.xml
 !.idea/modules.xml
 !.idea/vcs.xml
