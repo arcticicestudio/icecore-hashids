@@ -87,9 +87,7 @@ When you are submitting an pull request, please provide as much detail and conte
 
 IceCore Hashids has two main sets of documentation: the docs and guides, which helps users to learn about the project, and the API, which serves as a reference.
 
-You can help improve the docs and guides by making them more coherent, consistent or readable, adding missing information, correcting factual errors, fixing typos, bringing them up to date with when there are differences to the latest version. This can be done by submitting a [enhancement suggestion](#enhancement-suggestions) and then opening a [pull request](#pull-requests) for it.
-
-Typo corrections, error fixes, better explanations, more examples, etc. Open issues for things that could be improved. Help translate our docs. Anything. Even improvements to this document.
+You can help improve the docs and guides by making them more coherent, consistent or readable, adding missing information, correcting factual errors, fixing typos, bringing them up to date when there are differences to the latest version. This can be done by submitting a [enhancement suggestion](#enhancement-suggestions) and then opening a [pull request](#pull-requests) for it.
 
 ## Branch Organization
 

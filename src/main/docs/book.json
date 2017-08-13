@@ -1,7 +1,7 @@
 {
   "gitbook": "3.2.2",
   "title": "IceCore Hashids",
-  "description": "A lightweight generator for short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.",
+  "description": "A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers.",
   "author": "Arctic Ice Studio",
   "plugins": ["anchorjs", "github", "toggle-chapters", "toggle-headers", "-sharing"],
   "pluginsConfig": {
