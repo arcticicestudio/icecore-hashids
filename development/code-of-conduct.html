@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Testing · IceCore Hashids</title>
+        <title>Code of Conduct · IceCore Hashids</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.2">
@@ -63,10 +63,8 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="testing.html" />
     
-    
-    <link rel="prev" href="building.html" />
+    <link rel="prev" href="changelog.html" />
     
 
     </head>
@@ -549,7 +547,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="4.2" data-path="testing.html">
+        <li class="chapter " data-level="4.2" data-path="testing.html">
             
                 <a href="testing.html">
             
@@ -897,7 +895,7 @@
             
         </li>
     
-        <li class="chapter " data-level="4.5" data-path="code-of-conduct.html">
+        <li class="chapter active" data-level="4.5" data-path="code-of-conduct.html">
             
                 <a href="code-of-conduct.html">
             
@@ -940,7 +938,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Testing</a>
+        <a href=".." >Code of Conduct</a>
     </h1>
 </div>
 
@@ -955,38 +953,46 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="testing">Testing</h1>
-<blockquote>
-<p>Please make sure to complete the <a href="requirements.md">requirement</a> steps first in order to run the tests!</p>
-</blockquote>
-<p>Continuous integration builds are running at <a href="https://travis-ci.org/arcticicestudio/icecore-hashids" target="_blank">Travis CI</a> and <a href="https://circleci.com/bb/arcticicestudio/icecore-hashids" target="_blank">Circle CI</a>. The code coverage results are processed via <a href="https://codecov.io/gh/arcticicestudio/icecore-hashids" target="_blank">Codecov</a>.</p>
-<p>To start all test types at once run</p>
-<pre><code class="lang-sh">mvn clean <span class="hljs-built_in">test</span>
-</code></pre>
-<h2 id="unit-tests">Unit Tests</h2>
-<p>The unit tests are implemented using <a href="http://junit.org/junit4" target="_blank">JUnit 4</a> and can either be run via Maven</p>
-<pre><code class="lang-sh">mvn clean <span class="hljs-built_in">test</span> -D<span class="hljs-built_in">test</span>=HashidsTest
-</code></pre>
-<p>or by using the provided <em>Unit Tests</em> <a href="https://www.jetbrains.com/help/pycharm/run-debug-configurations.html" target="_blank">run/debug configuration</a> from within IntelliJ IDEA.</p>
-<p><img src="../assets/scrot-docs-testing-config-unit-tests.png" alt=""></p>
-<p>The unit tests can also be run in debug mode by using the bug icon next to the run configuration name or from the menu via <em>Run</em> &gt; <em>Debug</em> &gt; <em>Unit Tests</em>.</p>
-<p>The <a href="https://www.jetbrains.com/help/idea/test-runner-tab.html" target="_blank">test runner tab</a> will automatically toggle to show the test results.</p>
-<p><img src="../assets/scrot-docs-testing-window-unit-tests.png" alt=""></p>
-<h2 id="interoperability-tests">Interoperability Tests</h2>
-<p>The interoperability tests ensure that the library provides the same results as the reference algorithm implementation <a href="https://github.com/ivanakimov/hashids.js" target="_blank"><em>hashids.js</em></a> by using</p>
+                                <h1 id="code-of-conduct">Code of Conduct</h1>
+<p>All members, committers and volunteers in this project are required to act according to the following Code of Conduct. We ask you to follow these guidelines which help steer our interactions and strive to keep IceCore Hashids a positive and growing project and help us provide and ensure a safe environment for everyone.</p>
+<p>If you are being harassed, notice that someone else is being harassed, or have any other concerns, please contact us via <a href="mailto:development@arcticicestudio.com" target="_blank">email</a>. Your reports will be taken seriously and not dismissed or argued with.</p>
+<h2 id="what-we-believe-in-and-how-we-act">What we believe in and how we act</h2>
 <ul>
-<li>the Maven plugin <a href="https://github.com/eirslett/frontend-maven-plugin" target="_blank">frontend-maven-plugin</a> to locally download <a href="https://nodejs.org" target="_blank">NodeJS</a> and install the required <em>devDependencies</em> via <a href="https://www.npmjs.com" target="_blank"><em>npm</em></a></li>
-<li>the Java 8 JavaScript engine <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn" target="_blank">Nashorn</a> to execute the downloaded <em>hashids.js</em> script</li>
+<li>In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation. We welcome people regardless of these or other attributes.</li>
+<li>Our community is based on mutual respect, tolerance, and encouragement.</li>
+<li>We believe that a diverse community where people treat each other with respect is stronger, more vibrant and has more potential contributors and more sources for ideas. We aim for more diversity.</li>
+<li>We are kind, welcoming and courteous to everyone.</li>
+<li>We are respectful of others, their positions, their skills, their commitments and their efforts.</li>
+<li>We are attentive in our communications, whether in person or online, and we are tactful and respectful when approaching differing views and experiences.</li>
+<li>We are aware that language shapes reality. Thus, we use inclusive, gender-neutral language in the documents we provide and when we talk to people. When referring to a group of people, we aim to use gender-neutral terms like &quot;team&quot;, &quot;folks&quot; or &quot;everyone&quot;. <sup><a href="https://modelviewculture.com/pieces/gendered-language-feature-or-bug-in-software-documentation" target="_blank">1</a></sup></li>
+<li>We respect that people have differences of opinion and criticize constructively.</li>
 </ul>
-<p>and then comparing the results of both libraries.</p>
-<p>The tests can either be run via Maven</p>
-<pre><code class="lang-sh">mvn clean <span class="hljs-built_in">test</span> -P node -D<span class="hljs-built_in">test</span>=InteropHashidsTest
-</code></pre>
-<p>or by using the provided <em>Interop Tests</em> <a href="https://www.jetbrains.com/help/pycharm/run-debug-configurations.html" target="_blank">run/debug configuration</a> from within IntelliJ IDEA.</p>
-<p><img src="../assets/scrot-docs-testing-config-interop-tests.png" alt=""></p>
-<p>The tests can also be run in debug mode by using the bug icon next to the run configuration name or from the menu via <em>Run</em> &gt; <em>Debug</em> &gt; <em>Interop Tests</em>.</p>
-<p>The <a href="https://www.jetbrains.com/help/idea/test-runner-tab.html" target="_blank">test runner tab</a> will automatically toggle to show the test results.</p>
-<p><img src="../assets/scrot-docs-testing-window-interop-tests.png" alt=""></p>
+<p>If you are being harassed, notice that someone else is being harassed, or have any other concerns, please contact us via <a href="mailto:development@arcticicestudio.com" target="_blank">email</a>. Your reports will be taken seriously and not dismissed or argued with.</p>
+<h2 id="unacceptable-behavior">Unacceptable Behavior</h2>
+<ul>
+<li>Do not be mean or rude.</li>
+<li>Do not discriminate against anyone.</li>
+<li>Sexism and racism of any kind (including sexist and racist &quot;jokes&quot;), demeaning or insulting behaviour and harassment are seen as direct violations to this Code of Conduct. Harassment includes offensive verbal comments related to age, body size, culture, ethnicity, gender expression, gender identity, level of experience, nationality, personal ability or disability, physical appearance, physical or mental difference, race, religion, set of skills, sexual orientation, socio-economic status, and subculture. Harassment also includes sexual images in public spaces, deliberate intimidation, stalking, following, harassing photography or recording, inappropriate physical contact, and unwelcome sexual attention.</li>
+<li>Respect that some individuals and cultures consider the casual use of profanity offensive and off-putting.</li>
+<li>Derailing, tone arguments and otherwise playing on people&apos;s desires to be nice are not welcome, especially in discussions about violations to this Code of Conduct.</li>
+<li>Please avoid unstructured critique.</li>
+<li>Likewise any spamming, trolling, flaming, baiting or other attention-stealing behaviour is not welcome.</li>
+<li>Publishing others&apos; private information, such as a physical or electronic address, without explicit permission</li>
+<li>Other conduct which could reasonably be considered inappropriate in a professional setting</li>
+</ul>
+<h2 id="responsibilities">Responsibilities</h2>
+<p>Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.</p>
+<h2 id="enforcement">Enforcement</h2>
+<p>Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project core team members or owner via <a href="mailto:development@arcticicestudio.com" target="_blank">email</a>. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.</p>
+<p>Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project&apos;s leadership.</p>
+<h2 id="consequences-for-violations">Consequences for Violations</h2>
+<p>If a participant engages in any behaviour violating this Code of Conduct, the core team members and project owner of this project may take any action they deem appropriate, including warning the offender or expulsion from the project, exclusion from any interaction and loss of all rights in this project.</p>
+<p>Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.</p>
+<p>Decisions about consequences of violations of this Code of Conduct are made by this projects core team members and project owner as named above and will not be discussed with the person responsible for the violation.</p>
+<h2 id="scope">Scope</h2>
+<p>This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.</p>
+<hr>
+<p>Thanks for the inspirations and attributions to GitHub&apos;s <a href="https://opensource.guide" target="_blank">Open Source Guides</a>, <a href="http://hood.ie/code-of-conduct" target="_blank">Hoodie&apos;s Code of Conduct</a> and the <a href="http://contributor-covenant.org/version/1/4/" target="_blank">Contributor Covenant Version 1.4</a>.</p>
 
                                 
                                 </section>
@@ -1014,14 +1020,10 @@
 
             
                 
-                <a href="building.html#documentations" class="navigation navigation-prev " aria-label="Previous page: Documentations">
+                <a href="changelog.html#010" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 0.1.0">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
-                
-                <a href="testing.html#unit-tests" class="navigation navigation-next " aria-label="Next page: Unit Tests">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -1030,7 +1032,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Testing","level":"4.2","depth":1,"next":{"title":"Unit Tests","level":"4.2.1","depth":2,"anchor":"#unit-tests","path":"development/testing.md","ref":"development/testing.md#unit-tests","articles":[]},"previous":{"title":"Documentations","level":"4.1.2","depth":2,"anchor":"#documentations","path":"development/building.md","ref":"development/building.md#documentations","articles":[]},"dir":"ltr"},"config":{"plugins":["anchorjs","github","toggle-chapters","toggle-headers","-sharing"],"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/arcticicestudio/icecore-hashids"},"search":{},"lunr":{"maxIndexSize":200000,"ignoreSpecialCharacters":false},"toggle-headers":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-default":{"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{},"toggle-chapters":{}},"theme":"default","author":"Arctic Ice Studio","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"api":{"version":"0.4.0"}},"title":"IceCore Hashids","gitbook":"3.2.2","description":"A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers."},"file":{"path":"development/testing.md","mtime":"2017-08-13T18:41:16.384Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-08-13T18:53:56.141Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Code of Conduct","level":"4.5","depth":1,"previous":{"title":"0.1.0","level":"4.4.4","depth":2,"anchor":"#010","path":"development/changelog.md","ref":"development/changelog.md#010","articles":[]},"dir":"ltr"},"config":{"plugins":["anchorjs","github","toggle-chapters","toggle-headers","-sharing"],"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/arcticicestudio/icecore-hashids"},"search":{},"lunr":{"maxIndexSize":200000,"ignoreSpecialCharacters":false},"toggle-headers":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-default":{"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{},"toggle-chapters":{}},"theme":"default","author":"Arctic Ice Studio","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"api":{"version":"0.4.0"}},"title":"IceCore Hashids","gitbook":"3.2.2","description":"A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers."},"file":{"path":"development/code-of-conduct.md","mtime":"2017-08-13T18:41:16.384Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-08-13T18:53:56.141Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Testing · IceCore Hashids</title>
+        <title>Changelog · IceCore Hashids</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.2">
@@ -63,10 +63,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="testing.html" />
+    <link rel="next" href="changelog.html" />
     
     
-    <link rel="prev" href="building.html" />
+    <link rel="prev" href="contributing.html" />
     
 
     </head>
@@ -549,7 +549,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="4.2" data-path="testing.html">
+        <li class="chapter " data-level="4.2" data-path="testing.html">
             
                 <a href="testing.html">
             
@@ -826,7 +826,7 @@
             
         </li>
     
-        <li class="chapter " data-level="4.4" data-path="changelog.html">
+        <li class="chapter active" data-level="4.4" data-path="changelog.html">
             
                 <a href="changelog.html">
             
@@ -940,7 +940,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Testing</a>
+        <a href=".." >Changelog</a>
     </h1>
 </div>
 
@@ -955,38 +955,129 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="testing">Testing</h1>
+                                <p align="center"><img src="https://cdn.rawgit.com/arcticicestudio/icecore-hashids/develop/src/main/assets/icecore-hashids-logo-banner.svg"></p>
+
+<p align="center"><img src="https://assets-cdn.github.com/favicon.ico" width="24" height="24/"> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest" target="_blank"><img src="https://img.shields.io/github/release/arcticicestudio/icecore-hashids.svg"></a> <a href="https://arcticicestudio.github.io/icecore-hashids" target="_blank"><img src="https://img.shields.io/badge/docs-0.4.0-81A1C1.svg?style=flat-square"></a> <a href="https://arcticicestudio.github.io/icecore-hashids/javadoc" target="_blank"><img src="https://img.shields.io/badge/JavaDoc-0.4.0-81A1C1.svg?style=flat-square"></a> <img src="http://central.sonatype.org/favicon.ico" width="24" height="24/"> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22" target="_blank"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg"></a> <img src="https://bintray.com/favicon.ico" width="24" height="24/"> <a href="https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion" target="_blank"><img src="https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg"></a> <img src="https://jitpack.io/favicon.ico"> <a href="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg" target="_blank"><img src="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg?style=flat-square"></a></p>
+
+<hr>
+<h1 id="040">0.4.0</h1>
+<p><img src="https://img.shields.io/badge/Release_Date-2017--08--13-88C0D0.svg?style=flat-square" alt="Release Date: 2017-08-13"> <a href="https://github.com/arcticicestudio/icecore-hashids/projects/5" target="_blank"><img src="https://img.shields.io/badge/Project_Board-0.4.0-88C0D0.svg?style=flat-square" alt="Project Board"></a> <a href="https://github.com/arcticicestudio/icecore-hashids/milestone/4" target="_blank"><img src="https://img.shields.io/badge/Milestone-0.4.0-88C0D0.svg?style=flat-square" alt="Milestone"></a> <a href="https://arcticicestudio.github.io/icecore-hashids" target="_blank"><img src="https://img.shields.io/badge/docs-0.4.0-81A1C1.svg?style=flat-square" alt="docs"></a> <a href="https://arcticicestudio.github.io/icecore-hashids/javadoc" target="_blank"><img src="https://img.shields.io/badge/JavaDoc-0.4.0-81A1C1.svg?style=flat-square" alt="JavaDoc"></a></p>
+<p>This version represents a large milestone which is a revise of the whole project to improve the clarity, performance and stability.</p>
 <blockquote>
-<p>Please make sure to complete the <a href="requirements.md">requirement</a> steps first in order to run the tests!</p>
+<p>Detailed information about each new API feature- and change can be found in the <a href="https://arcticicestudio.github.io/icecore-hashids" target="_blank">project documentation</a>.</p>
 </blockquote>
-<p>Continuous integration builds are running at <a href="https://travis-ci.org/arcticicestudio/icecore-hashids" target="_blank">Travis CI</a> and <a href="https://circleci.com/bb/arcticicestudio/icecore-hashids" target="_blank">Circle CI</a>. The code coverage results are processed via <a href="https://codecov.io/gh/arcticicestudio/icecore-hashids" target="_blank">Codecov</a>.</p>
-<p>To start all test types at once run</p>
-<pre><code class="lang-sh">mvn clean <span class="hljs-built_in">test</span>
-</code></pre>
-<h2 id="unit-tests">Unit Tests</h2>
-<p>The unit tests are implemented using <a href="http://junit.org/junit4" target="_blank">JUnit 4</a> and can either be run via Maven</p>
-<pre><code class="lang-sh">mvn clean <span class="hljs-built_in">test</span> -D<span class="hljs-built_in">test</span>=HashidsTest
-</code></pre>
-<p>or by using the provided <em>Unit Tests</em> <a href="https://www.jetbrains.com/help/pycharm/run-debug-configurations.html" target="_blank">run/debug configuration</a> from within IntelliJ IDEA.</p>
-<p><img src="../assets/scrot-docs-testing-config-unit-tests.png" alt=""></p>
-<p>The unit tests can also be run in debug mode by using the bug icon next to the run configuration name or from the menu via <em>Run</em> &gt; <em>Debug</em> &gt; <em>Unit Tests</em>.</p>
-<p>The <a href="https://www.jetbrains.com/help/idea/test-runner-tab.html" target="_blank">test runner tab</a> will automatically toggle to show the test results.</p>
-<p><img src="../assets/scrot-docs-testing-window-unit-tests.png" alt=""></p>
-<h2 id="interoperability-tests">Interoperability Tests</h2>
-<p>The interoperability tests ensure that the library provides the same results as the reference algorithm implementation <a href="https://github.com/ivanakimov/hashids.js" target="_blank"><em>hashids.js</em></a> by using</p>
+<h2 id="features">Features</h2>
+<h3 id="api">API</h3>
+<p>&#x276F; The public- and internal APIs have been <a href="https://github.com/arcticicestudio/icecore-hashids/issues/9" target="_blank">redesigned</a> and rewritten from scratch regarding optimizations for Java 8, reduction of complexity and the new code style guide conventions.</p>
+<p>&#x276F; The new <code>com.arcticicestudio.icecore.hashids.HashidsFeature</code> enum contains constants for various <a href="https://arcticicestudio.github.io/icecore-hashids/#features" target="_blank">features</a> which can be enabled per instance through the <code>Hashids.Builder</code> method <code>features(HashidFeature) : Builder</code>.</p>
+<p>&#x276F; The public API now also provides the <code>decodeOne(String) : Optional&lt;Long&gt;</code> method to simplify the use-case where the amount of resulting numbers is known before to handle the return value as single value instead of an array. This improves the prevention of an <code>ArrayIndexOutOfBounceException</code> when users try to access an non-existent array index due to an failed encoding- or decoding.</p>
+<h4 id="public-api-breaking-changes">Public API Breaking Changes</h4>
+<p>&#x276F; The obsolete class <code>com.arcticicestudio.icecore.hashids.Hashid</code> has been removed which was previously added to simplify the binding handling of the numbers and their hash value, but users should implement the simple POJO on their own instead of forcing them to use this approach.</p>
+<p>The public API methods now returning the primitive values which have been hold by the <code>Hashid</code> class. (#9 closed by PR #22, 6d5b21f4)</p>
+<p>&#x276F; Due to the removement of the <code>Hashid</code> class some public API methods have become unnecessary and have also been removed. (#9 closed by PR #22, 8e21e96a)</p>
 <ul>
-<li>the Maven plugin <a href="https://github.com/eirslett/frontend-maven-plugin" target="_blank">frontend-maven-plugin</a> to locally download <a href="https://nodejs.org" target="_blank">NodeJS</a> and install the required <em>devDependencies</em> via <a href="https://www.npmjs.com" target="_blank"><em>npm</em></a></li>
-<li>the Java 8 JavaScript engine <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn" target="_blank">Nashorn</a> to execute the downloaded <em>hashids.js</em> script</li>
+<li><code>decodeLongNumbers(String) : long[]</code> - The removed <code>Hashid</code> class has been used as a kind of container to store both the numbers and their associated hash values. This method allowed to directly receive the <code>Long</code> numbers instead of the <code>Hashid</code> POJO which is now be provided by the <code>decode(String) : long[]</code> method.</li>
+<li><code>decodeIntegerNumbers(String) : int[]</code> - The algorithm is designed for <code>Long</code> numbers. This method has been implemented to provide an easy conversion interface to use the library with integer IDs which should now be handled by the user.</li>
+<li><code>encodeToString(long...) : String</code> and <code>encodeToString(int...) : String</code> - These methods are the counterparts for the decoding logic methods described above. Both have been removed for the same reason and the functionality is now available through the <code>encode(String) : long[]</code> method.</li>
 </ul>
-<p>and then comparing the results of both libraries.</p>
-<p>The tests can either be run via Maven</p>
-<pre><code class="lang-sh">mvn clean <span class="hljs-built_in">test</span> -P node -D<span class="hljs-built_in">test</span>=InteropHashidsTest
-</code></pre>
-<p>or by using the provided <em>Interop Tests</em> <a href="https://www.jetbrains.com/help/pycharm/run-debug-configurations.html" target="_blank">run/debug configuration</a> from within IntelliJ IDEA.</p>
-<p><img src="../assets/scrot-docs-testing-config-interop-tests.png" alt=""></p>
-<p>The tests can also be run in debug mode by using the bug icon next to the run configuration name or from the menu via <em>Run</em> &gt; <em>Debug</em> &gt; <em>Interop Tests</em>.</p>
-<p>The <a href="https://www.jetbrains.com/help/idea/test-runner-tab.html" target="_blank">test runner tab</a> will automatically toggle to show the test results.</p>
-<p><img src="../assets/scrot-docs-testing-window-interop-tests.png" alt=""></p>
+<p>&#x276F; Removed all overloaded constructors due to the already provided interfaces through the <code>Hashids.Builder</code> class. It provides methods for a accurate instance configuration while an instance with the default interoperable configurations is still available through the default constructor or by using default constructed builder instance. It allows a finer grained instance building since it doesn&apos;t depends on parameter ordering. The default constructor is still available for brevity and the functionality of all other removed constructors can now be achieved with the builder. (#9 closed by PR #22, 40231ad1)</p>
+<p>&#x276F; The <code>Hashids.Builder</code> method <code>minHashLength(int) : Builder</code> has been renamed to <code>minLength(int) : Builder</code> to adapt to the the builder methods naming style. (#9 closed by PR #22, 8617f4c2)</p>
+<p>&#x276F; Separators are not customizable anymore since the curse word protection of the reference algorithm implementation does
+not allow to modify the separators. The API provided methods to change those separators causing invalid and inconsistent hash- and numbers values. (#9 closed by PR #22, 1a082681)</p>
+<h4 id="internal-api-changes">Internal API Changes</h4>
+<p>&#x276F; The private main logic methods <code>doEncode(long...)</code> and <code>doDecode(String, String)</code> have been removed and rewritten from scratch into the associated public API methods. (#9 closed by PR #22)</p>
+<p>&#x276F; The private method <code>consistentShuffle(String, String) : String</code> has been rewritten from scratch and renamed to <code>shuffle(char[], char[]) : char[]</code>. (#9 closed by PR #22, 8617f4c2)</p>
+<p>&#x276F; The private methods <code>hash(long, String)</code> and <code>unhash(String, String)</code> have been rewritten from scratch and renamed to <code>transform(long, char[], StringBuilder, int)</code> and <code>transform(char[], char&quot;])</code>. (#9 closed by PR #22, 8617f4c2)</p>
+<p>&#x276F; The primary algorithm logic, which was mainly implemented in the private methods <code>doEncode</code> and <code>doDecode</code>, has been rewritten from scratch and modularized into the new methods <code>deriveNewAlphabet(char[], char[], char) : char[]</code> and <code>filterSeparators(char[], char[]) : char[]</code>. (#9 closed by PR #22, 8617f4c2)</p>
+<p>&#x276F; The private support methods <code>toArray(List&lt;Long&gt;) : long[]</code> and <code>isEmpty(String) : boolean</code> have been removed. (#9 closed by PR #22, 8617f4c2)</p>
+<h3 id="documentation">Documentation</h3>
+<p>&#x276F; The new <a href="https://arcticicestudio.github.io/icecore-hashids" target="_blank">project documentation</a> includes detailed information on how to <a href="https://arcticicestudio.github.io/icecore-hashids/getting-started/requirements.html" target="_blank">get started</a>, the new <a href="https://arcticicestudio.github.io/icecore-hashids/api" target="_blank">API overview</a> and <a href="https://arcticicestudio.github.io/icecore-hashids/api/guide" target="_blank">API guide</a> and how to <a href="https://arcticicestudio.github.io/icecore-hashids/development/building.html" target="_blank">build</a> the project and <a href="https://arcticicestudio.github.io/icecore-hashids/development/testing.html" target="_blank">run the tests</a>. (#11 closed by PR #23)</p>
+<p>&#x276F; Next to the project documentation the new <a href="https://github.com/arcticicestudio/icecore-hashids/issues/12" target="_blank">GitHub Open Source community standards</a> have been added to complete the project&apos;s <a href="https://github.com/arcticicestudio/icecore-hashids/community" target="_blank">community profile</a> and adapt to the <a href="https://opensource.guide" target="_blank">Open Source Guides</a> consisting of the <a href="https://arcticicestudio.github.io/icecore-hashids/development/contributing.html" target="_blank">Contributing Guidelines</a> and the <a href="https://arcticicestudio.github.io/icecore-hashids/development/code-of-conduct.html" target="_blank">Code of Conduct</a>. (#12 closed by PR #20)</p>
+<p>&#x276F; The new <a href="https://github.com/arcticicestudio/icecore-hashids/issues/13" target="_blank">GitHub templates</a> providing support for contributors to <a href="https://github.com/arcticicestudio/icecore-hashids/blob/develop/.github/ISSUE_TEMPLATE.md" target="_blank">create issues</a> and <a href="https://github.com/arcticicestudio/icecore-hashids/blob/develop/.github/PULL_REQUEST_TEMPLATE.md" target="_blank">submitting pull requests</a>. (#13 closed by PR #19)</p>
+<p>&#x276F; To improve the code review process the new <a href="https://github.com/arcticicestudio/icecore-hashids/issues/14" target="_blank">GitHub code owner</a> feature has been adapted. (#14 closed by PR #15)</p>
+<h3 id="tests">Tests</h3>
+<p>All unit tests have been rewritten from scratch to match the new API and include as much use-cases as possible to increase the code coverage. The new interoperability tests run against the matching version of the reference implementation <a href="https://github.com/ivanakimov/hashids.js" target="_blank">hashids.js</a>. The script is loaded by using the <a href="https://github.com/eirslett/frontend-maven-plugin" target="_blank">maven-frontend-plugin</a> which installs <a href="https://nodejs.org" target="_blank">NodeJS</a> locally and runs <a href="https://npmjs.com" target="_blank">NPM</a> to install all dependencies defined in the <code>package.json</code>. The parameterized <code>InteropHashidsTest</code> class compares the results of both
+algorithms to ensure interoperability. (#9 closed by PR #22, 8617f4c2)</p>
+<blockquote>
+<p>Detailed information about the functionality and how to run the unit- and interoperability tests can be found in the <a href="https://arcticicestudio.github.io/icecore-hashids/development/testing.html" target="_blank">project documentation</a>.</p>
+</blockquote>
+<h2 id="improvements">Improvements</h2>
+<p>&#x276F; The POM has been refactored to</p>
+<ul>
+<li>update all plugin- and dependency versions</li>
+<li>remove the unnecessary comment documentation header</li>
+<li>fix the copyright year for generated JavaDoc</li>
+<li>add the <code>maven-enforcer-plugin</code></li>
+<li>remove unused profiles and configured core plugins</li>
+<li>remove unused test dependencies</li>
+</ul>
+<p>(#17 closed by PR #21)</p>
+<h1 id="030">0.3.0</h1>
+<p><img src="https://img.shields.io/badge/Release_Date-2017--07--17-88C0D0.svg?style=flat-square" alt="Release Date: 2017-07-17"> <a href="https://github.com/arcticicestudio/icecore-hashids/projects/4" target="_blank"><img src="https://img.shields.io/badge/Project_Board-0.3.0-88C0D0.svg?style=flat-square" alt="Project Board"></a> <a href="https://github.com/arcticicestudio/icecore-hashids/milestone/3" target="_blank"><img src="https://img.shields.io/badge/Milestone-0.3.0-88C0D0.svg?style=flat-square" alt="Milestone"></a> <a href="https://arcticicestudio.github.io/icecore-hashids" target="_blank"><img src="https://img.shields.io/badge/docs-0.3.0-81A1C1.svg?style=flat-square" alt="docs"></a> <a href="https://arcticicestudio.github.io/icecore-hashids/javadoc" target="_blank"><img src="https://img.shields.io/badge/JavaDoc-0.3.0-81A1C1.svg?style=flat-square" alt="JavaDoc"></a></p>
+<h2 id="features">Features</h2>
+<h3 id="api">API</h3>
+<p>&#x276F; Implemented a non-parameter constructor as an equivalent to the default <code>Hashids.Builder</code> instance. The builder supports the creation of an Hashids instance without parameters for custom configurations, but there was no equivalent constructor for this case. (#1)</p>
+<h2 id="improvements">Improvements</h2>
+<h3 id="api">API</h3>
+<h4 id="performance-internal">Performance (Internal)</h4>
+<p>&#x276F; The private method <code>consistentShuffle(String,String)</code> now uses <code>char</code> arrays instead of <code>String</code> operations. This removes five additional <code>String</code> operations/methods and six String concatenations to three simple array assignments. (#7)</p>
+<p>&#x276F; Replaced <code>toCharArray(int)</code> methods with <code>charAt(int)</code> since <code>Strings</code> are implemented as array internally so  there is no need to convert to a char array.</p>
+<p>&#x276F; Adapted to SonarQube minor rule <a href="https://sonarcloud.io/coding_rules#q=squid%3AS3400" target="_blank">squid:S3400</a>. (#5)</p>
+<p>&#x276F; Adapted to SonarQube minor rule <a href="https://sonarcloud.io/coding_rules#q=squid%3AS1643" target="_blank">squid:S3400</a> to improve the performance. (#6)</p>
+<h3 id="documentation">Documentation</h3>
+<p>&#x276F; Adapted to a new project setup and documentation style. (#2)</p>
+<h3 id="tests">Tests</h3>
+<p>&#x276F; Slighly increased the code coverage by implementation unit tests for the <code>Hashid</code> <em>equals</em> symmetric. (#8)</p>
+<h2 id="bug-fixes">Bug Fixes</h2>
+<h3 id="api">API</h3>
+<p>&#x276F; Fixed a <code>ArrayIndexOutOfBoundsException</code> when using a invalid decode salt.</p>
+<h3 id="javadoc">JavaDoc</h3>
+<p>&#x276F; Fixed JavaDoc lint compilation errors for self-closed tags. (#3)</p>
+<h1 id="020">0.2.0</h1>
+<p><img src="https://img.shields.io/badge/Release_Date-2016--06--11-88C0D0.svg?style=flat-square" alt="Release Date: 2016-06-11"> <a href="https://github.com/arcticicestudio/icecore-hashids/projects/3" target="_blank"><img src="https://img.shields.io/badge/Project_Board-0.2.0-88C0D0.svg?style=flat-square" alt="Project Board"></a> <a href="https://github.com/arcticicestudio/icecore-hashids/milestone/2" target="_blank"><img src="https://img.shields.io/badge/Milestone-0.2.0-88C0D0.svg?style=flat-square" alt="Milestone"></a></p>
+<h2 id="features">Features</h2>
+<h3 id="api">API</h3>
+<p>&#x276F; Implemented the public API method <code>getVersion(String)</code> to get the version.</p>
+<h2 id="improvements">Improvements</h2>
+<h3 id="api">API</h3>
+<p>&#x276F; Now using <code>StringBuilder</code> for non-constant <code>String</code> attributes to avoid unnecessary <code>String</code> primitive-wrapping</p>
+<p>&#x276F; No more boxing of primitive for <code>String</code> conversion only. Make use of the static JDK method <code>+ String.valueOf(char):String</code> to avoid waste of memory and cycles by not using a primitive-wrapper with concatenating empty string <code>&quot;&quot;</code> to a primitive. This change fulfills the <a href="https://dev.eclipse.org/sonar" target="_blank">Eclipse SonarQube</a> rule <a href="https://dev.eclipse.org/sonar/rules/show/squid:S2131" target="_blank"><code>squid:S2131</code></a>:</p>
+<blockquote>
+<p>Primitives should not be boxed just for <code>String</code> conversion</p>
+</blockquote>
+<p>&#x276F; Changed private methods without access to instance data to be <code>static</code>. Clarifies that these methods will not modify the state of the object. This change fulfills the <a href="https://dev.eclipse.org/sonar" target="_blank">Eclipse SonarQube</a> rule <code>squid:S2325</code>:</p>
+<blockquote>
+<p>Private methods that don&apos;t access instance data should be static</p>
+</blockquote>
+<p>&#x276F; Pre-compile regex <code>Pattern</code> pattern. Improves the performance (less memory and CPU cycles) by using pre-compiled regex pattern instead of creating instances for each <code>Pattern</code> call.</p>
+<h1 id="010">0.1.0</h1>
+<p><img src="https://img.shields.io/badge/Release_Date-2016--06--10-88C0D0.svg?style=flat-square" alt="Release Date: 2016-06-10"> <a href="https://github.com/arcticicestudio/icecore-hashids/projects/2" target="_blank"><img src="https://img.shields.io/badge/Project_Board-0.1.0-88C0D0.svg?style=flat-square" alt="Project Board"></a> <a href="https://github.com/arcticicestudio/icecore-hashids/milestone/1" target="_blank"><img src="https://img.shields.io/badge/Milestone-0.1.0-88C0D0.svg?style=flat-square" alt="Milestone"></a></p>
+<h2 id="features">Features</h2>
+<h3 id="api">API</h3>
+<p>&#x276F; Implemented the public API. The <code>Hashids.Builder</code> class configures <code>Hashids</code> default instances. To create instances with custom configurations either the parameterized constructors can be used or by using the instance builder methods</p>
+<ul>
+<li><code>salt(String)</code></li>
+<li><code>alphabet(String)</code></li>
+<li><code>minHashLength(int)</code></li>
+<li><code>build(int)</code></li>
+</ul>
+<p>To encode numbers and decode hashes the following public API methods have been implemented:</p>
+<ul>
+<li><code>encode(long...) : Hashid</code> - Encode number(s)</li>
+<li><code>encodeToString(long...):String</code> - Encode number(s) to string. |</li>
+<li><code>encodeToString(int...):String</code> | Encode number(s) to string. |</li>
+<li><code>encodeHex(String):String</code> | Encode an hexadecimal string to string. |</li>
+<li><code>decode(String):Hashid</code> | Decode an encoded string. |</li>
+<li><code>decodeLongNumbers(String):long[]</code> | Decode an encoded string to long numbers. |</li>
+<li><code>decodeIntegerNumbers(String):int[]</code> | Decode an encoded string to integer numbers. |</li>
+<li><code>decodeHex(String):String</code> | Decode an string to hexadecimal numbers. |</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<p>&#x276F; Added a usage guide for the API. This includes all currently implemented public API methods and general notes to the library algorithm.</p>
+<h2 id="tests">Tests</h2>
+<p>&#x276F; Implemented unit tests for the public- and internal API.</p>
+<h2 id="project-initialization">Project Initialization</h2>
+<p>Date: <em>2016-06-04</em></p>
 
                                 
                                 </section>
@@ -1014,12 +1105,12 @@
 
             
                 
-                <a href="building.html#documentations" class="navigation navigation-prev " aria-label="Previous page: Documentations">
+                <a href="contributing.html#credits" class="navigation navigation-prev " aria-label="Previous page: Credits">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="testing.html#unit-tests" class="navigation navigation-next " aria-label="Next page: Unit Tests">
+                <a href="changelog.html#040" class="navigation navigation-next " aria-label="Next page: 0.4.0">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1030,7 +1121,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Testing","level":"4.2","depth":1,"next":{"title":"Unit Tests","level":"4.2.1","depth":2,"anchor":"#unit-tests","path":"development/testing.md","ref":"development/testing.md#unit-tests","articles":[]},"previous":{"title":"Documentations","level":"4.1.2","depth":2,"anchor":"#documentations","path":"development/building.md","ref":"development/building.md#documentations","articles":[]},"dir":"ltr"},"config":{"plugins":["anchorjs","github","toggle-chapters","toggle-headers","-sharing"],"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/arcticicestudio/icecore-hashids"},"search":{},"lunr":{"maxIndexSize":200000,"ignoreSpecialCharacters":false},"toggle-headers":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-default":{"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{},"toggle-chapters":{}},"theme":"default","author":"Arctic Ice Studio","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"api":{"version":"0.4.0"}},"title":"IceCore Hashids","gitbook":"3.2.2","description":"A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers."},"file":{"path":"development/testing.md","mtime":"2017-08-13T18:41:16.384Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-08-13T18:53:56.141Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Changelog","level":"4.4","depth":1,"next":{"title":"0.4.0","level":"4.4.1","depth":2,"anchor":"#040","path":"development/changelog.md","ref":"development/changelog.md#040","articles":[]},"previous":{"title":"Credits","level":"4.3.7","depth":2,"anchor":"#credits","path":"development/contributing.md","ref":"development/contributing.md#credits","articles":[]},"dir":"ltr"},"config":{"plugins":["anchorjs","github","toggle-chapters","toggle-headers","-sharing"],"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"github":{"url":"https://github.com/arcticicestudio/icecore-hashids"},"search":{},"lunr":{"maxIndexSize":200000,"ignoreSpecialCharacters":false},"toggle-headers":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-default":{"styles":{"website":"./styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{},"toggle-chapters":{}},"theme":"default","author":"Arctic Ice Studio","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"api":{"version":"0.4.0"}},"title":"IceCore Hashids","gitbook":"3.2.2","description":"A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers."},"file":{"path":"development/changelog.md","mtime":"2017-08-13T18:41:16.384Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-08-13T18:53:56.141Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
