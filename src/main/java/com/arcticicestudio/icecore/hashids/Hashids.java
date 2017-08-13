@@ -598,12 +598,12 @@ public final class Hashids {
 
   @Override
   public String toString() {
-    return "Hashids{" +
-      "salt=" + Arrays.toString(salt) +
-      ", minLength=" + minLength +
-      ", alphabet=" + Arrays.toString(alphabet) +
-      ", features=" + features +
-      '}';
+    return "Hashids{"
+      + "salt=" + Arrays.toString(salt)
+      + ", minLength=" + minLength
+      + ", alphabet=" + Arrays.toString(alphabet)
+      + ", features=" + features
+      + '}';
   }
 
   /**
