@@ -2,15 +2,17 @@
 
 <p align="center"><img src="https://cdn.travis-ci.org/images/favicon-c566132d45ab1a9bcae64d8d90e4378a.svg" width=24 height=24/> <a href="https://travis-ci.org/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/travis/arcticicestudio/icecore-hashids/develop.svg?style=flat-square"/></a> <img src="https://circleci.com/favicon.ico" width=24 height=24/> <a href="https://circleci.com/gh/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/circleci/project/github/arcticicestudio/icecore-hashids/develop.svg?style=flat-square"/></a> <img src="https://assets-cdn.github.com/favicon.ico" width=24 height=24/> <a href="https://github.com/arcticicestudio/icecore-hashids/releases/latest"><img src="https://img.shields.io/github/release/arcticicestudio/icecore-hashids.svg?style=flat-square"/></a> <img src="https://d234q63orb21db.cloudfront.net/685e381330164f79197bc0e7f75035c6f1b9d7d0/media/images/favicon.png" width=24 height=24/> <a href="https://codecov.io/gh/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/codecov/c/github/arcticicestudio/icecore-hashids/develop.svg?style=flat-square"/></a></p>
 
-<p align="center"><img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg?style=flat-square"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot-_---blue.svg?style=flat-square"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href="https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion"><img src="https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg"></a> <a href="https://oss.jfrog.org/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/artifactory-_---green.svg?style=flat-square"/></a> <img src="https://jitpack.io/favicon.ico"/> <a href="https://jitpack.io/#arcticicestudio/icecore-hashids"><img src="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg?style=flat-square"></a></p>
+<p align="center"><img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg?style=flat-square"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot-_---blue.svg?style=flat-square"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href="https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion"><img src="https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg"></a> <a href="https://oss.jfrog.org/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/artifactory-_---43A047.svg?style=flat-square"/></a> <img src="https://jitpack.io/favicon.ico"/> <a href="https://jitpack.io/#arcticicestudio/icecore-hashids"><img src="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg?style=flat-square"></a></p>
 
-<p align="center">A lightweight generator for short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.</p>
+<p align="center"><a href="https://arcticicestudio.github.io/icecore-hashids/javadoc"><img src="https://img.shields.io/badge/JavaDoc-0.3.0-81A1C1.svg?style=flat-square"/></a></p>
+
+<p align="center">A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers.</p>
 
 <p align="center">Implementation of the <a href="http://hashids.org">Hashids</a> algorithm.</p>
 
 ---
 
-[Hashids][hashids] are obfuscated unique hashes of positive unsigned numbers, but in contrast to cryptographic one-way hash algorithms they are can be decoded again. The algorithm can be used to either generate a hash from a single number or bundling several numbers into one to be stored as simple short UIDs. This design allows to use them for many use-cases like
+[Hashids][hashids] are obfuscated unique hashes of non-negative (long) integer numbers, but in contrast to cryptographic one-way hash algorithms they are can be decoded again. The algorithm can be used to either generate a hash from a single number or bundling several numbers into one to be stored as simple short UIDs. This design allows to use them for many use-cases like
 
 * URL shortening
 * database ID protection
@@ -38,6 +40,13 @@ In addition, the **library** provides features to
 * [disable the maximum number size limit][api-guide-config-feature-no-max-number-size] which ensures the interoperability with the [algorithm reference implementation][hashids-js] and allows the usage of the Java `Long` [maximum value][long-max-value]
 
 > Please note that most features will break the interoperability with the [algorithm reference implementation][hashids-js]!
+
+---
+
+<p align="center"> <img src="http://arcticicestudio.com/favicon.ico" width=16 height=16/> Copyright &copy; 2017
+Arctic Ice Studio</p>
+
+<p align="center"><a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-5E81AC.svg"/></a></p>
 
 [api-curse-word-prevention]: api/curse-word-prevention.md
 [api-guide-config-alphabet]: api/guide/configuration/index.md#determine-a-custom-alphabet
