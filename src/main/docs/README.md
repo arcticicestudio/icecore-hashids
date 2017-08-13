@@ -4,7 +4,7 @@
 
 <p align="center"><img src="http://central.sonatype.org/favicon.ico" width=24 height=24/> <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.arcticicestudio%22%20AND%20a%3A%22icecore-hashids%22"><img src="https://img.shields.io/maven-central/v/com.arcticicestudio/icecore-hashids.svg?style=flat-square"/></a> <img src="https://oss.sonatype.org/favicon.ico"/> <a href="https://oss.sonatype.org/content/repositories/snapshots/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/snapshot-_---blue.svg?style=flat-square"/></a> <img src="https://bintray.com/favicon.ico" width=24 height=24/> <a href="https://bintray.com/arcticicestudio/IceCore/icecore-hashids/_latestVersion"><img src="https://api.bintray.com/packages/arcticicestudio/IceCore/icecore-hashids/images/download.svg"></a> <a href="https://oss.jfrog.org/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/com/arcticicestudio/icecore-hashids"><img src="https://img.shields.io/badge/artifactory-_---43A047.svg?style=flat-square"/></a> <img src="https://jitpack.io/favicon.ico"/> <a href="https://jitpack.io/#arcticicestudio/icecore-hashids"><img src="https://jitpack.io/v/arcticicestudio/icecore-hashids.svg?style=flat-square"></a></p>
 
-<p align="center"><a href="https://arcticicestudio.github.io/icecore-hashids/javadoc"><img src="https://img.shields.io/badge/JavaDoc-0.3.0-81A1C1.svg?style=flat-square"/></a></p>
+<p align="center"><a href="https://arcticicestudio.github.io/icecore-hashids/javadoc"><img src="https://img.shields.io/badge/JavaDoc-0.4.0-81A1C1.svg?style=flat-square"/></a></p>
 
 <p align="center">A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers.</p>
 

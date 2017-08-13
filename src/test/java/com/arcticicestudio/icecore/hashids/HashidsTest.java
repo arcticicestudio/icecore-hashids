@@ -413,7 +413,7 @@ public class HashidsTest {
 
   @Test
   public void validVersion() {
-    assertThat(Hashids.getVersion(), equalTo("0.3.0"));
+    assertThat(Hashids.getVersion(), equalTo("0.4.0"));
   }
 
   @Test

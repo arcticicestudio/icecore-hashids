@@ -44,11 +44,11 @@ import java.util.stream.Stream;
  *
  * @author Arctic Ice Studio &lt;development@arcticicestudio.com&gt;
  * @see <a href="https://github.com/arcticicestudio/icecore-hashids">IceCore Hashids GitHub Repository</a>
- * @version 0.3.0
+ * @version 0.4.0
  */
 public final class Hashids {
 
-  private static final String VERSION = "0.3.0";
+  private static final String VERSION = "0.4.0";
   private static final String VERSION_INTEROP = "1.0.0";
 
   private static final int LOTTERY_MOD = 100;

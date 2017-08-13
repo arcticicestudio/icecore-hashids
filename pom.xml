@@ -7,11 +7,11 @@
 
   <groupId>com.arcticicestudio</groupId>
   <artifactId>icecore-hashids</artifactId>
-  <version>0.3.0</version>
+  <version>0.4.0</version>
   <packaging>jar</packaging>
 
   <name>icecore-hashids</name>
-  <description>A lightweight generator for short, unique, non-sequential and decodable Hashids from positive unsigned (long) integer numbers.</description>
+  <description>A lightweight generator for short, unique, non-sequential and decodable Hashids from non-negative numbers.</description>
   <url>https://github.com/arcticicestudio/icecore-hashids</url>
   <inceptionYear>2016</inceptionYear>
   <organization>

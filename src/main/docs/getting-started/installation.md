@@ -11,18 +11,18 @@ Development snapshots are available via [OSS Sonatype][oss-sonatype] and [JFrog 
 <dependency>
   <groupId>com.arcticicestudio</groupId>
   <artifactId>icecore-hashids</artifactId>
-  <version>0.3.0</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 
 ###### Gradle
 ```java
-compile(group: 'com.arcticicestudio', name: 'icecore-hashids', version: '0.3.0')
+compile(group: 'com.arcticicestudio', name: 'icecore-hashids', version: '0.4.0')
 ```
 
 ###### Ivy
 ```xml
-<dependency org="com.arcticicestudio" name="icecore-hashids" rev="0.3.0" />
+<dependency org="com.arcticicestudio" name="icecore-hashids" rev="0.4.0" />
 ```
 [artifactory]: https://oss.jfrog.org/artifactory/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/com/arcticicestudio/icecore-hashids
 [central-repository]: https://oss.sonatype.org/content/repositories/releases/com/arcticicestudio/icecore-hashids
