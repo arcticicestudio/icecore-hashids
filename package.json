@@ -7,7 +7,7 @@
     "name": "Arctic Ice Studio",
     "url": "http://arcticicestudio.com"
   },
-  "license": "Apache 2.0",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "gitbook-cli": "2.3.2",

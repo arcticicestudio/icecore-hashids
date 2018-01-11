@@ -1,15 +1,13 @@
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# title      Circle CI Build Configuration                      +
-# project    icecore-hashids                                    +
-# repository https://github.com/arcticicestudio/icecore-hashids +
-# author     Arctic Ice Studio                                  +
-# email      development@arcticicestudio.com                    +
-# copyright  Copyright (C) 2017                                 +
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#
-# [References]
-# Circle CI
-#   https://circleci.com/docs
+# Copyright (c) 2016-present Arctic Ice Studio <development@arcticicestudio.com>
+# Copyright (c) 2016-present Sven Greb <code@svengreb.de>
+
+# Project:    IceCore Hashids
+# Repository: https://github.com/arcticicestudio/icecore-hashids
+# License:    MIT
+# References:
+#   https://circleci.com/docs/2.0
+#   https://circleci.com/docs/2.0/circleci-images/#nodejs
+
 machine:
   java:
     version: oraclejdk8
